@@ -24,5 +24,12 @@ static void render_character(SDL_Renderer* renderer,Game game){
 }
 
 void render_game(SDL_Renderer* renderer, Game game){
+    //render to screen
+    SDL_SetRenderDrawColor(renderer,0xff,0xff,0xff,0xff);
+    SDL_RenderClear(renderer);
+    
+    //actual rendering here
     render_character(renderer,game);
+
+    SDL_RenderPresent(renderer);
 }

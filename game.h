@@ -20,5 +20,6 @@ typedef struct game_t {
 } *Game;
 
 Game initGame();
+void handleEvent(SDL_Event* e,Game game);
 
 #endif
