@@ -8,9 +8,14 @@ I've always loved games and found that game programming resembles the foundation
 
 # Devlog and Screenshots
 
-1. 12/10/2023:- project started, initial commit
+12/10/2023:- project started, initial commit
+
+13/10/2023:- Basic SDL app with texture rendering
+
+![Screenshot from 2023-10-13 19-55-19](https://github.com/Asaadziad/WOA/assets/108868994/0d4c485c-e77e-4308-88c9-6d1f15db45f4)
+
 
 
 # Credits
 
-(Asaad ziad)[https://github.com/asaadziad]
+(https://github.com/asaadziad)[Asaad ziad]
