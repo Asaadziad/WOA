@@ -1,8 +1,8 @@
 # World of Asaad
 WOA is a game project for learning purposes
 
-TBA :- 
-1. A sketch for the game design
+![WOA](https://github.com/Asaadziad/WOA/assets/108868994/a38c6701-6748-4c08-878e-a28feadb9589)
+
 
 # Devlog and Screenshots
 
