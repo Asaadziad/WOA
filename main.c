@@ -1,21 +1,19 @@
-#include "common.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+
 #include "game.h"
-#include "rendering.h"
 
 static void initSDL(SDL_Window** window, SDL_Renderer** renderer);
 static void quitSDL(SDL_Window** window);
 
 int main(){
     SDL_Window* window = NULL;
-    SDL_Renderer* renderer = NULL;
-
-    initSDL(&window,&renderer);
 
     Game game = initGame();
     game->state = RUNNING_STATE;
-    loadTexture(renderer,game->current_texture,"WOA.png");
+    initSDL(&window,&game->renderer);
+    loadTexture(game->renderer,game->current_texture,"sprites.png");
+    initEntities(game);
 
     SDL_Event event;
     while(IS_RUNNING(game)){
@@ -24,14 +22,17 @@ int main(){
         */
         handleEvent(&event, game);
         
-        render_game(renderer, game);   
+        //render_game(game);   
+        renderEntities(game);
+
     }
 
     freeTexture(game->current_texture);
     
     
     quitSDL(&window);
-
+    quitGame(game);
+    
     return 0;
 }
 

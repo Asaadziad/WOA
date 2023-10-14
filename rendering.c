@@ -10,26 +10,32 @@ static void render(SDL_Renderer* renderer,Texture* texture,int x,int y,SDL_Rect*
     
     if( clip != NULL )
 	{
-		renderQuad.w = clip->w;
-		renderQuad.h = clip->h;
+		renderQuad.w = clip->w / 3; // temporary magical number
+		renderQuad.h = clip->h / 3;
 	}
     //Render to screen
 	SDL_RenderCopy( renderer, texture->texture, clip, &renderQuad );
 }
 
 // Rendering Textures / Sprites
-static void render_character(SDL_Renderer* renderer,Game game){
-    SDL_Rect character_quad = {450,300,300,600};
-    render(renderer,game->current_texture,0,0,&character_quad);
+void render_character(SDL_Renderer* renderer,Game game,int x,int y){
+    //render to screen
+    SDL_SetRenderDrawColor(game->renderer,0xff,0xff,0xff,0xff);
+    SDL_RenderClear(game->renderer);
+
+    SDL_Rect character_quad = {0,0,150,400};
+    render(renderer,game->current_texture,x,y,&character_quad);
+
+    SDL_RenderPresent(game->renderer);
 }
 
-void render_game(SDL_Renderer* renderer, Game game){
+void render_game(Game game){
     //render to screen
-    SDL_SetRenderDrawColor(renderer,0xff,0xff,0xff,0xff);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(game->renderer,0xff,0xff,0xff,0xff);
+    SDL_RenderClear(game->renderer);
     
-    //actual rendering here
-    render_character(renderer,game);
+    //initiate character at some point (HOME POINT)
+    render_character(game->renderer,game,0,0);
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(game->renderer);
 }
