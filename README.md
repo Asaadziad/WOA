@@ -16,6 +16,9 @@ I've always loved games and found that game programming resembles the foundation
 
 14/10/2023:- Now you can move the character on mouse click and added players as entities (for now manually added)
 
+[Screencast from 14-10-23 13:03:40.webm](https://github.com/Asaadziad/WOA/assets/108868994/9cfb43d8-1958-4654-b399-b7ff501f9892)
+
+
 # Credits
 
 [Asaad ziad](https://github.com/asaadziad)
