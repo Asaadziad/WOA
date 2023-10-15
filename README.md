@@ -20,6 +20,8 @@ I've always loved games and found that game programming resembles the foundation
 
 15/10/2023:- Added animation for character movement - Capped fps at 60
 
+[Screencast from 15-10-23 19:31:02.webm](https://github.com/Asaadziad/WOA/assets/108868994/85140dc6-cc14-4401-8266-86173a565dff)
+
 
 
 
