@@ -23,9 +23,7 @@ void handleEvent(SDL_Event* e,Game game){
                 game->state = QUIT_STATE;
             break;
             case SDL_MOUSEBUTTONDOWN:
-                int x,y;
-                SDL_GetMouseState(&x,&y);
-                moveCharacter(game,x,y);
+                SDL_GetMouseState(&game->players[0]->walk_to_x,&game->players[0]->walk_to_y);
             break;
             default: {}
         }

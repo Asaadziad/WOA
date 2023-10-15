@@ -2,11 +2,16 @@
 #include "SDL2/SDL_image.h"
 
 #include "game.h"
+#include "logic.h"
+#include "timer.h"
 
 static void initSDL(SDL_Window** window, SDL_Renderer** renderer);
 static void quitSDL(SDL_Window** window);
 
 int main(){
+    const int SCREEN_FPS = 60;
+    const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
     SDL_Window* window = NULL;
 
     Game game = initGame();
@@ -15,24 +20,41 @@ int main(){
     loadTexture(game->renderer,game->current_texture,"sprites.png");
     initEntities(game);
 
+    uint32_t start_time = SDL_GetTicks();
+    int frameCounter = 0;
+
     SDL_Event event;
     while(IS_RUNNING(game)){
+        uint32_t cap_time = SDL_GetTicks();
         /*
         * This function keeps listening to events and handles it accordinlgy
         */
         handleEvent(&event, game);
+
+        initLogic(game);
+
+        float avgFPS = frameCounter / ( (SDL_GetTicks() - start_time) / 1000.f );
+        if( avgFPS > 2000000 ){
+            avgFPS = 0;
+        }
         
+
         //render_game(game);   
         renderEntities(game);
-
+        ++frameCounter;
+        
+        int frameTicks = SDL_GetTicks() - cap_time;
+        if( frameTicks < SCREEN_TICKS_PER_FRAME ){
+            //Wait remaining time
+            SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
+        }
     }
-
     freeTexture(game->current_texture);
     
     
     quitSDL(&window);
     quitGame(game);
-    
+
     return 0;
 }
 

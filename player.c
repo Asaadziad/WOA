@@ -7,5 +7,11 @@ Player initPlayer(int x,int y){
     if(!new_p) return NULL;
     new_p->x = x;
     new_p->y = y;
+    new_p->walk_to_x = x;
+    new_p->walk_to_y = y;
+    new_p->state = STANDING_STATE;
+    new_p->walking_frames = 4;
+    new_p->current_frame = 0;
+    new_p->p_vel = 1;
     return new_p;
 }

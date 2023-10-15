@@ -3,6 +3,7 @@
 #include "game.h"
 
 
-void moveCharacter(Game game,int x,int y);
+void initLogic(Game game);
+void moveCharacter(Player p);
 
 #endif

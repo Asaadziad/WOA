@@ -19,11 +19,21 @@ static void render(SDL_Renderer* renderer,Texture* texture,int x,int y,SDL_Rect*
 
 // Rendering Textures / Sprites
 void render_character(SDL_Renderer* renderer,Game game,int x,int y){
+    Player asaad = game->players[0];
     //render to screen
     SDL_SetRenderDrawColor(game->renderer,0xff,0xff,0xff,0xff);
     SDL_RenderClear(game->renderer);
+    SDL_Rect character_quad = {0,0,144,384};  
+    
+    if(asaad->state == WALKING_STATE){
+        character_quad.x = 144 * (((int)(asaad->current_frame/8)));
+        if(asaad->current_frame/8 >= asaad->walking_frames){
+            asaad->current_frame = 0;
+        }
+        asaad->current_frame++;
+    }
 
-    SDL_Rect character_quad = {0,0,150,400};
+    
     render(renderer,game->current_texture,x,y,&character_quad);
 
     SDL_RenderPresent(game->renderer);

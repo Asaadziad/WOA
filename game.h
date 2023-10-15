@@ -28,6 +28,6 @@ void handleEvent(SDL_Event* e,Game game);
 void initEntities(Game game);
 void renderEntities(Game game);
 
-
 void quitGame(Game game);
+
 #endif
