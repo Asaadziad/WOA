@@ -3,7 +3,7 @@
 #include "game.h"
 
 
-void initLogic(Game game);
+void handleLogic(Game game);
 void moveCharacter(Player p);
 
 #endif

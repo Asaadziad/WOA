@@ -13,5 +13,8 @@ Player initPlayer(int x,int y){
     new_p->walking_frames = 4;
     new_p->current_frame = 0;
     new_p->p_vel = 1;
+    new_p->height = 384;
+    new_p->width = 144;
+    new_p->isMoving = false;
     return new_p;
 }

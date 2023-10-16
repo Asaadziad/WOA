@@ -5,7 +5,9 @@
 #include "game.h"
 
 
-void render_character(SDL_Renderer* renderer,Game game,int x,int y);
-void render_game(Game game);
+void render_character(SDL_Renderer* renderer,Game game,int x,int y,int camX,int camY);
+void render_fence(Game game);
+void render_monster(Game game);
+
 
 #endif

@@ -9,6 +9,8 @@ static void initSDL(SDL_Window** window, SDL_Renderer** renderer);
 static void quitSDL(SDL_Window** window);
 
 int main(){
+    
+
     const int SCREEN_FPS = 60;
     const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
@@ -20,7 +22,7 @@ int main(){
     loadTexture(game->renderer,game->current_texture,"sprites.png");
     initEntities(game);
 
-    uint32_t start_time = SDL_GetTicks();
+    
     int frameCounter = 0;
 
     SDL_Event event;
@@ -29,18 +31,18 @@ int main(){
         /*
         * This function keeps listening to events and handles it accordinlgy
         */
-        handleEvent(&event, game);
+        handleEvents(&event, game);
 
-        initLogic(game);
+        handleLogic(game);
 
-        float avgFPS = frameCounter / ( (SDL_GetTicks() - start_time) / 1000.f );
-        if( avgFPS > 2000000 ){
-            avgFPS = 0;
-        }
-        
-
-        //render_game(game);   
+        /* Rendering */
+        clearScreen(game);
+         
         renderEntities(game);
+
+        updateScreen(game);
+        /* End of Rendering */
+
         ++frameCounter;
         
         int frameTicks = SDL_GetTicks() - cap_time;
@@ -50,7 +52,7 @@ int main(){
         }
     }
     freeTexture(game->current_texture);
-    
+    freeTexture(game->world_texture);
     
     quitSDL(&window);
     quitGame(game);

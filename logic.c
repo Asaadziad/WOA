@@ -11,28 +11,35 @@ static void initPlayerMovement(Player* players){
     }
 }
 
-void initLogic(Game game) {
+void handleLogic(Game game) {
     initPlayerMovement(game->players);
 }
 
 static void moveCharacterTo(Player p, int x,int y){
-    if(p->x < x){
+    int currentX = p->x + p->width/2;
+    int currentY = p->y + p->height/2;
+
+    if((currentX) < x){
         p->x += p->p_vel;
-    } else if(p->x > x){
+    } else if((currentX) > x){
         p->x -= p->p_vel;
     }
 
-    if(p->y < y){
+    if((currentY) < y){
         p->y += p->p_vel;
-    } else if(p->y > y){
+    } else if((currentY) > y){
         p->y -= p->p_vel;
+    }
+
+    if(currentX == x && currentY == y){
+        p->state = STANDING_STATE;
     }
 }
 
 void moveCharacter(Player p){
-    if(p->walk_to_x != p->x || p->walk_to_y != p->y){
-        moveCharacterTo(p,p->walk_to_x,p->walk_to_y);
+    if(p->isMoving){
         p->state = WALKING_STATE;
+        moveCharacterTo(p,p->walk_to_x,p->walk_to_y);
     } else {
         p->state = STANDING_STATE;
     }
