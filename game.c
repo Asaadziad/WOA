@@ -39,11 +39,18 @@ void initEntities(Game game){
     game->players[0] = asaad;
 }
 
+static int test = 0;
+
 void renderEntities(Game game){
     int p_x = game->players[0]->x;
     int p_y = game->players[0]->y;
     render_character(game->renderer,game,p_x,p_y,p_x - SCREEN_WIDTH/2,p_y - SCREEN_HEIGHT/2);
-    render_fence(game);
+    build_monster_area(game);
+    animate(render_monster, game,test,4);
+    test++;
+    if(test/16 >= 4 ){
+        test = 0;
+    }
 }
 
 
