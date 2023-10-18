@@ -4,6 +4,7 @@
 #include "logic.h"
 #include "memory.h"
 #include "rendering.h"
+#include "movementHandler.h"
 
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
@@ -25,8 +26,6 @@ void handleEvents(SDL_Event* e,Game game){
             break;
             case SDL_MOUSEBUTTONDOWN:
                 game->players[0]->isMoving = true;
-                SDL_GetMouseState(&game->players[0]->walk_to_x,&game->players[0]->walk_to_y);
-                fprintf(stdout,"Mouse-X: %d, Mouse-Y: %d\n", game->players[0]->walk_to_x,game->players[0]->walk_to_y);
             break;
             default: {}
         }
@@ -35,28 +34,20 @@ void handleEvents(SDL_Event* e,Game game){
 
 void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
-    Player asaad = initPlayer(50,50);
+    Player asaad = initPlayer(50,50,200,200);
     game->players[0] = asaad;
 }
 
-static int test = 0;
+
 
 void renderEntities(Game game){
-    int p_x = game->players[0]->x;
-    int p_y = game->players[0]->y;
-    render_character(game->renderer,game,p_x,p_y,p_x - SCREEN_WIDTH/2,p_y - SCREEN_HEIGHT/2);
-    build_monster_area(game);
-    animate(render_monster, game,test,4);
-    test++;
-    if(test/16 >= 4 ){
-        test = 0;
-    }
+    renderPlayer(game,game->players[0]);
 }
 
 
 void clearScreen(Game game){
-    SDL_SetRenderDrawColor(game->renderer,0xff,0xff,0xff,0xff);
     SDL_RenderClear(game->renderer);
+    SDL_SetRenderDrawColor(game->renderer,0xff,0xff,0xff,0xff);
 }
 void updateScreen(Game game){
     SDL_RenderPresent(game->renderer);

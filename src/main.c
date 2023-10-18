@@ -19,7 +19,7 @@ int main(){
     Game game = initGame();
     game->state = RUNNING_STATE;
     initSDL(&window,&game->renderer);
-    loadTexture(game->renderer,game->current_texture,"sprites.png");
+    loadTexture(game->renderer,game->current_texture,"spritesheet.png");
     initEntities(game);
 
     
@@ -37,7 +37,7 @@ int main(){
 
         /* Rendering */
         clearScreen(game);
-         
+
         renderEntities(game);
 
         updateScreen(game);
@@ -52,7 +52,7 @@ int main(){
         }
     }
     freeTexture(game->current_texture);
-    freeTexture(game->world_texture);
+
     
     quitSDL(&window);
     quitGame(game);
