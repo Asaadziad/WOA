@@ -9,14 +9,11 @@ void renderPlayer(Game game,Player p){
         rect.y = p->y;
         rect.w = p->width;
         rect.h = p->height;
-    
-    fprintf(stdout,"%d\n",p->y + p->height);
+
     SDL_RenderFillRect(game->renderer,&rect);
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
-    if(p->isMoving){
-    randomMovement(PLAYER_TYPE,p);
 
-    }
+    handleMovement(PLAYER_TYPE,game->players[0]);
 //    SDL_Rect src = {};
 //    SDL_Rect dst = {};
 //    SDL_RenderCopy(game->renderer,game->current_texture->texture,&src,&dst);

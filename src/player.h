@@ -2,13 +2,14 @@
 #define PLAYER_H
 
 #include "stdbool.h"
+#include "vector.h"
 
 typedef struct player_t{
     int x;
     int y;
     int height;
     int width;
-    int vel;
+    Vector2f vel;
     bool isMoving;
 } *Player;
 

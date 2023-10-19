@@ -25,7 +25,9 @@ void handleEvents(SDL_Event* e,Game game){
                 game->state = QUIT_STATE;
             break;
             case SDL_MOUSEBUTTONDOWN:
+                Vector2f v = {1,1};
                 game->players[0]->isMoving = true;
+                game->players[0]->vel = addVectors(game->players[0]->vel, v);
             break;
             default: {}
         }

@@ -3,6 +3,6 @@
 
 #include "entity.h"
 
-void randomMovement(EntityType type,void* Entity);
+void handleMovement(EntityType type,void* Entity);
 
 #endif

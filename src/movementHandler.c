@@ -3,18 +3,30 @@
 #include "movementHandler.h"
 #include "player.h"
 
-#define CHECK_AXIS(x,w) ((x == 0) || (x == w))
 
+static bool checkXout(int x){
+    if(x <= 0 || x >= 800) return true;
+    return false;
+}
+static bool checkYout(int y){
+    if(y <= 0 || y >= 600) return true;
+    return false;
+}
 // Entity can be Player/Monster
-void randomMovement(EntityType type,void* Entity){
+void handleMovement(EntityType type,void* Entity){
     switch (type)
     {
     case PLAYER_TYPE:
         Player p = (Player)Entity;
-        if(!CHECK_AXIS(p->x + p->width,800) || !CHECK_AXIS(p->y + p->height,600)){
-            p->vel *= -1;
-        } 
-
+        if(!p->isMoving) break;
+        if(checkXout(p->x + p->width) || checkXout(p->x)){
+            p->vel.x *= -1;
+        }
+        if(checkYout(p->y + p->height) || checkYout(p->y)){
+            p->vel.y *= -1;
+        }
+        p->x += p->vel.x;
+        p->y += p->vel.y;
         break;
     case MONSTER_TYPE:
     break;
