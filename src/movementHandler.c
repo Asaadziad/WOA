@@ -19,14 +19,14 @@ void handleMovement(EntityType type,void* Entity){
     case PLAYER_TYPE:
         Player p = (Player)Entity;
         if(!p->isMoving) break;
-        if(checkXout(p->x + p->width) || checkXout(p->x)){
+        if(checkXout(p->position.x + p->width) || checkXout(p->position.x)){
             p->vel.x *= -1;
         }
-        if(checkYout(p->y + p->height) || checkYout(p->y)){
+        if(checkYout(p->position.y + p->height) || checkYout(p->position.y)){
             p->vel.y *= -1;
         }
-        p->x += p->vel.x;
-        p->y += p->vel.y;
+        p->position.x += p->vel.x;
+        p->position.y += p->vel.y;
         break;
     case MONSTER_TYPE:
     break;
@@ -39,19 +39,19 @@ void handlePlayerMovement(Player p, MovementType m_type){
     
     switch(m_type){
         case MOVE_UP:
-        p->y -= checkYout(p->y) ? 0 : p->vel.y;
+        p->position.y -= checkYout(p->position.y) ? 0 : p->vel.y;
         break;
         
         case MOVE_DOWN:
-        p->y += checkYout(p->y + p->height) ? 0 : p->vel.y;
+        p->position.y += checkYout(p->position.y + p->height) ? 0 : p->vel.y;
         break;
   
         case MOVE_RIGHT:
-        p->x += checkXout(p->x + p->width) ? 0 : p->vel.x;
+        p->position.x += checkXout(p->position.x + p->width) ? 0 : p->vel.x;
         break;
 
         case MOVE_LEFT:
-        p->x -= checkXout(p->x) ? 0 : p->vel.x;
+        p->position.x -= checkXout(p->position.x) ? 0 : p->vel.x;
         break;
  
         default:

@@ -5,5 +5,6 @@
 
 void handleLogic(Game game);
 void moveCharacter(Player p);
+void shootTile(Player p);
 
 #endif

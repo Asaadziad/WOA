@@ -5,6 +5,7 @@
 #include "memory.h"
 #include "rendering.h"
 #include "movementHandler.h"
+#include "tile.h"
 
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
@@ -34,7 +35,8 @@ static void handleKey(Game game,SDL_Keycode code){
         handlePlayerMovement(asaad,MOVE_DOWN);
         break;
         case SDLK_SPACE:
-        fprintf(stderr,"SPACE");
+        shootTile(game->players[0]);
+
         break;
         default:
         break;
@@ -68,12 +70,13 @@ void initEntities(Game game){
 
 void renderEntities(Game game){
     renderPlayer(game,game->players[0]);
+    
 }
 
 
 void clearScreen(Game game){
-    SDL_RenderClear(game->renderer);
     SDL_SetRenderDrawColor(game->renderer,0xff,0xff,0xff,0xff);
+    SDL_RenderClear(game->renderer);
 }
 void updateScreen(Game game){
     SDL_RenderPresent(game->renderer);
