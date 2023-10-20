@@ -34,3 +34,27 @@ void handleMovement(EntityType type,void* Entity){
         break;
     }
 }
+
+void handlePlayerMovement(Player p, MovementType m_type){
+    
+    switch(m_type){
+        case MOVE_UP:
+        p->y -= checkYout(p->y) ? 0 : p->vel.y;
+        break;
+        
+        case MOVE_DOWN:
+        p->y += checkYout(p->y + p->height) ? 0 : p->vel.y;
+        break;
+  
+        case MOVE_RIGHT:
+        p->x += checkXout(p->x + p->width) ? 0 : p->vel.x;
+        break;
+
+        case MOVE_LEFT:
+        p->x -= checkXout(p->x) ? 0 : p->vel.x;
+        break;
+ 
+        default:
+        break;
+    }
+}

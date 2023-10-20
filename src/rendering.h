@@ -3,7 +3,9 @@
 
 #include "SDL2/SDL.h"
 #include "game.h"
+#include "tile.h"
 
 void renderPlayer(Game game,Player p);
+void renderTile(Game game,Tile tile);
 
 #endif

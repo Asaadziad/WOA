@@ -11,8 +11,8 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->height = height;
     // Player created in standing position therefore it doesnt move.
     new_p->isMoving = false;
-    new_p->vel.x = 0;
-    new_p->vel.y = 0;
+    new_p->vel.x = 10;
+    new_p->vel.y = 10;
 
     return new_p;
 }

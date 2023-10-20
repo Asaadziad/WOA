@@ -18,16 +18,40 @@ Game initGame(){
     return new_g;
 }
 
+static void handleKey(Game game,SDL_Keycode code){
+    Player asaad = game->players[0];
+    switch(code){
+        case SDLK_LEFT:
+        handlePlayerMovement(asaad,MOVE_LEFT);
+        break;
+        case SDLK_RIGHT:
+        handlePlayerMovement(asaad,MOVE_RIGHT);
+        break;
+        case SDLK_UP:
+        handlePlayerMovement(asaad,MOVE_UP);
+        break;
+        case SDLK_DOWN:
+        handlePlayerMovement(asaad,MOVE_DOWN);
+        break;
+        case SDLK_SPACE:
+        fprintf(stderr,"SPACE");
+        break;
+        default:
+        break;
+    }
+}
+
 void handleEvents(SDL_Event* e,Game game){
     while(SDL_PollEvent(e) != 0){
         switch(e->type){
             case SDL_QUIT:
                 game->state = QUIT_STATE;
             break;
+            case SDL_KEYDOWN:
+                handleKey(game,e->key.keysym.sym);
+            break;
             case SDL_MOUSEBUTTONDOWN:
-                Vector2f v = {1,1};
                 game->players[0]->isMoving = true;
-                game->players[0]->vel = addVectors(game->players[0]->vel, v);
             break;
             default: {}
         }
