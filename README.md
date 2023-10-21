@@ -23,6 +23,8 @@ I've always loved games and found that game programming resembles the foundation
 [Screencast from 15-10-23 19:31:02.webm](https://github.com/Asaadziad/WOA/assets/108868994/85140dc6-cc14-4401-8266-86173a565dff)
 
 
+21/10/2023 :- Added player movement and player shooting tiles features
+
 
 
 # Credits
