@@ -35,8 +35,9 @@ static void handleKey(Game game,SDL_Keycode code){
         handlePlayerMovement(asaad,MOVE_DOWN);
         break;
         case SDLK_SPACE:
-        shootTile(game->players[0]);
-
+        Tile new_t = createTile(asaad->position.x + asaad->width,asaad->position.y + (asaad->height / 2),10,0);
+        insertTile(asaad->tile_list,new_t);
+        printList(asaad->tile_list);
         break;
         default:
         break;
@@ -53,7 +54,7 @@ void handleEvents(SDL_Event* e,Game game){
                 handleKey(game,e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
-                game->players[0]->isMoving = true;
+                //game->players[0]->isMoving = true;
             break;
             default: {}
         }
@@ -84,6 +85,9 @@ void updateScreen(Game game){
 
 
 void quitGame(Game game){
-    FREE_ARRAY(Player,game->players,PLAYERS_COUNT);
+    for(int i = 0; i < PLAYERS_COUNT;i++){
+        destroyPlayer(game->players[i]);
+    }
+    free(game->players);
     free(game);
 }

@@ -4,8 +4,16 @@
 #include "stdbool.h"
 #include "vector.h"
 #include "tile.h"
-#include "stack.h"
 
+typedef struct node_t {
+    Tile tile;
+    struct node_t* next;
+} *Node;
+
+typedef struct list_t {
+    Node head;
+    size_t size;
+} *List;
 
 typedef struct player_t{
     Vector2f position;
@@ -13,11 +21,14 @@ typedef struct player_t{
     int height;
     int width;
     bool isMoving;
-    STACK tiles;        
+    List tile_list;  
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);
-void pushTile(Player p ,Tile tile);
-void popTile();
+void destroyPlayer(Player p);
+
+void insertTile(List list,Tile t);
+void removeHead(List list);
+void printList(List list);
 
 #endif

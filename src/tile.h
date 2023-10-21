@@ -4,13 +4,15 @@
 #include "SDL2/SDL.h"
 #include "vector.h"
 
+#define TILE_WIDTH 50
+#define TILE_HEIGHT 50
+
 typedef struct {
     Vector2f current_position;
     Vector2f velocity;
-    SDL_Texture* texture;
 } *Tile;
 
-Tile createTile();
+Tile createTile(int x, int y,int vel_x,int vel_y);
 void destroyTile(Tile t);
 
 #endif

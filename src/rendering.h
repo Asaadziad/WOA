@@ -6,6 +6,6 @@
 #include "tile.h"
 
 void renderPlayer(Game game,Player p);
-void renderTile(Game game,int x);
+void renderTile(Game game,Tile tile);
 
 #endif

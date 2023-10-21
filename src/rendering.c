@@ -2,6 +2,17 @@
 #include "texture.h"
 #include "movementHandler.h"
 
+static void renderPlayerTiles(Game game,List list){
+    if(!list) return;
+    Node current = list->head;
+    if(!current) return;
+    while(current != NULL){
+        handleTileMovement(game->players[0],current->tile);
+        renderTile(game,current->tile);
+        current = current->next;
+    }
+
+}
 
 void renderPlayer(Game game,Player p){
     SDL_Rect rect;
@@ -14,15 +25,14 @@ void renderPlayer(Game game,Player p){
     SDL_RenderFillRect(game->renderer,&rect);
 
     handleMovement(PLAYER_TYPE,game->players[0]);
-
-    int x = 0;
-
+    renderPlayerTiles(game,game->players[0]->tile_list);
 }
 
-void renderTile(Game game,int x){
+void renderTile(Game game,Tile tile){
+    if(!tile) return;
     SDL_Rect rect;
-        rect.x = 600 + x;
-        rect.y = 300;
+        rect.x = tile->current_position.x;
+        rect.y = tile->current_position.y - 25;
         rect.w = 50;
         rect.h = 50;
 

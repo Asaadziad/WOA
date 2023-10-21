@@ -13,6 +13,6 @@ typedef enum {
 
 void handleMovement(EntityType type,void* Entity);
 void handlePlayerMovement(Player p, MovementType m_type);
-
+void handleTileMovement(Player p ,Tile t);
 
 #endif

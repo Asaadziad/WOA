@@ -3,6 +3,12 @@
 
 #include "stddef.h"
 
+#define GROW_CAPACITY(capacity) \
+    ((capacity) < 8 ? 8 : (capacity) * 2)
+
+#define GROW_ARRAY(type, arrayPointer, oldCount, newCount) \
+    (type*)reallocate(arrayPointer, sizeof(type) * oldCount, sizeof(type) * newCount)
+
 #define FREE_ARRAY(type, arrayPointer, capacity) (type*)reallocate(arrayPointer, sizeof(type) * capacity, 0)
 
 #define ALLOCATE(type, count) \

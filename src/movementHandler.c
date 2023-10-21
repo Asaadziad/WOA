@@ -36,7 +36,7 @@ void handleMovement(EntityType type,void* Entity){
 }
 
 void handlePlayerMovement(Player p, MovementType m_type){
-    
+
     switch(m_type){
         case MOVE_UP:
         p->position.y -= checkYout(p->position.y) ? 0 : p->vel.y;
@@ -57,4 +57,10 @@ void handlePlayerMovement(Player p, MovementType m_type){
         default:
         break;
     }
+}
+
+void handleTileMovement(Player p,Tile t){
+    if(!t) return;
+    t->current_position.x += t->velocity.x;
+    t->current_position.y += t->velocity.y;
 }
