@@ -25,6 +25,7 @@ I've always loved games and found that game programming resembles the foundation
 
 21/10/2023 :- Added player movement and player shooting tiles features
 
+[Screencast from 21-10-23 12:30:26.webm](https://github.com/Asaadziad/WOA/assets/108868994/5c974b8d-37c1-4019-9783-7411f17df6c1)
 
 
 # Credits
