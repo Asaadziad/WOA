@@ -7,8 +7,8 @@ static void renderPlayerTiles(Game game,List list){
     Node current = list->head;
     if(!current) return;
     while(current != NULL){
-        handleTileMovement(game->players[0],current->tile);
         renderTile(game,current->tile);
+        handleTileMovement(game->players[0],current->tile);
         current = current->next;
     }
 
