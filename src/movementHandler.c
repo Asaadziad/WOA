@@ -59,8 +59,23 @@ void handlePlayerMovement(Player p, MovementType m_type){
     }
 }
 
-void handleTileMovement(Player p,Tile t){
-    if(!t) return;
-    t->current_position.x += t->velocity.x;
-    t->current_position.y += t->velocity.y;
+void handleTilesMovement(Player p,List tiles_list){
+    if(!tiles_list) return;
+    Node current = tiles_list->head;
+    if(!current) return;
+    while(current != NULL){
+        int current_x = current->tile->current_position.x;
+        int current_y = current->tile->current_position.y;
+        if(checkXout(current_x) || checkXout(current_x + TILE_WIDTH)){
+            removeHead(tiles_list);
+            break;
+        }
+        if(checkYout(current_y) || checkYout(current_y + TILE_HEIGHT)){
+            removeHead(tiles_list);
+            break;
+        }
+        current->tile->current_position.x += current->tile->velocity.x;
+        current->tile->current_position.y += current->tile->velocity.y;
+        current = current->next;
+    }
 }

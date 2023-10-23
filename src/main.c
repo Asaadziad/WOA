@@ -34,7 +34,6 @@ int main(){
         handleEvents(&event, game);
 
         handleLogic(game);
-
         /* Rendering */
         clearScreen(game);
 

@@ -8,7 +8,6 @@ static void renderPlayerTiles(Game game,List list){
     if(!current) return;
     while(current != NULL){
         renderTile(game,current->tile);
-        handleTileMovement(game->players[0],current->tile);
         current = current->next;
     }
 
@@ -24,7 +23,6 @@ void renderPlayer(Game game,Player p){
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(game->renderer,&rect);
 
-    handleMovement(PLAYER_TYPE,game->players[0]);
     renderPlayerTiles(game,game->players[0]->tile_list);
 }
 
