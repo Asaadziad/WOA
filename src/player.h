@@ -15,6 +15,13 @@ typedef struct list_t {
     size_t size;
 } *List;
 
+typedef enum {
+    NORTH,
+    SOUTH,
+    WEST,
+    EAST,
+} PlayerFace;
+
 typedef struct player_t{
     Vector2f position;
     Vector2f vel;
@@ -22,6 +29,7 @@ typedef struct player_t{
     int width;
     bool isMoving;
     List tile_list;  
+    PlayerFace face;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);

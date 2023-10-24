@@ -3,7 +3,7 @@
 #include "game.h"
 
 
-void handleLogic(Game game);
+void handleLogic(Game game, uint32_t time);
 void moveCharacter(Player p);
 void shootTile(Player p);
 

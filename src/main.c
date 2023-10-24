@@ -1,5 +1,6 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "SDL2/SDL_ttf.h"
 
 #include "game.h"
 #include "logic.h"
@@ -17,7 +18,6 @@ int main(){
     SDL_Window* window = NULL;
 
     Game game = initGame();
-    game->state = RUNNING_STATE;
     initSDL(&window,&game->renderer);
     loadTexture(game->renderer,game->current_texture,"spritesheet.png");
     initEntities(game);
@@ -33,13 +33,10 @@ int main(){
         */
         handleEvents(&event, game);
 
-        handleLogic(game);
+        handleLogic(game, cap_time);
+
         /* Rendering */
-        clearScreen(game);
-
-        renderEntities(game);
-
-        updateScreen(game);
+        initRendering(game);
         /* End of Rendering */
 
         ++frameCounter;
@@ -64,26 +61,33 @@ int main(){
 
 static void initSDL(SDL_Window** window, SDL_Renderer** renderer){
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
-        printf("Couldn't initialize SDL: %s\n", SDL_GetError());
+        fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(1);
     }
     *window = SDL_CreateWindow("World of Asaad",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,800,600,SDL_WINDOW_SHOWN );
     if(!(*window)) {
-        printf("Could'nt initiate window: %s \n", SDL_GetError());
+        fprintf(stderr,"Could'nt initiate window: %s \n", SDL_GetError());
         exit(1);
     }
     *renderer = SDL_CreateRenderer(*window,-1 ,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(!(*renderer)) {
-        printf("Could'nt initiate renderer: %s \n", SDL_GetError());
+        fprintf(stderr,"Could'nt initiate renderer: %s \n", SDL_GetError());
         exit(1);
     }
 
     //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
     if( !( IMG_Init( imgFlags ) & imgFlags ) ){
-        printf("Couldn't initialize images: %s\n", SDL_GetError());
+        fprintf(stderr,"Couldn't initialize images: %s\n", SDL_GetError());
         exit(1);
     }
+
+    //Initialize SDL_ttf
+    /*if( TTF_Init() == -1 ){
+        fprintf(stderr, "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+        exit(1);
+    }*/
+
 }
 
 void quitSDL(SDL_Window** window){

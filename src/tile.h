@@ -4,8 +4,8 @@
 #include "SDL2/SDL.h"
 #include "vector.h"
 
-#define TILE_WIDTH 50
-#define TILE_HEIGHT 50
+#define TILE_WIDTH 25
+#define TILE_HEIGHT 25
 
 typedef struct {
     Vector2f current_position;

@@ -13,7 +13,7 @@ static bool checkYout(int y){
     return false;
 }
 // Entity can be Player/Monster
-void handleMovement(EntityType type,void* Entity){
+void handleMovement(EntityType type,void* Entity,uint32_t time){
     switch (type)
     {
     case PLAYER_TYPE:
@@ -25,8 +25,8 @@ void handleMovement(EntityType type,void* Entity){
         if(checkYout(p->position.y + p->height) || checkYout(p->position.y)){
             p->vel.y *= -1;
         }
-        p->position.x += p->vel.x;
-        p->position.y += p->vel.y;
+        p->position.x += p->vel.x * time;
+        p->position.y += p->vel.y * time;
         break;
     case MONSTER_TYPE:
     break;

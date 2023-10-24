@@ -15,14 +15,15 @@ static List createList(){
 Player initPlayer(int x,int y,int width,int height){
     Player new_p = (Player)malloc(sizeof(*new_p));
     if(!new_p) return NULL;
-    new_p->position.x = x;
-    new_p->position.y = y;
+    Vector2f pos = {x,y};
+    new_p->position = pos;
     new_p->width = width;
     new_p->height = height;
     new_p->isMoving = false;
     Vector2f vel = {10,10};
     new_p->vel = vel;
     new_p->tile_list = createList();
+    new_p->face = NORTH;
     return new_p;
 }
 

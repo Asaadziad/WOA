@@ -11,7 +11,7 @@ typedef enum {
     MOVE_RIGHT
 } MovementType;
 
-void handleMovement(EntityType type,void* Entity);
+void handleMovement(EntityType type,void* Entity,uint32_t time);
 void handlePlayerMovement(Player p, MovementType m_type);
 void handleTilesMovement(Player p ,List tiles_list);
 

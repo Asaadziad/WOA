@@ -11,26 +11,27 @@
 
 #define PLAYERS_COUNT 1
 
-#define IS_RUNNING(game) ((game)->state == RUNNING_STATE)
+#define IS_RUNNING(game) ((game)->state != QUIT_STATE)
 
 typedef enum {
     RUNNING_STATE,
-    QUIT_STATE
+    QUIT_STATE,
+    MENU_STATE
 } GameState;
 
 typedef struct game_t {
     Player* players;
     GameState state;
     Texture* current_texture;
-    Texture* world_texture;
     SDL_Renderer* renderer;
 } *Game;
 
 Game initGame();
 void handleEvents(SDL_Event* e,Game game);
 void initEntities(Game game);
+void initRendering(Game game);
+
 void renderEntities(Game game);
-void renderWorld(Game game);
 
 void clearScreen(Game game);
 void updateScreen(Game game);
