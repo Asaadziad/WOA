@@ -3,6 +3,7 @@
 
 #include "texture.h"
 #include "player.h"
+#include "SDL2/SDL_ttf.h"
 
 #define SCREEN_HEIGHT 500
 #define SCREEN_WIDTH 500
@@ -23,6 +24,7 @@ typedef struct game_t {
     Player* players;
     GameState state;
     Texture* current_texture;
+    TTF_Font* global_font;
     SDL_Renderer* renderer;
 } *Game;
 

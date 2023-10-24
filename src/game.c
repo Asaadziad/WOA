@@ -14,7 +14,7 @@ Game initGame(){
     
     new_g->current_texture = initTexture();
     new_g->state = MENU_STATE;
-
+    
     
     return new_g;
 }
@@ -79,11 +79,16 @@ void renderEntities(Game game){
     renderPlayer(game,game->players[1]);
 }
 
+Label helloLabel(Game game,const char* text){
+    Label t = createLabel(game,text, 0 ,0);
+    return t;
+}
+
 void initRendering(Game game){
     clearScreen(game);
 
     if(game->state == MENU_STATE){
-       drawLabel("Hello world", 0 ,0);
+       drawLabel(game,helloLabel(game,"hello world"));
     
     } else {
         renderEntities(game);
@@ -106,6 +111,8 @@ void updateScreen(Game game){
 
 
 void quitGame(Game game){
+    TTF_CloseFont(game->global_font);
+
     for(int i = 0; i < PLAYERS_COUNT;i++){
         destroyPlayer(game->players[i]);
     }

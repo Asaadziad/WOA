@@ -19,6 +19,10 @@ int main(){
 
     Game game = initGame();
     initSDL(&window,&game->renderer);
+    game->global_font = TTF_OpenFont("lazy.ttf",28);
+    if(!game->global_font){
+        fprintf(stderr,"%s", TTF_GetError());
+    }
     loadTexture(game->renderer,game->current_texture,"spritesheet.png");
     initEntities(game);
 
@@ -83,15 +87,18 @@ static void initSDL(SDL_Window** window, SDL_Renderer** renderer){
     }
 
     //Initialize SDL_ttf
-    /*if( TTF_Init() == -1 ){
+    if( TTF_Init() == -1 ){
         fprintf(stderr, "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
         exit(1);
-    }*/
+    }
 
 }
 
 void quitSDL(SDL_Window** window){
     SDL_DestroyWindow(*window);
+
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }
 
