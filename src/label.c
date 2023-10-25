@@ -20,13 +20,3 @@ Label createLabel(Game game,const char* text, int x, int y){
     return s;
 }
 
-void drawLabel(Game game,Label label){
-    if(!label) return;
-    SDL_Rect src;
-    src.x = label->position.x;
-    src.y = label->position.y;
-    src.w = label->width;
-    src.h = label->width;
-
-    SDL_RenderCopy(game->renderer,label->labelTexture,&src,NULL);
-}

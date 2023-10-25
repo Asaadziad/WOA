@@ -13,6 +13,5 @@ typedef struct {
 } *Label;
 
 Label createLabel(Game game,const char* text,int x, int y);
-void drawLabel(Game game,Label label);
 
 #endif

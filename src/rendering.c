@@ -38,3 +38,14 @@ void renderTile(Game game,Tile tile){
     SDL_RenderFillRect(game->renderer,&rect);
     
 }
+
+void renderLabel(Game game,Label label){
+    if(!label) return;
+    SDL_Rect src;
+    src.x = label->position.x;
+    src.y = label->position.y;
+    src.w = label->width;
+    src.h = label->height;
+
+    SDL_RenderCopy(game->renderer,label->labelTexture,NULL,&src);
+}

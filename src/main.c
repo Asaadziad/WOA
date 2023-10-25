@@ -25,7 +25,6 @@ int main(){
     }
     loadTexture(game->renderer,game->current_texture,"spritesheet.png");
     initEntities(game);
-
     
     int frameCounter = 0;
 
