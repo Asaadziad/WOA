@@ -8,5 +8,5 @@
 
 void renderPlayer(Game game,Player p);
 void renderTile(Game game,Tile tile);
-void renderLabel(Game game,Label label);
+void renderLabel(Game game);
 #endif

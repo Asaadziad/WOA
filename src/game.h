@@ -23,15 +23,18 @@ typedef enum {
 typedef struct game_t {
     Player* players;
     GameState state;
-    Texture* current_texture;
+    Texture head;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
 } *Game;
 
 Game initGame();
 void handleEvents(SDL_Event* e,Game game);
+void initTextures(Game game);
 void initEntities(Game game);
 void initRendering(Game game);
+
+void loadTextures(Game game);
 
 void renderEntities(Game game);
 

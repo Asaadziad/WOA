@@ -1,16 +1,17 @@
 #include "texture.h"
 
-Texture* initTexture(){
+Texture initTexture(){
     
-    Texture* new_texture = (Texture*)malloc(sizeof(*new_texture));
+    Texture new_texture = (Texture)malloc(sizeof(*new_texture));
     if(!new_texture) return NULL;
     new_texture->height = 0;
     new_texture->width = 0;
     new_texture->texture = NULL;
+    new_texture->next = NULL;
     return new_texture;
 }
 
-void loadTexture(SDL_Renderer* renderer,Texture* texture, const char* path){
+void loadTexture(SDL_Renderer* renderer,Texture texture, const char* path){
     if(!texture) return;
     SDL_DestroyTexture(texture->texture);
     SDL_Surface* surface = IMG_Load(path);
@@ -35,7 +36,8 @@ void loadTexture(SDL_Renderer* renderer,Texture* texture, const char* path){
     SDL_FreeSurface(surface);
 }
 
-void freeTexture(Texture* texture){
+
+void freeTexture(Texture texture){
     SDL_DestroyTexture(texture->texture);
     free(texture);
 }

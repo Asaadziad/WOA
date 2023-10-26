@@ -7,17 +7,20 @@
 #include "movementHandler.h"
 #include "tile.h"
 #include "components.h"
+#include "logger.h"
 
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     
-    new_g->current_texture = initTexture();
+    new_g->head = initTexture();
     new_g->state = MENU_STATE;
     
     
     return new_g;
 }
+
+void loadTextures(Game game){}
 
 static void handleKey(Game game,SDL_Keycode code){
     Player asaad = game->players[0];
@@ -65,6 +68,14 @@ void handleEvents(SDL_Event* e,Game game){
     }
 }
 
+void initTextures(Game game){
+
+}
+
+void insertTexture(){}
+
+static void destroyTextureList(Texture head){}
+
 void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
     Player asaad = initPlayer(50,50,100,100);
@@ -84,7 +95,8 @@ void initRendering(Game game){
 
     if(game->state == MENU_STATE){
        //drawLabel(game,helloLabel(game,"hello world"));
-        
+        //renderEntities(game);
+        renderLabel(game);
     } else {
         renderEntities(game);
     }
@@ -111,6 +123,7 @@ void quitGame(Game game){
     for(int i = 0; i < PLAYERS_COUNT;i++){
         destroyPlayer(game->players[i]);
     }
+    destroyTextureList(game->head);
     free(game->players);
     free(game);
 }

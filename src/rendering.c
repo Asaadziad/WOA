@@ -39,13 +39,22 @@ void renderTile(Game game,Tile tile){
     
 }
 
-void renderLabel(Game game,Label label){
-    if(!label) return;
-    SDL_Rect src;
-    src.x = label->position.x;
-    src.y = label->position.y;
-    src.w = label->width;
-    src.h = label->height;
+void renderLabel(Game game){
+    SDL_Texture* label;
 
-    SDL_RenderCopy(game->renderer,label->labelTexture,NULL,&src);
+    SDL_Color black = {0,0,0,0};
+    SDL_Surface* surface = TTF_RenderText_Solid(game->global_font,"hello world",black);
+    if(!surface) return;
+
+    label = SDL_CreateTextureFromSurface(game->renderer , surface );
+
+    SDL_Rect src;
+    src.x = 0;
+    src.y = 0;
+    src.w = surface->w;
+    src.h = surface->h;
+
+    SDL_RenderCopy(game->renderer,label,NULL,&src);
+
+    SDL_FreeSurface( surface );
 }

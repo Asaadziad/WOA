@@ -23,7 +23,7 @@ int main(){
     if(!game->global_font){
         fprintf(stderr,"%s", TTF_GetError());
     }
-    loadTexture(game->renderer,game->current_texture,"spritesheet.png");
+    loadTextures(game);
     initEntities(game);
     
     int frameCounter = 0;
@@ -50,11 +50,11 @@ int main(){
             SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
         }
     }
-    freeTexture(game->current_texture);
+   //freeTexture(game->head);
 
     
-    quitSDL(&window);
     quitGame(game);
+    quitSDL(&window);
 
     return 0;
 }
