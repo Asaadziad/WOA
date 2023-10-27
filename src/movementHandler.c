@@ -59,7 +59,7 @@ void handlePlayerMovement(Player p, MovementType m_type){
     }
 }
 
-void handleTilesMovement(Player p,List tiles_list){
+/*void handleTilesMovement(Player p,List tiles_list){
     if(!tiles_list) return;
     Node current = tiles_list->head;
     if(!current) return;
@@ -78,4 +78,4 @@ void handleTilesMovement(Player p,List tiles_list){
         current->tile->current_position.y += current->tile->velocity.y;
         current = current->next;
     }
-}
+}*/

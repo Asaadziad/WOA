@@ -17,4 +17,10 @@ ListResult listInsert(List list, Element element);
 void listDestroy(List list);
 void listPrint(List list);
 
+size_t getListSize(List list);
+Node getHead(List list);
+Element getNodeData(Node node);
+Node getNextNode(Node node);
+
+
 #endif

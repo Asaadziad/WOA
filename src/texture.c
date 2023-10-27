@@ -1,13 +1,14 @@
 #include "texture.h"
 
-Texture initTexture(){
+Texture initTexture(int render_x,int render_y){
     
     Texture new_texture = (Texture)malloc(sizeof(*new_texture));
     if(!new_texture) return NULL;
     new_texture->height = 0;
     new_texture->width = 0;
     new_texture->texture = NULL;
-    new_texture->next = NULL;
+    Vector2f starter_pos = {render_x,render_y};
+    new_texture->render_pos = starter_pos;
     return new_texture;
 }
 
@@ -35,6 +36,23 @@ void loadTexture(SDL_Renderer* renderer,Texture texture, const char* path){
 
     SDL_FreeSurface(surface);
 }
+
+void loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,Texture texture, const char* text){
+    SDL_Texture* label;
+
+    SDL_Color black = {0,0,0,0};
+    SDL_Surface* surface = TTF_RenderText_Solid(font,text,black);
+    if(!surface) return;
+
+    label = SDL_CreateTextureFromSurface(renderer , surface );
+
+    texture->texture = label;
+    texture->height = surface->h;
+    texture->width = surface->w;
+
+    SDL_FreeSurface( surface );
+}
+
 
 
 void freeTexture(Texture texture){

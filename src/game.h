@@ -1,9 +1,11 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "SDL2/SDL_ttf.h"
+
 #include "texture.h"
 #include "player.h"
-#include "SDL2/SDL_ttf.h"
+#include "DS/list.h"
 
 #define SCREEN_HEIGHT 500
 #define SCREEN_WIDTH 500
@@ -23,7 +25,7 @@ typedef enum {
 typedef struct game_t {
     Player* players;
     GameState state;
-    Texture head;
+    List textures;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
 } *Game;

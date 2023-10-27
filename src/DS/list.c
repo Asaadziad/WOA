@@ -56,20 +56,22 @@ static void nodeDestroy(Node node,elemDestroy destroy){
 */
 ListResult listInsert(List list, Element element){
     if(!list || !element) return LIST_NULL_ARG;
+    Node new = nodeCreate(element);
+    if(!new) return LIST_ALLOCATION_FAIL;
     Node current = list->head;
+    /* IF LIST IS EMPTY */
     if(!current) {
-        Node head = nodeCreate(element);
-        if(!head) return LIST_ALLOCATION_FAIL;
-        list->head = head; 
+        list->head = new; 
+        list->size++;
         return LIST_SUCCESS;
     }
+    /* WALK TILL THE END */
     while (current->next)
     {
         current = current->next;
     }
-    Node next = nodeCreate(element);
-    if(!next) return LIST_ALLOCATION_FAIL;
-    current->next = next;  
+    current->next = new;  
+    list->size++;
     return LIST_SUCCESS;
 }
 
@@ -100,3 +102,18 @@ void listPrint(List list){
     printf("\n");
 }
 
+size_t getListSize(List list){
+    return list->size;
+}
+
+Node getHead(List list){
+    return list->head;
+}
+
+Element getNodeData(Node node){
+    return node->data;
+}
+
+Node getNextNode(Node node){
+    return node->next;
+}

@@ -5,9 +5,11 @@
 #include "game.h"
 #include "tile.h"
 #include "label.h"
+#include "texture.h"
 
 void renderPlayer(Game game,Player p);
 void renderTile(Game game,Tile tile);
 void renderLabel(Game game);
+void renderTexture(Game game,Texture texture,int x, int y);
 
 #endif

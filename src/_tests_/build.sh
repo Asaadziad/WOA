@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc *.c ../DS/*.c -o ./test
+gcc lib_test.c ../lib/assets.c -o ./test

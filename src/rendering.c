@@ -2,16 +2,6 @@
 #include "texture.h"
 #include "movementHandler.h"
 
-static void renderPlayerTiles(Game game,List list){
-    if(!list) return;
-    Node current = list->head;
-    if(!current) return;
-    while(current != NULL){
-        renderTile(game,current->tile);
-        current = current->next;
-    }
-
-}
 
 void renderPlayer(Game game,Player p){
     SDL_Rect rect;
@@ -23,7 +13,7 @@ void renderPlayer(Game game,Player p){
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(game->renderer,&rect);
 
-    renderPlayerTiles(game,game->players[0]->tile_list);
+    //renderPlayerTiles(game,game->players[0]->tile_list);
 }
 
 void renderTile(Game game,Tile tile){
@@ -57,4 +47,13 @@ void renderLabel(Game game){
     SDL_RenderCopy(game->renderer,label,NULL,&src);
 
     SDL_FreeSurface( surface );
+}
+
+void renderTexture(Game game,Texture texture,int x, int y){
+    SDL_Rect dst;
+    dst.x = texture->render_pos.x;
+    dst.y = texture->render_pos.y;
+    dst.h = texture->height;
+    dst.w = texture->width;
+    SDL_RenderCopy(game->renderer,texture->texture,NULL,&dst);
 }
