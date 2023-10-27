@@ -4,13 +4,17 @@
 typedef void* Element;
 
 typedef void (*elemDestroy)(Element);
+typedef void (*elemPrint)(Element);
 
 typedef struct node_t* Node;
 typedef struct list_t* List;
 
-List listCreate(elemDestroy destroy_function);
+typedef enum { LIST_SUCCESS, LIST_NULL_ARG, LIST_FAILED, LIST_ALLOCATION_FAIL, } ListResult;
 
-void listInsert(List list, Element element);
+List listCreate(elemDestroy destroy_function,elemPrint print_function);
+
+ListResult listInsert(List list, Element element);
 void listDestroy(List list);
+void listPrint(List list);
 
 #endif

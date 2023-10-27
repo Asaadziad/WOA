@@ -1,6 +1,8 @@
-#include "list.h"
 #include "stddef.h"
 #include "stdlib.h"
+#include "stdio.h"
+
+#include "list.h"
 
 struct node_t
 {
@@ -12,17 +14,19 @@ struct list_t {
     Node head;
     size_t size;
     elemDestroy destroy_function;
+    elemPrint print_function;
 };
 
 /*
 * Creates an empty list
 */
-List listCreate(elemDestroy destroy_function){
+List listCreate(elemDestroy destroy_function,elemPrint print_function){
     List list = (List)malloc(sizeof(*list));
     if(!list) return NULL;
     list->head = NULL;
     list->size = 0;
     list->destroy_function = destroy_function;
+    list->print_function = print_function;
     return list;
 }
 
@@ -34,21 +38,49 @@ static Node nodeCreate(Element element){
     return e;
 }
 
+static void nodeDestroy(Node node,elemDestroy destroy){
+    if(!node) return;
+    if(destroy == NULL){
+        
+        free(node->data);
+    } else { 
+        destroy(node->data);
+    }
+    node->next = NULL;
+    free(node);
+}
+
 
 /*
 * Inserts at the end of the list
 */
-void listInsert(List list, Element element){
-    if(!list || !element) return;
+ListResult listInsert(List list, Element element){
+    if(!list || !element) return LIST_NULL_ARG;
     Node current = list->head;
-    if(!current) return;
+    if(!current) {
+        Node head = nodeCreate(element);
+        if(!head) return LIST_ALLOCATION_FAIL;
+        list->head = head; 
+        return LIST_SUCCESS;
+    }
     while (current->next)
     {
         current = current->next;
     }
     Node next = nodeCreate(element);
-    if(!next) return;
+    if(!next) return LIST_ALLOCATION_FAIL;
     current->next = next;  
+    return LIST_SUCCESS;
+}
+
+typedef void (*MAP)(Element);
+static void loopAndMap(List list,MAP map){
+    if(!list || !map) return;
+    Node current = list->head;
+    while(current != NULL){
+        map(current->data);
+        current = current->next;
+    }
 }
 
 void listDestroy(List list){
@@ -56,9 +88,15 @@ void listDestroy(List list){
     Node current = list->head;
     while(current != NULL){
         Node tmp = current->next;
-        list->destroy_function(current->data);
-        current->next = NULL;
-        free(current);
+        nodeDestroy(current,list->destroy_function);
         current = tmp;
     }
+    free(list);
 }
+
+void listPrint(List list){
+    if(!list) return;
+    loopAndMap(list,list->print_function);
+    printf("\n");
+}
+
