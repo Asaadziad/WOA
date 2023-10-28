@@ -49,11 +49,46 @@ void renderLabel(Game game){
     SDL_FreeSurface( surface );
 }
 
-void renderTexture(Game game,Texture texture,int x, int y){
+void renderTexture(Game game,Texture texture){
+    
     SDL_Rect dst;
     dst.x = texture->render_pos.x;
     dst.y = texture->render_pos.y;
     dst.h = texture->height;
     dst.w = texture->width;
     SDL_RenderCopy(game->renderer,texture->texture,NULL,&dst);
+}
+
+void renderTextureAt(Game game,Texture texture,int x, int y){
+    Vector2f new_pos = {x,y};
+    texture->render_pos = new_pos;
+    SDL_Rect dst;
+    dst.x = x;
+    dst.y = y;
+    dst.h = texture->height;
+    dst.w = texture->width;
+    SDL_RenderCopy(game->renderer,texture->texture,NULL,&dst);
+}
+
+void renderButton(Game game,int x, int y, const char* text){
+    int global_h = 50;
+    int global_w = 100;
+    SDL_Rect border;
+    border.x = x;
+    border.y = y;
+    border.h = global_h;
+    border.w = global_w;
+
+    SDL_Rect inner;
+    inner.x = x + 5;
+    inner.y = y + 5;
+    inner.h = global_h - 10;
+    inner.w = global_w - 10;
+
+    SDL_SetRenderDrawColor(game->renderer, 0,0,0,0);
+    SDL_RenderFillRect(game->renderer, &border);
+    SDL_SetRenderDrawColor(game->renderer, 255,255,255,0);
+    SDL_RenderFillRect(game->renderer, &inner);
+
+
 }

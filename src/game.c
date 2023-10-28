@@ -11,6 +11,7 @@
 #include "DS/list.h"
 #include "lib/assets.h"
 
+
 static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
 }
@@ -21,18 +22,19 @@ Game initGame(){
     
     new_g->state = MENU_STATE;
     new_g->textures = listCreate(freeTexturePtr,NULL);
-    
+
     return new_g;
 }
 
 static void createMenuUI(Game game){
-    Texture t = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2);
-    loadTextureFromText(game->renderer,game->global_font,t,"Hello world");
-    Texture tt = initTexture(100,100);
-    loadTextureFromText(game->renderer,game->global_font,tt,"LIGMABALLS");
+    Texture t = initTexture(SCREEN_HEIGHT / 2,SCREEN_WIDTH / 2);
+    loadTextureFromText(game->renderer,game->global_font,t,"World of asaad");
+    Texture tt = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 + t->height);
+    loadTextureFromText(game->renderer,game->global_font,tt,"Press space to enter");
     listInsert(game->textures,t);
     listInsert(game->textures,tt);
 }
+
 
 void loadTextures(Game game){
     if(game->state == MENU_STATE){
@@ -66,7 +68,12 @@ static void handleKey(Game game,SDL_Keycode code){
         handlePlayerMovement(asaad,MOVE_DOWN);
         break;
         case SDLK_SPACE:
-
+            if(game->state == MENU_STATE){
+                listEmpty(game->textures);
+                game->state = RUNNING_STATE;
+            } else {
+                LOG("Running state");
+            }
         break;
         default:
         break;
@@ -104,23 +111,28 @@ void renderEntities(Game game){
     renderPlayer(game,game->players[1]);
 }
 
+
+
+static void renderMenu(Game game){
+    int i = 0;
+    Node current = getHead(game->textures);
+    while(current != NULL){
+        Texture t = (Texture)getNodeData(current);
+        renderTexture(game,t);
+        current = getNextNode(current);
+        i++;
+    }
+}
+
 void initRendering(Game game){
     clearScreen(game);
-
-   Node current = getHead(game->textures);
-   while(current != NULL){
-    Texture tmp = (Texture)getNodeData(current);
-    renderTexture(game,tmp,0,0);
-    current = getNextNode(current);
-   }
-   
-   /* if(game->state == MENU_STATE){
-       //drawLabel(game,helloLabel(game,"hello world"));
-        //renderEntities(game);
-        renderLabel(game);
+        
+    if(game->state == MENU_STATE){
+        renderMenu(game);
+        //renderButton(game,100,100,"Click me");
     } else {
         renderEntities(game);
-    }*/
+    }
 
     updateScreen(game);
 }

@@ -1,4 +1,5 @@
 #include "texture.h"
+#include "string.h"
 
 Texture initTexture(int render_x,int render_y){
     
@@ -49,7 +50,6 @@ void loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,Texture texture, 
     texture->texture = label;
     texture->height = surface->h;
     texture->width = surface->w;
-
     SDL_FreeSurface( surface );
 }
 

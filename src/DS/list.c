@@ -85,7 +85,7 @@ static void loopAndMap(List list,MAP map){
     }
 }
 
-void listDestroy(List list){
+void listEmpty(List list){
     if(!list) return;
     Node current = list->head;
     while(current != NULL){
@@ -93,6 +93,13 @@ void listDestroy(List list){
         nodeDestroy(current,list->destroy_function);
         current = tmp;
     }
+    list->head = NULL;
+    list->size = 0;
+}
+
+
+void listDestroy(List list){
+    listEmpty(list);
     free(list);
 }
 

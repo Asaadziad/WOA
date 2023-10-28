@@ -15,6 +15,7 @@ List listCreate(elemDestroy destroy_function,elemPrint print_function);
 
 ListResult listInsert(List list, Element element);
 void listDestroy(List list);
+void listEmpty(List list);
 void listPrint(List list);
 
 size_t getListSize(List list);

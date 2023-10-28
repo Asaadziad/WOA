@@ -10,6 +10,8 @@
 void renderPlayer(Game game,Player p);
 void renderTile(Game game,Tile tile);
 void renderLabel(Game game);
-void renderTexture(Game game,Texture texture,int x, int y);
+void renderTexture(Game game,Texture texture);
+void renderTextureAt(Game game,Texture texture,int x, int y);
+void renderButton(Game game,int x, int y,const char* text);
 
 #endif
