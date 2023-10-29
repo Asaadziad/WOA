@@ -7,12 +7,19 @@
 #define TILE_WIDTH 25
 #define TILE_HEIGHT 25
 
+typedef enum {
+    WATER_TILE,
+    GRASS_TILE,
+    BLOCK_TILE,
+} TileType;
+
 typedef struct {
-    Vector2f current_position;
-    Vector2f velocity;
+    SDL_Rect tile_box;
+    TileType type;
 } *Tile;
 
-Tile createTile(int x, int y,int vel_x,int vel_y);
+Tile createTile(int x, int y,TileType type);
+void renderTile(Tile tile);
 void destroyTile(Tile t);
 
 #endif

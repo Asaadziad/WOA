@@ -1,13 +1,18 @@
 #include "tile.h"
 #include "stdlib.h"
 
-Tile createTile(int x, int y,int vel_x,int vel_y){
+
+Tile createTile(int x, int y,TileType type){
     Tile t = (Tile)malloc(sizeof(*t));
     if(!t) return NULL;
-    Vector2f pos = {x,y};
-    Vector2f vel = {vel_x,vel_y};
-    t->velocity = vel;
-    t->current_position = pos;
+    SDL_Rect dst;
+    dst.x = x;
+    dst.y = y;
+    dst.h = 50;
+    dst.w = 50;
+    t->tile_box = dst;
+    t->type = type;
+    
     return t;
 }
 

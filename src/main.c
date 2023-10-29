@@ -19,7 +19,7 @@ int main(){
 
     Game game = initGame();
     initSDL(&window,&game->renderer);
-    game->global_font = TTF_OpenFont("lazy.ttf",28);
+    game->global_font = TTF_OpenFont("src/assets/AlbertText-Bold.ttf",28);
     if(!game->global_font){
         fprintf(stderr,"%s", TTF_GetError());
     }

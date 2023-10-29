@@ -27,7 +27,7 @@ Game initGame(){
 }
 
 static void createMenuUI(Game game){
-    Texture t = initTexture(SCREEN_HEIGHT / 2,SCREEN_WIDTH / 2);
+    Texture t = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2);
     loadTextureFromText(game->renderer,game->global_font,t,"World of asaad");
     Texture tt = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 + t->height);
     loadTextureFromText(game->renderer,game->global_font,tt,"Press space to enter");
@@ -136,9 +136,6 @@ void initRendering(Game game){
 
     updateScreen(game);
 }
-
-
-
 
 
 void clearScreen(Game game){
