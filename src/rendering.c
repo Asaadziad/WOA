@@ -16,18 +16,6 @@ void renderPlayer(Game game,Player p){
     //renderPlayerTiles(game,game->players[0]->tile_list);
 }
 
-void renderTile(Game game,Tile tile){
-    if(!tile) return;
-    SDL_Rect rect;
-        rect.x = tile->current_position.x;
-        rect.y = tile->current_position.y - 25;
-        rect.w = 50;
-        rect.h = 50;
-
-    SDL_SetRenderDrawColor(game->renderer,255,0,0,255);
-    SDL_RenderFillRect(game->renderer,&rect);
-    
-}
 
 void renderLabel(Game game){
     SDL_Texture* label;
@@ -69,6 +57,8 @@ void renderTextureAt(Game game,Texture texture,int x, int y){
     dst.w = texture->width;
     SDL_RenderCopy(game->renderer,texture->texture,NULL,&dst);
 }
+
+void renderPartOfTexture(Game game, Texture texture,SDL_Rect dst){}
 
 void renderButton(Game game,int x, int y, const char* text){
     int global_h = 50;

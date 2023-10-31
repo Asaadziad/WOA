@@ -12,7 +12,6 @@ Tile createTile(int x, int y,TileType type){
     dst.w = 50;
     t->tile_box = dst;
     t->type = type;
-    
     return t;
 }
 

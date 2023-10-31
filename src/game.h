@@ -7,7 +7,6 @@
 #include "player.h"
 #include "DS/list.h"
 
-
 #define SCREEN_HEIGHT 500
 #define SCREEN_WIDTH 500
 #define WORLD_WIDTH 1250
@@ -29,11 +28,12 @@ typedef struct game_t {
     List textures;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
+    FILE* map;
+    Tile* tiles;
 } *Game;
 
 Game initGame();
 void handleEvents(SDL_Event* e,Game game);
-void initTextures(Game game);
 void initEntities(Game game);
 void initRendering(Game game);
 

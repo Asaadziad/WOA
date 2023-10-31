@@ -22,27 +22,81 @@ Game initGame(){
     
     new_g->state = MENU_STATE;
     new_g->textures = listCreate(freeTexturePtr,NULL);
-
+    new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
     return new_g;
 }
 
 static void createMenuUI(Game game){
-    Texture t = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2);
+    Texture t = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2,LABEL_TEXTURE);
     loadTextureFromText(game->renderer,game->global_font,t,"World of asaad");
-    Texture tt = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 + t->height);
+    Texture tt = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 + t->height,LABEL_TEXTURE);
     loadTextureFromText(game->renderer,game->global_font,tt,"Press space to enter");
     listInsert(game->textures,t);
     listInsert(game->textures,tt);
 }
 
+/*static void getTileTypes(Game game){
+    FILE* map_file = game->map;
+    
+    TileType type = game->tiles[0]->type;
+        SDL_Rect dst;
+        dst.h = TILE_HEIGHT;
+        dst.w = TILE_WIDTH;
+        switch(type){
+            case WATER_TILE:
+                dst.x = 0;
+                dst.y = 60;
+                break;
+            case BLOCK_TILE:
+                dst.x = 160;
+                dst.y = 80;
+                break;
+            case GRASS_TILE:
+                dst.x = 0;
+                dst.x = 80;
+                break;
+            case LAVA_TILE:
+                dst.x = 0;
+                dst.y = 0;
+            break;
+        };
+        game->tiles[0]->tile_box = dst;
+}*/
+
+static char* fileToBuffer(FILE* file){
+    int buffSize = 0;
+    fseek(file,0L,SEEK_END);
+    buffSize = ftell(file);
+    char* result = (char*)malloc(sizeof(char) * (buffSize+1));
+    if(!result) return NULL;
+
+    size_t new_len = fread(result,sizeof(char),buffSize,file);
+    result[new_len++] = '\0'; 
+    fseek(file,0L,SEEK_SET);
+
+    return result;
+}
+
+static void setTiles(Game game){
+    char* map = fileToBuffer(game->map);
+    char* token = strtok(map," ");
+    LOG(token);
+    free(map);
+}
+static void loadTileMap(Game game){
+    Texture tiles = loadTextureFromFile(game->renderer,"tiles.jpg",TILE_TEXTURE);
+    if(!tiles) return;
+    listInsert(game->textures,tiles);
+    FILE* map_f = fopen("src/assets/map.map","r");
+    if(!map_f) return;
+    game->map = map_f;
+    setTiles(game);
+}
+
 
 void loadTextures(Game game){
-    if(game->state == MENU_STATE){
-        createMenuUI(game);
-    } else {
-        LOG("ligma");
-    }
-    
+    createMenuUI(game);
+    loadTileMap(game);
     char* size = int2string(getListSize(game->textures));
     LOG(size);
     free(size);
@@ -118,10 +172,36 @@ static void renderMenu(Game game){
     Node current = getHead(game->textures);
     while(current != NULL){
         Texture t = (Texture)getNodeData(current);
-        renderTexture(game,t);
+        if(t->type == LABEL_TEXTURE){
+            renderTexture(game,t);
+        }
         current = getNextNode(current);
         i++;
     }
+}
+
+static void renderTiles(Game game){
+    int i = 0;
+    Node current = getHead(game->textures);
+    Texture to_render = NULL;
+    while(current != NULL){
+        Texture t = (Texture)getNodeData(current);
+        if(t->type == TILE_TEXTURE){
+            to_render = t;
+            break;
+        }
+        current = getNextNode(current);
+        i++;
+    }
+    if(!to_render){
+        ERR("TILE_TEXTURE is not found");
+        return;
+    }
+    for(int i = 0 ; i < (TOTAL_TILES);i++){
+        
+        renderPartOfTexture(game,to_render,game->tiles[i]->tile_box);//need to change (0,0) depending on tile type
+    }
+
 }
 
 void initRendering(Game game){
@@ -129,6 +209,7 @@ void initRendering(Game game){
         
     if(game->state == MENU_STATE){
         renderMenu(game);
+        renderTiles(game);
         //renderButton(game,100,100,"Click me");
     } else {
         renderEntities(game);
@@ -153,6 +234,7 @@ void quitGame(Game game){
     for(int i = 0; i < PLAYERS_COUNT;i++){
         destroyPlayer(game->players[i]);
     }
+    fclose(game->map);
     listDestroy(game->textures);
     free(game->players);
     free(game);
