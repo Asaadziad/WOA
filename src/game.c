@@ -23,6 +23,8 @@ Game initGame(){
     new_g->state = MENU_STATE;
     new_g->textures = listCreate(freeTexturePtr,NULL);
     new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
+    if(!new_g->tiles) return NULL;
+    new_g->map = NULL;
     return new_g;
 }
 
@@ -35,10 +37,9 @@ static void createMenuUI(Game game){
     listInsert(game->textures,tt);
 }
 
-/*static void getTileTypes(Game game){
-    FILE* map_file = game->map;
-    
-    TileType type = game->tiles[0]->type;
+static void getTileTypes(Game game){   
+    for(int i = 0; i <TOTAL_TILES;i++){
+        TileType type = game->tiles[i]->type;
         SDL_Rect dst;
         dst.h = TILE_HEIGHT;
         dst.w = TILE_WIDTH;
@@ -60,8 +61,9 @@ static void createMenuUI(Game game){
                 dst.y = 0;
             break;
         };
-        game->tiles[0]->tile_box = dst;
-}*/
+        game->tiles[i]->tile_box = dst;
+    }
+}
 
 static char* fileToBuffer(FILE* file){
     int buffSize = 0;
@@ -69,28 +71,45 @@ static char* fileToBuffer(FILE* file){
     buffSize = ftell(file);
     char* result = (char*)malloc(sizeof(char) * (buffSize+1));
     if(!result) return NULL;
-
-    size_t new_len = fread(result,sizeof(char),buffSize,file);
-    result[new_len++] = '\0'; 
     fseek(file,0L,SEEK_SET);
-
+    size_t new_len = fread(result,sizeof(char),buffSize,file);
+    result[new_len] = '\0'; 
     return result;
 }
 
 static void setTiles(Game game){
     char* map = fileToBuffer(game->map);
-    char* token = strtok(map," ");
-    LOG(token);
+    size_t len = strlen(map);
+    int t_index = 0;
+    for(int i = 0;i < len;i++){
+        if(map[i] == ' ' || map[i] == '\n'){
+            continue;
+        }
+        if(game->tiles){ 
+            game->tiles[t_index] = createTile(0,0,map[i] - '0');
+        } else {
+            ERR("test");
+        }
+        t_index++;
+    }
     free(map);
+    getTileTypes(game);
 }
 static void loadTileMap(Game game){
     Texture tiles = loadTextureFromFile(game->renderer,"tiles.jpg",TILE_TEXTURE);
-    if(!tiles) return;
+    if(!tiles) {
+        ERR("Tiles Couldn't create");
+        exit(1);
+    }
     listInsert(game->textures,tiles);
     FILE* map_f = fopen("src/assets/map.map","r");
-    if(!map_f) return;
+    if(!map_f) {
+        ERR("Couldn't open map");
+        exit(1);
+    }
     game->map = map_f;
     setTiles(game);
+    
 }
 
 
@@ -198,8 +217,9 @@ static void renderTiles(Game game){
         return;
     }
     for(int i = 0 ; i < (TOTAL_TILES);i++){
-        
-        renderPartOfTexture(game,to_render,game->tiles[i]->tile_box);//need to change (0,0) depending on tile type
+        if(game->tiles[i]){
+            renderPartOfTexture(game,to_render,game->tiles[i]->tile_box,0 + TILE_WIDTH*i ,0);//need to change (0,0) depending on tile type
+        }
     }
 
 }

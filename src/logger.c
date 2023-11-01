@@ -5,5 +5,5 @@ void LOG(const char* message){
     fprintf(stderr,"[LOG] : %s\n",message);    
 }
 void ERR(const char* message){
-    fprintf(stderr,"[ERROR] : %s",message);
+    fprintf(stderr,"[ERROR] : %s\n",message);
 }

@@ -18,6 +18,9 @@ int main(){
     SDL_Window* window = NULL;
 
     Game game = initGame();
+    if(!game){
+        exit(1);
+    }
     initSDL(&window,&game->renderer);
     game->global_font = TTF_OpenFont("src/assets/AlbertText-Bold.ttf",28);
     if(!game->global_font){

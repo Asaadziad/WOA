@@ -11,7 +11,7 @@ void renderPlayer(Game game,Player p);
 void renderLabel(Game game);
 void renderTexture(Game game,Texture texture);
 void renderTextureAt(Game game,Texture texture,int x, int y);
-void renderPartOfTexture(Game game, Texture texture,SDL_Rect dst);
+void renderPartOfTexture(Game game, Texture texture,SDL_Rect dst,int x, int y);
 void renderButton(Game game,int x, int y,const char* text);
 
 #endif
