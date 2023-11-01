@@ -19,8 +19,8 @@
 typedef enum {
     WATER_TILE,
     GRASS_TILE,
-    BLOCK_TILE,
     LAVA_TILE,
+    BLOCK_TILE,
 } TileType;
 
 typedef struct {

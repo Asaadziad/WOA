@@ -48,10 +48,6 @@ static void getTileTypes(Game game){
                 dst.x = 0;
                 dst.y = 60;
                 break;
-            case BLOCK_TILE:
-                dst.x = 160;
-                dst.y = 80;
-                break;
             case GRASS_TILE:
                 dst.x = 0;
                 dst.x = 80;
@@ -60,6 +56,10 @@ static void getTileTypes(Game game){
                 dst.x = 0;
                 dst.y = 0;
             break;
+            case BLOCK_TILE:
+                dst.x = 160;
+                dst.y = 80;
+                break;
         };
         game->tiles[i]->tile_box = dst;
     }
@@ -218,7 +218,7 @@ static void renderTiles(Game game){
     }
     for(int i = 0 ; i < (TOTAL_TILES);i++){
         if(game->tiles[i]){
-            renderPartOfTexture(game,to_render,game->tiles[i]->tile_box,0 + TILE_WIDTH*i ,0);//need to change (0,0) depending on tile type
+            renderPartOfTexture(game,to_render,game->tiles[i]->tile_box,(SCREEN_WIDTH/4)*(i%4) , (SCREEN_HEIGHT/3)*(i/4));//need to change (0,0) depending on tile type
         }
     }
 

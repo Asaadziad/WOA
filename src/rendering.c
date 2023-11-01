@@ -61,8 +61,8 @@ void renderTextureAt(Game game,Texture texture,int x, int y){
 void renderPartOfTexture(Game game, Texture texture,SDL_Rect dst,int x, int y){
     if(!texture) return;
     SDL_Rect src;
-    src.h = TILE_HEIGHT;
-    src.w = TILE_WIDTH;
+    src.h = SCREEN_HEIGHT/3;
+    src.w = SCREEN_WIDTH/4;
     src.x = x;
     src.y = y;
     SDL_RenderCopy(game->renderer,texture->texture,&dst,&src);
@@ -87,6 +87,4 @@ void renderButton(Game game,int x, int y, const char* text){
     SDL_RenderFillRect(game->renderer, &border);
     SDL_SetRenderDrawColor(game->renderer, 255,255,255,0);
     SDL_RenderFillRect(game->renderer, &inner);
-
-
 }
