@@ -15,6 +15,8 @@ Player initPlayer(int x,int y,int width,int height){
     Vector2f vel = {10,10};
     new_p->vel = vel;
     new_p->face = NORTH;
+    new_p->level = 0;
+    new_p->current_xp = 0;
     return new_p;
 }
 

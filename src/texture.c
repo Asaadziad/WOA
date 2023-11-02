@@ -33,6 +33,7 @@ Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type
     t->texture = texture;
     t->height = surface->h;
     t->width = surface->w;
+    
     SDL_FreeSurface( surface );
 
     return t;

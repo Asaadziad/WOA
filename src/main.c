@@ -70,7 +70,7 @@ static void initSDL(SDL_Window** window, SDL_Renderer** renderer){
         fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(1);
     }
-    *window = SDL_CreateWindow("World of Asaad",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,800,600,SDL_WINDOW_SHOWN );
+    *window = SDL_CreateWindow("World of Asaad",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH,SCREEN_HEIGHT,SDL_WINDOW_SHOWN );
     if(!(*window)) {
         fprintf(stderr,"Could'nt initiate window: %s \n", SDL_GetError());
         exit(1);

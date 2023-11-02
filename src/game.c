@@ -16,15 +16,20 @@ static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
 }
 
+static void freeObjectPtr(void* elem){
+    destroyObject((OBJECT)elem);
+}
+
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
-    
     new_g->state = MENU_STATE;
     new_g->textures = listCreate(freeTexturePtr,NULL);
+    new_g->objects = listCreate(freeObjectPtr,NULL);
     new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
     if(!new_g->tiles) return NULL;
     new_g->map = NULL;
+    new_g->handeled_event = 0;
     return new_g;
 }
 
@@ -35,6 +40,18 @@ static void createMenuUI(Game game){
     loadTextureFromText(game->renderer,game->global_font,tt,"Press space to enter");
     listInsert(game->textures,t);
     listInsert(game->textures,tt);
+}
+
+static void createStatsUI(Game game){
+    Texture t = initTexture(SCREEN_WIDTH,0,LABEL_TEXTURE);
+    Texture t_level = initTexture(0,0,LABEL_TEXTURE);
+    //char* xp = game->players[0]->current_xp - '0';
+    char* level = "69";
+    loadTextureFromText(game->renderer,game->global_font,t,"Fishing Level: ");
+    loadTextureFromText(game->renderer,game->global_font,t_level,level);
+    t->render_pos.x = t->render_pos.x - t->width - 20;
+    listInsert(game->textures,t);
+    listInsert(game->textures,t_level);
 }
 
 static void getTileTypes(Game game){   
@@ -95,7 +112,7 @@ static void setTiles(Game game){
     free(map);
     getTileTypes(game);
 }
-static void loadTileMap(Game game){
+void loadTileMap(Game game){
     Texture tiles = loadTextureFromFile(game->renderer,"tiles.jpg",TILE_TEXTURE);
     if(!tiles) {
         ERR("Tiles Couldn't create");
@@ -115,7 +132,8 @@ static void loadTileMap(Game game){
 
 void loadTextures(Game game){
     createMenuUI(game);
-    loadTileMap(game);
+    
+    //loadTileMap(game);
     char* size = int2string(getListSize(game->textures));
     LOG(size);
     free(size);
@@ -144,6 +162,7 @@ static void handleKey(Game game,SDL_Keycode code){
             if(game->state == MENU_STATE){
                 listEmpty(game->textures);
                 game->state = RUNNING_STATE;
+                createStatsUI(game);
             } else {
                 LOG("Running state");
             }
@@ -163,7 +182,8 @@ void handleEvents(SDL_Event* e,Game game){
                 handleKey(game,e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
-                //game->players[0]->isMoving = true;
+                SDL_GetMouseState(&(game->mouse_x),&(game->mouse_y));
+                game->handeled_event = false;
             break;
             default: {}
         }
@@ -172,16 +192,17 @@ void handleEvents(SDL_Event* e,Game game){
 
 void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
-    Player asaad = initPlayer(50,50,100,100);
-    Player monster = initPlayer(400,50,100,100);
+    Player asaad = initPlayer(50,250,100,100);
     game->players[0] = asaad;
-    game->players[1] = monster;
-    
+    OBJECT fish = createObject(50,50,50,50,FISHING_SPOT);
+    listInsert(game->objects,fish);  
 }
 
 void renderEntities(Game game){
     renderPlayer(game,game->players[0]);
-    renderPlayer(game,game->players[1]);
+    Node g = getHead(game->objects);
+    OBJECT d = getNodeData(g);
+    renderObject(game,d);
 }
 
 
@@ -199,7 +220,7 @@ static void renderMenu(Game game){
     }
 }
 
-static void renderTiles(Game game){
+/*static void renderTiles(Game game){
     int i = 0;
     Node current = getHead(game->textures);
     Texture to_render = NULL;
@@ -218,21 +239,24 @@ static void renderTiles(Game game){
     }
     for(int i = 0 ; i < (TOTAL_TILES);i++){
         if(game->tiles[i]){
-            renderPartOfTexture(game,to_render,game->tiles[i]->tile_box,(SCREEN_WIDTH/4)*(i%4) , (SCREEN_HEIGHT/3)*(i/4));//need to change (0,0) depending on tile type
+            //renderPartOfTexture(game,to_render,game->tiles[i]->tile_box,(SCREEN_WIDTH/5)*(i%4) , (SCREEN_HEIGHT/3)*(i/4));//need to change (0,0) depending on tile type
+            // TODO:: implement actually working :L rendering for the textures
         }
     }
 
-}
+}*/
 
 void initRendering(Game game){
     clearScreen(game);
         
     if(game->state == MENU_STATE){
         renderMenu(game);
-        renderTiles(game);
+        //renderTiles(game);
         //renderButton(game,100,100,"Click me");
     } else {
+        renderMenu(game);
         renderEntities(game);
+        
     }
 
     updateScreen(game);
@@ -254,7 +278,7 @@ void quitGame(Game game){
     for(int i = 0; i < PLAYERS_COUNT;i++){
         destroyPlayer(game->players[i]);
     }
-    fclose(game->map);
+    //fclose(game->map);
     listDestroy(game->textures);
     free(game->players);
     free(game);

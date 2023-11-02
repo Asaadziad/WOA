@@ -13,13 +13,15 @@ typedef enum {
     EAST,
 } PlayerFace;
 
-typedef struct player_t{
+typedef struct player_t {
     Vector2f position;
     Vector2f vel;
     int height;
     int width;
     bool isMoving;
     PlayerFace face;
+    int level;
+    uint32_t current_xp;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);

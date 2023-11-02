@@ -7,10 +7,8 @@
 #include "player.h"
 #include "DS/list.h"
 
-#define SCREEN_HEIGHT 500
-#define SCREEN_WIDTH 500
-#define WORLD_WIDTH 1250
-#define WORLD_HEIGHT 1165
+#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 800
 
 #define PLAYERS_COUNT 1
 
@@ -26,10 +24,15 @@ typedef struct game_t {
     Player* players;
     GameState state;
     List textures;
+    List objects;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
     FILE* map;
     Tile* tiles;
+    int mouse_x;
+    int mouse_y;
+    uint8_t handeled_event;
+
 } *Game;
 
 Game initGame();
