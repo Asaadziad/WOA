@@ -25,6 +25,7 @@ typedef struct game_t {
     GameState state;
     List textures;
     List objects;
+    List tasks;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
     FILE* map;

@@ -10,7 +10,7 @@
 #include "logger.h"
 #include "DS/list.h"
 #include "lib/assets.h"
-
+#include "taskManager.h"
 
 static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
@@ -20,12 +20,17 @@ static void freeObjectPtr(void* elem){
     destroyObject((OBJECT)elem);
 }
 
+static void freeTaskPtr(void* elem){
+    destroyTask((TASK)elem);
+}
+
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
     new_g->textures = listCreate(freeTexturePtr,NULL);
     new_g->objects = listCreate(freeObjectPtr,NULL);
+    new_g->tasks = listCreate(freeTaskPtr,NULL);
     new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
     if(!new_g->tiles) return NULL;
     new_g->map = NULL;
@@ -42,14 +47,26 @@ static void createMenuUI(Game game){
     listInsert(game->textures,tt);
 }
 
+//convert the given int to a string
+static void stringIT(char string[],int len,int x){
+    string[len - 1] = '\0';
+    for(int i = len - 2;i >= 0; i--){
+        string[i] = x%10 + '0';
+        x = x/10;
+    }
+}
+
 static void createStatsUI(Game game){
     Texture t = initTexture(SCREEN_WIDTH,0,LABEL_TEXTURE);
-    Texture t_level = initTexture(0,0,LABEL_TEXTURE);
+    Texture t_level = initTexture(SCREEN_WIDTH,0,LABEL_TEXTURE);
     //char* xp = game->players[0]->current_xp - '0';
-    char* level = "69";
+    int level_len = game->players[0]->level >= 10 ? 2 : 1; 
+    char level[level_len]; // maximum level is 99
+    stringIT(level,level_len + 1,game->players[0]->level);
     loadTextureFromText(game->renderer,game->global_font,t,"Fishing Level: ");
     loadTextureFromText(game->renderer,game->global_font,t_level,level);
     t->render_pos.x = t->render_pos.x - t->width - 20;
+    t_level->render_pos.x = t_level->render_pos.x - t_level->width - 10;
     listInsert(game->textures,t);
     listInsert(game->textures,t_level);
 }
@@ -184,6 +201,7 @@ void handleEvents(SDL_Event* e,Game game){
             case SDL_MOUSEBUTTONDOWN:
                 SDL_GetMouseState(&(game->mouse_x),&(game->mouse_y));
                 game->handeled_event = false;
+                
             break;
             default: {}
         }
@@ -254,8 +272,10 @@ void initRendering(Game game){
         //renderTiles(game);
         //renderButton(game,100,100,"Click me");
     } else {
+        createStatsUI(game);
         renderMenu(game);
         renderEntities(game);
+        listEmpty(game->textures);
         
     }
 

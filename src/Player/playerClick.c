@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 #include "../logger.h"
 #include "playerFishing.h"
+#include "playerWalk.h"
 
 static uint8_t isObjectClicked(int x, int y,SDL_Rect src){
     return (x >= src.x && x <= (src.x + src.w)) && ((y <= (src.y + src.h)) && (y >= src.y));
@@ -20,6 +21,7 @@ void handlePlayerClick(Game game){
         if(isObjectClicked(game->mouse_x,game->mouse_y,src)){
             ObjectType type = objectGetType(tmp);
             if(!game->handeled_event){
+                playerWalkToObject(game,game->players[0],tmp);
                 switch(type){
                     case FISHING_SPOT:
                         startFishing(game->players[0]);
