@@ -3,6 +3,6 @@
 
 #include "../game.h"
 
-void handlePlayerClick(Game game);
+void handlePlayerClick(Game game,int x, int y);
 
 #endif

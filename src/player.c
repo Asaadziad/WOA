@@ -17,6 +17,7 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->face = NORTH;
     new_p->level = 0;
     new_p->current_xp = 0;
+    new_p->target_object = NULL;
     return new_p;
 }
 

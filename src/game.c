@@ -11,6 +11,7 @@
 #include "DS/list.h"
 #include "lib/assets.h"
 #include "task.h"
+#include "Player/playerClick.h"
 
 static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
@@ -195,8 +196,10 @@ void handleEvents(SDL_Event* e,Game game){
                 handleKey(game,e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
-                SDL_GetMouseState(&(game->mouse_x),&(game->mouse_y));
-                game->handeled_event = false;
+                int x,y;
+                SDL_GetMouseState(&(x),&(y));
+                handlePlayerClick(game,x,y);
+                fprintf(stderr,"MOUSE-X: %d MOUSE-Y:%d\n",x,y);
             break;
             default: {}
         }

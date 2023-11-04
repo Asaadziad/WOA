@@ -2,7 +2,8 @@
 #define PLAYER_FISHING_H
 
 #include "../player.h"
+#include "../task.h"
 
-void startFishing(Player p);
+void startFishing(TASK task,Player p);
 
 #endif

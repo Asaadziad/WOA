@@ -26,13 +26,20 @@ void destroyTask(TASK task){
 
 
 uint32_t getTaskId(TASK task){
+    if(!task) return 0;
     return task->task_id;
 }
 
 void markTaskFinished(TASK task){
+    if(!task) return;
     task->isFinished = true;
 }
 
 uint8_t isTaskFinished(TASK task){
+    if(!task) return 0;
     return task->isFinished;
+}
+
+TaskType getTaskType(TASK task){
+    return task->type;
 }

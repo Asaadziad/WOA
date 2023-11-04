@@ -144,12 +144,24 @@ ListResult removeHead(List list){
     Node tmp = list->head->next;
     if(!tmp){
         listEmpty(list);
+        list->head = NULL;
+        list->tail = NULL;
+        list->size = 0;
+        return LIST_SUCCESS;
+    }
+    if(list->head == list->tail){
+        listEmpty(list);
+        list->head = NULL;
+        list->tail = NULL;
+        list->size = 0;
         return LIST_SUCCESS;
     }
     Node current_head = list->head;
     current_head->next = NULL;
+    tmp->prev = NULL;
     list->head = tmp;
     nodeDestroy(current_head,list->destroy_function);
+    list->size--;
     return LIST_SUCCESS;
 }
 ListResult setHead(List list,Node node){

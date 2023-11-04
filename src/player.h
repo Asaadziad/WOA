@@ -4,7 +4,7 @@
 #include "stdbool.h"
 #include "vector.h"
 #include "tile.h"
-
+#include "object.h"
 
 typedef enum {
     NORTH,
@@ -20,6 +20,7 @@ typedef struct player_t {
     int width;
     bool isMoving;
     PlayerFace face;
+    OBJECT target_object;
     int level;
     uint32_t current_xp;
 } *Player;

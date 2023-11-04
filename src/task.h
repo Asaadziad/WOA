@@ -5,7 +5,7 @@
 
 typedef enum {
     PLAYER_WALK_TASK,
-    SKILL_TASK,
+    FISHING_SKILL_TASK,
 } TaskType;
 
 typedef struct task_t* TASK;
@@ -15,6 +15,7 @@ void destroyTask(TASK task);
 
 uint32_t getTaskId(TASK task);
 uint8_t isTaskFinished(TASK task);
+TaskType getTaskType(TASK task);
 void markTaskFinished(TASK task);
 
 #endif

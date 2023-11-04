@@ -13,23 +13,17 @@ static uint8_t isObjectClicked(int x, int y,SDL_Rect src){
 /*
 * Need to walk through objects and check if the player clicked on one of them
 */
-void handlePlayerClick(Game game){
+void handlePlayerClick(Game game,int x, int y){
     Node current = getHead(game->objects);
     while(current != NULL){
         OBJECT tmp = (OBJECT)getNodeData(current);
         SDL_Rect src = objectGetRect(tmp);
-        if(isObjectClicked(game->mouse_x,game->mouse_y,src)){
-            ObjectType type = objectGetType(tmp);
-            if(!game->handeled_event){
-                playerWalkToObject(game,game->players[0],tmp);
-                switch(type){
-                    case FISHING_SPOT:
-                        startFishing(game->players[0]);
-                        game->handeled_event  = !game->handeled_event;
-                    break;
-                    default:break;
-                }
-            }
+        if(isObjectClicked(x,y,src)){
+            game->players[0]->target_object = tmp;
+            addTask(game->task_manager,0,PLAYER_WALK_TASK);
+            addTask(game->task_manager,1,FISHING_SKILL_TASK);
+        } else {
+            LOG("test");
         }
         current = getNextNode(current);
     }

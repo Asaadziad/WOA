@@ -5,12 +5,17 @@
 #include "taskManager.h"
 #include "task.h"
 #include "stdint.h"
+#include "logger.h"
+#include "stdio.h"
+#include "Player/playerWalk.h"
+#include "player.h"
+#include "Player/playerFishing.h"
 
 struct tmanager_t
 {
     QUEUE tasks;    
 };
-void handleTasks(TaskManager manager);
+
 static void destroyTaskPtr(void* t){
     destroyTask((TASK)t);
 }
@@ -29,18 +34,26 @@ void addTask(TaskManager manager,uint32_t id,TaskType type){
     queuePush(manager->tasks,new_t);
 }
 
-void handleTasks(TaskManager manager){
+
+/*
+*   Tasks are saved in a queue (FIFO) and handeled accordingly.
+*/
+void handleTasks(TaskManager manager,Player p){
     QUEUE q = manager->tasks;
     if(!q) return;
     TASK t = (TASK)getFirstElement(q);
-    if(!t) return;
-    while(isTaskFinished(t)){
-        //CODE to do the task
-
-        //when finished mark it
-        markTaskFinished(t);
+    if(!t) {return;}
+    switch (getTaskType(t)){
+        case PLAYER_WALK_TASK:
+        playerWalkToObject(t,p,p->target_object);
+        break;
+        case FISHING_SKILL_TASK:
+            startFishing(t,p);
+        break;
+        default:break;
+    }
+    if(isTaskFinished(t)){
         queuePop(q);
-        //get the next task
-        t = (TASK)getFirstElement(q);
     }
 }
+
