@@ -1,10 +1,15 @@
 #ifndef TASK_MANAGER_H
 #define TASK_MANAGER_H
 
-typedef struct task_t* TASK;
+#include "task.h"
+#include "stdint.h"
 
-TASK createTask();
+typedef struct tmanager_t* TaskManager;
 
-void destroyTask(TASK task);
+TaskManager taskManagerInit();
+
+void addTask(TaskManager manager,uint32_t id,TaskType type);
+void handleTasks(TaskManager manager);
+
 
 #endif

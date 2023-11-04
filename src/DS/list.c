@@ -8,10 +8,12 @@ struct node_t
 {
     Element data;
     Node next;
+    Node prev;
 };
 
 struct list_t {
     Node head;
+    Node tail;
     size_t size;
     elemDestroy destroy_function;
     elemPrint print_function;
@@ -24,6 +26,7 @@ List listCreate(elemDestroy destroy_function,elemPrint print_function){
     List list = (List)malloc(sizeof(*list));
     if(!list) return NULL;
     list->head = NULL;
+    list->tail = NULL;
     list->size = 0;
     list->destroy_function = destroy_function;
     list->print_function = print_function;
@@ -35,6 +38,7 @@ static Node nodeCreate(Element element){
     if(!e) return NULL;
     e->data = element;
     e->next = NULL;
+    e->prev = NULL;
     return e;
 }
 
@@ -47,6 +51,7 @@ static void nodeDestroy(Node node,elemDestroy destroy){
         destroy(node->data);
     }
     node->next = NULL;
+    node->prev = NULL;
     free(node);
 }
 
@@ -62,15 +67,32 @@ ListResult listInsert(List list, Element element){
     /* IF LIST IS EMPTY */
     if(!current) {
         list->head = new; 
+        list->tail = new;
         list->size++;
         return LIST_SUCCESS;
     }
-    /* WALK TILL THE END */
-    while (current->next)
-    {
-        current = current->next;
+    list->tail->next = new;
+    list->tail = new;
+    list->size++;
+    return LIST_SUCCESS;
+}
+
+ListResult listInsertTail(List list,Element element){
+    if(!list || !element) return LIST_NULL_ARG;
+    Node new = nodeCreate(element);
+    if(!new) return LIST_ALLOCATION_FAIL;
+    if(!list->tail && !list->head){
+        list->head = new;
+        list->tail = new;
+        list->size++;
+        return LIST_SUCCESS;
     }
-    current->next = new;  
+    if(list->tail){
+        Node current_tail = list->tail;
+        new->prev = current_tail;
+        current_tail->next = new;
+        list->tail = new;
+    }
     list->size++;
     return LIST_SUCCESS;
 }
@@ -116,6 +138,29 @@ size_t getListSize(List list){
 Node getHead(List list){
     return list->head;
 }
+
+ListResult removeHead(List list){
+    if(!list) return LIST_NULL_ARG;
+    Node tmp = list->head->next;
+    if(!tmp){
+        listEmpty(list);
+        return LIST_SUCCESS;
+    }
+    Node current_head = list->head;
+    current_head->next = NULL;
+    list->head = tmp;
+    nodeDestroy(current_head,list->destroy_function);
+    return LIST_SUCCESS;
+}
+ListResult setHead(List list,Node node){
+    if(!node || !list) return LIST_NULL_ARG;
+    node->prev = NULL;
+    node->next = list->head;
+    list->head->prev = node;
+    list->head = node;
+    return LIST_SUCCESS;
+}
+
 
 Element getNodeData(Node node){
     return node->data;

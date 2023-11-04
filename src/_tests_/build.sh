@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc lib_test.c ../lib/assets.c -o ./test
+gcc main.c list_test.c ../DS/list.c -o ./test

@@ -6,6 +6,7 @@
 #include "texture.h"
 #include "player.h"
 #include "DS/list.h"
+#include "taskManager.h"
 
 #define SCREEN_HEIGHT 600
 #define SCREEN_WIDTH 800
@@ -25,7 +26,7 @@ typedef struct game_t {
     GameState state;
     List textures;
     List objects;
-    List tasks;
+    TaskManager task_manager;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
     FILE* map;

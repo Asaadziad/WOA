@@ -10,7 +10,7 @@
 #include "logger.h"
 #include "DS/list.h"
 #include "lib/assets.h"
-#include "taskManager.h"
+#include "task.h"
 
 static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
@@ -20,17 +20,13 @@ static void freeObjectPtr(void* elem){
     destroyObject((OBJECT)elem);
 }
 
-static void freeTaskPtr(void* elem){
-    destroyTask((TASK)elem);
-}
-
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
     new_g->textures = listCreate(freeTexturePtr,NULL);
     new_g->objects = listCreate(freeObjectPtr,NULL);
-    new_g->tasks = listCreate(freeTaskPtr,NULL);
+    new_g->task_manager = taskManagerInit();
     new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
     if(!new_g->tiles) return NULL;
     new_g->map = NULL;
@@ -201,7 +197,6 @@ void handleEvents(SDL_Event* e,Game game){
             case SDL_MOUSEBUTTONDOWN:
                 SDL_GetMouseState(&(game->mouse_x),&(game->mouse_y));
                 game->handeled_event = false;
-                
             break;
             default: {}
         }

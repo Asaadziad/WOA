@@ -3,5 +3,6 @@
 
 void list_create();
 void list_print();
+void listInsertAtTail();
 
 #endif

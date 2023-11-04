@@ -1,6 +1,8 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include "stddef.h"
+
 typedef void* Element;
 
 typedef void (*elemDestroy)(Element);
@@ -14,12 +16,16 @@ typedef enum { LIST_SUCCESS, LIST_NULL_ARG, LIST_FAILED, LIST_ALLOCATION_FAIL, }
 List listCreate(elemDestroy destroy_function,elemPrint print_function);
 
 ListResult listInsert(List list, Element element);
+ListResult listInsertTail(List list,Element element);
 void listDestroy(List list);
 void listEmpty(List list);
 void listPrint(List list);
 
 size_t getListSize(List list);
+
 Node getHead(List list);
+ListResult removeHead(List list);
+ListResult setHead(List list,Node node);
 Element getNodeData(Node node);
 Node getNextNode(Node node);
 
