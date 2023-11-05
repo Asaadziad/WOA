@@ -18,6 +18,8 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->level = 0;
     new_p->current_xp = 0;
     new_p->target_object = NULL;
+    new_p->target_position.x = 0;
+    new_p->target_position.y = 0;
     return new_p;
 }
 

@@ -4,6 +4,7 @@
 #include "stdint.h"
 
 typedef enum {
+    PLAYER_WALK_2OBJECT_TASK,
     PLAYER_WALK_TASK,
     FISHING_SKILL_TASK,
 } TaskType;

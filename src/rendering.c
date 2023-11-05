@@ -1,18 +1,33 @@
 #include "rendering.h"
 #include "texture.h"
 #include "movementHandler.h"
-
+#include "logger.h"
 
 void renderPlayer(Game game,Player p){
+    Node current = getHead(game->textures);
+    Texture to_render = NULL;
+    while(current != NULL){
+        Texture t = (Texture)getNodeData(current);
+        if(t->type == PLAYER_TEXTURE){
+            to_render = t;
+            break;
+        }
+        current = getNextNode(current);
+    }
+    if(!to_render) {ERR("Could'nt find player texture");return;}
     SDL_Rect rect;
         rect.x = p->position.x;
         rect.y = p->position.y;
         rect.w = p->width;
         rect.h = p->height;
-
-    SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(game->renderer,&rect);
-
+    SDL_Rect src;
+        src.x = 40;
+        src.y = 65;
+        src.h = 64;
+        src.w = 32;
+    //SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
+    //SDL_RenderFillRect(game->renderer,&rect);
+    SDL_RenderCopy(game->renderer,to_render->texture,&src,&rect);
     //renderPlayerTiles(game,game->players[0]->tile_list);
 }
 

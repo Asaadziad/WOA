@@ -44,8 +44,11 @@ void handleTasks(TaskManager manager,Player p){
     TASK t = (TASK)getFirstElement(q);
     if(!t) {return;}
     switch (getTaskType(t)){
-        case PLAYER_WALK_TASK:
+        case PLAYER_WALK_2OBJECT_TASK:
         playerWalkToObject(t,p,p->target_object);
+        break;
+        case PLAYER_WALK_TASK:
+        playerWalkTo(t,p,p->target_position.x,p->target_position.y);
         break;
         case FISHING_SKILL_TASK:
             startFishing(t,p);

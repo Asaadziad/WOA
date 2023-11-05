@@ -20,10 +20,12 @@ void handlePlayerClick(Game game,int x, int y){
         SDL_Rect src = objectGetRect(tmp);
         if(isObjectClicked(x,y,src)){
             game->players[0]->target_object = tmp;
-            addTask(game->task_manager,0,PLAYER_WALK_TASK);
+            addTask(game->task_manager,0,PLAYER_WALK_2OBJECT_TASK);
             addTask(game->task_manager,1,FISHING_SKILL_TASK);
         } else {
-            LOG("test");
+            Vector2f pos = {x,y};
+            game->players[0]->target_position = pos;
+            addTask(game->task_manager,0,PLAYER_WALK_TASK);
         }
         current = getNextNode(current);
     }

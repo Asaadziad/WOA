@@ -21,6 +21,7 @@ typedef struct player_t {
     bool isMoving;
     PlayerFace face;
     OBJECT target_object;
+    Vector2f target_position;
     int level;
     uint32_t current_xp;
 } *Player;

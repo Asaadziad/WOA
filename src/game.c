@@ -143,6 +143,11 @@ void loadTileMap(Game game){
     
 }
 
+static void createPlayerTextures(Game game){
+    Texture player = loadTextureFromFile(game->renderer,"character.png",PLAYER_TEXTURE);
+    listInsert(game->textures,player);
+}
+
 
 void loadTextures(Game game){
     createMenuUI(game);
@@ -177,6 +182,7 @@ static void handleKey(Game game,SDL_Keycode code){
                 listEmpty(game->textures);
                 game->state = RUNNING_STATE;
                 createStatsUI(game);
+                createPlayerTextures(game);
             } else {
                 LOG("Running state");
             }
@@ -262,6 +268,7 @@ static void renderMenu(Game game){
 
 }*/
 
+
 void initRendering(Game game){
     clearScreen(game);
         
@@ -271,6 +278,7 @@ void initRendering(Game game){
         //renderButton(game,100,100,"Click me");
     } else {
         createStatsUI(game);
+        createPlayerTextures(game);
         renderMenu(game);
         renderEntities(game);
         listEmpty(game->textures);
