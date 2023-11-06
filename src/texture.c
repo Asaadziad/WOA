@@ -12,6 +12,7 @@ Texture initTexture(int render_x,int render_y,TexType type){
     Vector2f starter_pos = {render_x,render_y};
     new_texture->render_pos = starter_pos;
     new_texture->type = type;
+    new_texture->label_id = -1;
     return new_texture;
 }
 
@@ -39,19 +40,22 @@ Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type
     return t;
 }
 
-void loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,Texture texture, const char* text){
+Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text){
     SDL_Texture* label;
 
     SDL_Color black = {0,0,0,0};
     SDL_Surface* surface = TTF_RenderText_Solid(font,text,black);
-    if(!surface) return;
+    if(!surface) return NULL;
 
     label = SDL_CreateTextureFromSurface(renderer , surface );
 
+    Texture texture = initTexture(0,0,LABEL_TEXTURE);
     texture->texture = label;
     texture->height = surface->h;
     texture->width = surface->w;
     SDL_FreeSurface( surface );
+
+    return texture;
 }
 
 void freeTexture(Texture texture){

@@ -5,6 +5,10 @@
 #include "SDL2/SDL_ttf.h"
 
 #include "vector.h"
+
+/*
+* Need to find better solution for this.. but for now lets stick with it
+*/
 typedef enum {
     PLAYER_TEXTURE,
     LABEL_TEXTURE,
@@ -17,12 +21,13 @@ typedef struct texture_t{
     Vector2f render_pos;
     SDL_Texture* texture;
     TexType type;
+    int label_id;
 } *Texture;
 
 Texture initTexture(int render_x,int render_y,TexType type);
 Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type);
+Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text);
 
-void loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,Texture texture, const char* text);
 
 
 void freeTexture(Texture texture);

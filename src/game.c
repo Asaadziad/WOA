@@ -45,29 +45,6 @@ Game initGame(){
     listInsert(game->textures,tt);
 }*/
 
-//convert the given int to a string
-static void stringIT(char string[],int len,int x){
-    string[len - 1] = '\0';
-    for(int i = len - 2;i >= 0; i--){
-        string[i] = x%10 + '0';
-        x = x/10;
-    }
-}
-
-static void createStatsUI(Game game){
-    Texture t = initTexture(SCREEN_WIDTH,0,LABEL_TEXTURE);
-    Texture t_level = initTexture(SCREEN_WIDTH,0,LABEL_TEXTURE);
-    //char* xp = game->players[0]->current_xp - '0';
-    int level_len = game->players[0]->level >= 10 ? 2 : 1; 
-    char level[level_len]; // maximum level is 99
-    stringIT(level,level_len + 1,game->players[0]->level);
-    loadTextureFromText(game->renderer,game->global_font,t,"Fishing Level: ");
-    loadTextureFromText(game->renderer,game->global_font,t_level,level);
-    t->render_pos.x = t->render_pos.x - t->width - 20;
-    t_level->render_pos.x = t_level->render_pos.x - t_level->width - 10;
-    listInsert(game->textures,t);
-    listInsert(game->textures,t_level);
-}
 
 static void getTileTypes(Game game){   
     for(int i = 0; i <TOTAL_TILES;i++){
@@ -153,6 +130,7 @@ static void createPlayerTextures(Game game){
 void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"character.png",PLAYER_TEXTURE);
+    loadText(game->texture_manager,game->renderer,game->global_font,"hello world");
     //loadTileMap(game);
     char* size = int2string(getListSize(game->textures));
     LOG(size);
@@ -182,7 +160,7 @@ static void handleKey(Game game,SDL_Keycode code){
             if(game->state == MENU_STATE){
                 listEmpty(game->textures);
                 game->state = RUNNING_STATE;
-                createStatsUI(game);
+                
                 createPlayerTextures(game);
             } else {
                 LOG("Running state");
@@ -275,8 +253,9 @@ void initRendering(Game game){
         
     if(game->state == MENU_STATE){
         draw(game->texture_manager,PLAYER_TEXTURE,0,0,112,112,game->renderer,SDL_FLIP_NONE);
+        drawText(game->texture_manager,0,100,100,250,250,game->renderer);
     } else {
-        createStatsUI(game);
+        
         createPlayerTextures(game);
         renderMenu(game);
         renderEntities(game);
