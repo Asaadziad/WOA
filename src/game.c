@@ -28,6 +28,7 @@ Game initGame(){
     new_g->textures = listCreate(freeTexturePtr,NULL);
     new_g->objects = listCreate(freeObjectPtr,NULL);
     new_g->task_manager = taskManagerInit();
+    new_g->texture_manager = textureManagerInit();
     new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
     if(!new_g->tiles) return NULL;
     new_g->map = NULL;
@@ -35,14 +36,14 @@ Game initGame(){
     return new_g;
 }
 
-static void createMenuUI(Game game){
+/*static void createMenuUI(Game game){
     Texture t = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2,LABEL_TEXTURE);
     loadTextureFromText(game->renderer,game->global_font,t,"World of asaad");
     Texture tt = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 + t->height,LABEL_TEXTURE);
     loadTextureFromText(game->renderer,game->global_font,tt,"Press space to enter");
     listInsert(game->textures,t);
     listInsert(game->textures,tt);
-}
+}*/
 
 //convert the given int to a string
 static void stringIT(char string[],int len,int x){
@@ -150,8 +151,8 @@ static void createPlayerTextures(Game game){
 
 
 void loadTextures(Game game){
-    createMenuUI(game);
-    
+    //createMenuUI(game);
+    load(game->texture_manager,game->renderer,"character.png",PLAYER_TEXTURE);
     //loadTileMap(game);
     char* size = int2string(getListSize(game->textures));
     LOG(size);
@@ -273,9 +274,7 @@ void initRendering(Game game){
     clearScreen(game);
         
     if(game->state == MENU_STATE){
-        renderMenu(game);
-        //renderTiles(game);
-        //renderButton(game,100,100,"Click me");
+        draw(game->texture_manager,PLAYER_TEXTURE,0,0,112,112,game->renderer,SDL_FLIP_NONE);
     } else {
         createStatsUI(game);
         createPlayerTextures(game);

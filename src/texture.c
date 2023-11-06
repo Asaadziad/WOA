@@ -39,31 +39,6 @@ Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type
     return t;
 }
 
-void loadTexture(SDL_Renderer* renderer,Texture texture, const char* path){
-    if(!texture) return;
-    SDL_DestroyTexture(texture->texture);
-    SDL_Surface* surface = IMG_Load(path);
-    if(!surface){
-        fprintf(stderr,"Could'nt Load surface : %s", SDL_GetError());
-        exit(1);
-    }
-
-    //Color key image
-	SDL_SetColorKey( surface, SDL_TRUE, SDL_MapRGB( surface->format, 0, 0xFF, 0xFF ) );
-
-    SDL_Texture* new_t = SDL_CreateTextureFromSurface(renderer,surface);
-    if(!new_t) {
-        fprintf(stderr,"Could'nt Load texture : %s", SDL_GetError());
-        exit(1);
-    }
-
-    texture->height = surface->h;
-    texture->width = surface->w;
-    texture->texture = new_t;
-
-    SDL_FreeSurface(surface);
-}
-
 void loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,Texture texture, const char* text){
     SDL_Texture* label;
 
@@ -78,8 +53,6 @@ void loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,Texture texture, 
     texture->width = surface->w;
     SDL_FreeSurface( surface );
 }
-
-
 
 void freeTexture(Texture texture){
     SDL_DestroyTexture(texture->texture);
