@@ -43,6 +43,7 @@ Game initGame();
 void handleEvents(SDL_Event* e,Game game);
 void initEntities(Game game);
 void initRendering(Game game);
+void gameUpdate(Game game);
 
 void loadTextures(Game game);
 

@@ -130,7 +130,8 @@ static void createPlayerTextures(Game game){
 void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"character.png",PLAYER_TEXTURE);
-    loadText(game->texture_manager,game->renderer,game->global_font,"hello world");
+    loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
+    loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     //loadTileMap(game);
     char* size = int2string(getListSize(game->textures));
     LOG(size);
@@ -193,71 +194,28 @@ void handleEvents(SDL_Event* e,Game game){
 
 void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
-    Player asaad = initPlayer(50,250,100,100);
+    Player asaad = initPlayer(50,250,112,133);
     game->players[0] = asaad;
     OBJECT fish = createObject(50,50,50,50,FISHING_SPOT);
     listInsert(game->objects,fish);  
 }
 
 void renderEntities(Game game){
-    renderPlayer(game,game->players[0]);
-    Node g = getHead(game->objects);
-    OBJECT d = getNodeData(g);
-    renderObject(game,d);
+    playerDraw(game->texture_manager,game->players[0],game->renderer);
+
 }
-
-
-
-static void renderMenu(Game game){
-    int i = 0;
-    Node current = getHead(game->textures);
-    while(current != NULL){
-        Texture t = (Texture)getNodeData(current);
-        if(t->type == LABEL_TEXTURE){
-            renderTexture(game,t);
-        }
-        current = getNextNode(current);
-        i++;
-    }
-}
-
-/*static void renderTiles(Game game){
-    int i = 0;
-    Node current = getHead(game->textures);
-    Texture to_render = NULL;
-    while(current != NULL){
-        Texture t = (Texture)getNodeData(current);
-        if(t->type == TILE_TEXTURE){
-            to_render = t;
-            break;
-        }
-        current = getNextNode(current);
-        i++;
-    }
-    if(!to_render){
-        ERR("TILE_TEXTURE is not found");
-        return;
-    }
-    for(int i = 0 ; i < (TOTAL_TILES);i++){
-        if(game->tiles[i]){
-            //renderPartOfTexture(game,to_render,game->tiles[i]->tile_box,(SCREEN_WIDTH/5)*(i%4) , (SCREEN_HEIGHT/3)*(i/4));//need to change (0,0) depending on tile type
-            // TODO:: implement actually working :L rendering for the textures
-        }
-    }
-
-}*/
 
 
 void initRendering(Game game){
     clearScreen(game);
         
     if(game->state == MENU_STATE){
-        draw(game->texture_manager,PLAYER_TEXTURE,0,0,112,112,game->renderer,SDL_FLIP_NONE);
-        drawText(game->texture_manager,0,100,100,250,250,game->renderer);
+        int actual_center_x = SCREEN_WIDTH/2 - 125;
+        int actual_center_y = SCREEN_HEIGHT/2 - 50;
+        drawText(game->texture_manager,0,actual_center_x,actual_center_y,250,50,game->renderer);
+        drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,game->renderer);
     } else {
-        
-        createPlayerTextures(game);
-        renderMenu(game);
+        //createPlayerTextures(game);
         renderEntities(game);
         listEmpty(game->textures);
         
@@ -273,6 +231,10 @@ void clearScreen(Game game){
 }
 void updateScreen(Game game){
     SDL_RenderPresent(game->renderer);
+}
+
+void gameUpdate(Game game){
+    playerUpdate(game->players[0]);
 }
 
 

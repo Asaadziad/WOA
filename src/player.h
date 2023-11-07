@@ -5,6 +5,7 @@
 #include "vector.h"
 #include "tile.h"
 #include "object.h"
+#include "TextureManager.h"
 
 typedef enum {
     NORTH,
@@ -14,6 +15,7 @@ typedef enum {
 } PlayerFace;
 
 typedef struct player_t {
+    int current_frame;
     Vector2f position;
     Vector2f vel;
     int height;
@@ -27,6 +29,8 @@ typedef struct player_t {
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);
+void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer);
+void playerUpdate(Player p);
 void destroyPlayer(Player p);
 
 #endif

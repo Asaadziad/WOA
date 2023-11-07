@@ -96,8 +96,10 @@ void drawText(TextureManager manager,int label_id,int x,int y,
                 SDL_Rect dst;
                 src.x = 0;
                 src.y = 0;
-                src.h = dst.h = height;
-                src.w = dst.w = width;
+                src.h = tmp->height;
+                src.w = tmp->width; 
+                dst.w = width;
+                dst.h = height;
                 dst.x = x;
                 dst.y = y;
                 SDL_RenderCopy(renderer,tmp->texture,&src, &dst);
