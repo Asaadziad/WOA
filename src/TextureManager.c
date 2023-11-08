@@ -108,3 +108,19 @@ void drawText(TextureManager manager,int label_id,int x,int y,
         }
                 
 }
+
+void drawSprite(TextureManager manager, TexType texture_type,int x,int y, int width,int height, int sprite_x,int sprite_y,SDL_Renderer* renderer){
+    Texture to_render = loopAndFindTexture(manager,texture_type);
+    if(!to_render) return;
+    
+    SDL_Rect src;
+    SDL_Rect dst;
+    src.x = sprite_x;
+    src.y = sprite_y;
+    src.h = dst.h = height;
+    src.w = dst.w = width;
+    dst.x = x;
+    dst.y = y;
+
+    SDL_RenderCopy(renderer,to_render->texture,&src,&dst);
+}

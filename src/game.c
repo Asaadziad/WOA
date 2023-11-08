@@ -121,15 +121,11 @@ void loadTileMap(Game game){
     
 }
 
-static void createPlayerTextures(Game game){
-    Texture player = loadTextureFromFile(game->renderer,"character.png",PLAYER_TEXTURE);
-    listInsert(game->textures,player);
-}
-
 
 void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"character.png",PLAYER_TEXTURE);
+    load(game->texture_manager,game->renderer,"spritesheet.png",TILE_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     //loadTileMap(game);
@@ -159,10 +155,7 @@ static void handleKey(Game game,SDL_Keycode code){
         break;
         case SDLK_SPACE:
             if(game->state == MENU_STATE){
-                listEmpty(game->textures);
                 game->state = RUNNING_STATE;
-                
-                createPlayerTextures(game);
             } else {
                 LOG("Running state");
             }
@@ -214,11 +207,10 @@ void initRendering(Game game){
         int actual_center_y = SCREEN_HEIGHT/2 - 50;
         drawText(game->texture_manager,0,actual_center_x,actual_center_y,250,50,game->renderer);
         drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,game->renderer);
+    
     } else {
-        //createPlayerTextures(game);
+        drawSprite(game->texture_manager,TILE_TEXTURE,0,0,55,67,423,95,game->renderer);
         renderEntities(game);
-        listEmpty(game->textures);
-        
     }
 
     updateScreen(game);
