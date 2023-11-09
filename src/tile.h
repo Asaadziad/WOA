@@ -19,8 +19,7 @@
 typedef enum {
     WATER_TILE,
     GRASS_TILE,
-    LAVA_TILE,
-    BLOCK_TILE,
+    EARTH_TILE,
 } TileType;
 
 typedef struct {
@@ -28,7 +27,7 @@ typedef struct {
     TileType type;
 } *Tile;
 
-Tile createTile(int x, int y,TileType type);
+Tile createTile(int x, int y,int height, int width,TileType type);
 void destroyTile(Tile t);
 
 #endif

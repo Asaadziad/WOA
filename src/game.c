@@ -36,96 +36,10 @@ Game initGame(){
     return new_g;
 }
 
-/*static void createMenuUI(Game game){
-    Texture t = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2,LABEL_TEXTURE);
-    loadTextureFromText(game->renderer,game->global_font,t,"World of asaad");
-    Texture tt = initTexture(SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 + t->height,LABEL_TEXTURE);
-    loadTextureFromText(game->renderer,game->global_font,tt,"Press space to enter");
-    listInsert(game->textures,t);
-    listInsert(game->textures,tt);
-}*/
-
-
-static void getTileTypes(Game game){   
-    for(int i = 0; i <TOTAL_TILES;i++){
-        TileType type = game->tiles[i]->type;
-        SDL_Rect dst;
-        dst.h = TILE_HEIGHT;
-        dst.w = TILE_WIDTH;
-        switch(type){
-            case WATER_TILE:
-                dst.x = 0;
-                dst.y = 60;
-                break;
-            case GRASS_TILE:
-                dst.x = 0;
-                dst.x = 80;
-                break;
-            case LAVA_TILE:
-                dst.x = 0;
-                dst.y = 0;
-            break;
-            case BLOCK_TILE:
-                dst.x = 160;
-                dst.y = 80;
-                break;
-        };
-        game->tiles[i]->tile_box = dst;
-    }
-}
-
-static char* fileToBuffer(FILE* file){
-    int buffSize = 0;
-    fseek(file,0L,SEEK_END);
-    buffSize = ftell(file);
-    char* result = (char*)malloc(sizeof(char) * (buffSize+1));
-    if(!result) return NULL;
-    fseek(file,0L,SEEK_SET);
-    size_t new_len = fread(result,sizeof(char),buffSize,file);
-    result[new_len] = '\0'; 
-    return result;
-}
-
-static void setTiles(Game game){
-    char* map = fileToBuffer(game->map);
-    size_t len = strlen(map);
-    int t_index = 0;
-    for(int i = 0;i < len;i++){
-        if(map[i] == ' ' || map[i] == '\n'){
-            continue;
-        }
-        if(game->tiles){ 
-            game->tiles[t_index] = createTile(0,0,map[i] - '0');
-        } else {
-            ERR("test");
-        }
-        t_index++;
-    }
-    free(map);
-    getTileTypes(game);
-}
-void loadTileMap(Game game){
-    Texture tiles = loadTextureFromFile(game->renderer,"tiles.jpg",TILE_TEXTURE);
-    if(!tiles) {
-        ERR("Tiles Couldn't create");
-        exit(1);
-    }
-    listInsert(game->textures,tiles);
-    FILE* map_f = fopen("src/assets/map.map","r");
-    if(!map_f) {
-        ERR("Couldn't open map");
-        exit(1);
-    }
-    game->map = map_f;
-    setTiles(game);
-    
-}
-
-
 void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"character.png",PLAYER_TEXTURE);
-    load(game->texture_manager,game->renderer,"spritesheet.png",TILE_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/walls.png",TILE_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     //loadTileMap(game);
@@ -209,7 +123,14 @@ void initRendering(Game game){
         drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,game->renderer);
     
     } else {
-        drawSprite(game->texture_manager,TILE_TEXTURE,0,0,55,67,423,95,game->renderer);
+        drawFrame(game->texture_manager,TILE_TEXTURE,0,0,33,33,1,0,game->renderer,SDL_FLIP_NONE);
+        drawFrame(game->texture_manager,TILE_TEXTURE,32,0,33,33,1,0,game->renderer,SDL_FLIP_NONE);
+        drawFrame(game->texture_manager,TILE_TEXTURE,0,32,33,33,1,0,game->renderer,SDL_FLIP_NONE);
+        drawFrame(game->texture_manager,TILE_TEXTURE,32,32,33,33,1,0,game->renderer,SDL_FLIP_NONE);
+        drawFrame(game->texture_manager,TILE_TEXTURE,0,64,33,33,1,0,game->renderer,SDL_FLIP_NONE);
+        drawFrame(game->texture_manager,TILE_TEXTURE,64,0,33,33,1,0,game->renderer,SDL_FLIP_NONE);
+      
+      
         renderEntities(game);
     }
 

@@ -2,15 +2,15 @@
 #include "stdlib.h"
 
 
-Tile createTile(int x, int y,TileType type){
+Tile createTile(int x, int y,int height, int width,TileType type){
     Tile t = (Tile)malloc(sizeof(*t));
     if(!t) return NULL;
-    SDL_Rect dst;
-    dst.x = x;
-    dst.y = y;
-    dst.h = 50;
-    dst.w = 50;
-    t->tile_box = dst;
+    SDL_Rect src;
+    src.x = x;
+    src.y = y;
+    src.h = height;
+    src.w = width;
+    t->tile_box = src;
     t->type = type;
     return t;
 }
