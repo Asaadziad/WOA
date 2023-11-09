@@ -29,11 +29,44 @@ Game initGame(){
     new_g->objects = listCreate(freeObjectPtr,NULL);
     new_g->task_manager = taskManagerInit();
     new_g->texture_manager = textureManagerInit();
-    new_g->tiles = (Tile*) malloc(sizeof(Tile) * (TOTAL_TILES));
-    if(!new_g->tiles) return NULL;
-    new_g->map = NULL;
     new_g->handeled_event = 0;
+    int* new_map = (int*)malloc(sizeof(*new_map) * (25*19));
+    if(!new_map) return NULL;
+    new_g->map = new_map;
     return new_g;
+}
+
+static char* readFileToBuffer(const char* map_path){
+    FILE* map = fopen(map_path, "r");
+    if(!map) {ERR("Couldn't open map");exit(1);}
+    
+    fseek(map,1L,SEEK_END);
+    size_t file_size = ftell(map);
+    fseek(map,1L,SEEK_SET);
+    char* buffer = (char*)malloc(sizeof(char)* (file_size + 1));
+    if(!buffer) exit(1);
+    fread(buffer,file_size,1,map);
+    buffer[file_size] = '\0';
+    fclose(map);
+    return buffer;
+}
+
+static void loadTilesMap(Game game, const char* map_path){
+    char* tiles_string = readFileToBuffer(map_path);
+    char* to_free = tiles_string;
+    int i = 0;
+    while(*tiles_string != '\0'){
+        if(*tiles_string == ' ' || *tiles_string == '\n' || *tiles_string == '\r'){
+            tiles_string++;
+            continue;
+        }
+        game->map[i] = *tiles_string - '0';
+        
+        i++;
+        tiles_string++;
+    }
+    free(to_free);
+    
 }
 
 void loadTextures(Game game){
@@ -42,7 +75,7 @@ void loadTextures(Game game){
     load(game->texture_manager,game->renderer,"res/walls.png",TILE_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
-    //loadTileMap(game);
+    loadTilesMap(game, "tiles.config");
     char* size = int2string(getListSize(game->textures));
     LOG(size);
     free(size);
@@ -109,7 +142,13 @@ void initEntities(Game game){
 
 void renderEntities(Game game){
     playerDraw(game->texture_manager,game->players[0],game->renderer);
+}
 
+static void drawMap(Game game){
+    for(int i = 0; i < 475;i++){
+       // int current_frame = (game->map[i]/2 + 1) == 2 ? 0 : game->map[i];
+        drawFrame(game->texture_manager,TILE_TEXTURE,i%25 * 32,i%19 * 32,32,32,(game->map[i]/2) + 1,game->map[i]%2,game->renderer,SDL_FLIP_NONE);      
+    }
 }
 
 
@@ -123,14 +162,7 @@ void initRendering(Game game){
         drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,game->renderer);
     
     } else {
-        drawFrame(game->texture_manager,TILE_TEXTURE,0,0,33,33,1,0,game->renderer,SDL_FLIP_NONE);
-        drawFrame(game->texture_manager,TILE_TEXTURE,32,0,33,33,1,0,game->renderer,SDL_FLIP_NONE);
-        drawFrame(game->texture_manager,TILE_TEXTURE,0,32,33,33,1,0,game->renderer,SDL_FLIP_NONE);
-        drawFrame(game->texture_manager,TILE_TEXTURE,32,32,33,33,1,0,game->renderer,SDL_FLIP_NONE);
-        drawFrame(game->texture_manager,TILE_TEXTURE,0,64,33,33,1,0,game->renderer,SDL_FLIP_NONE);
-        drawFrame(game->texture_manager,TILE_TEXTURE,64,0,33,33,1,0,game->renderer,SDL_FLIP_NONE);
-      
-      
+        drawMap(game);
         renderEntities(game);
     }
 

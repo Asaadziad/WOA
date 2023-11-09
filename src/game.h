@@ -31,11 +31,10 @@ typedef struct game_t {
     TextureManager texture_manager;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
-    FILE* map;
-    Tile* tiles;
     int mouse_x;
     int mouse_y;
     uint8_t handeled_event;
+    int* map;
 
 } *Game;
 

@@ -5,7 +5,6 @@
 #include "game.h"
 #include "logic.h"
 #include "timer.h"
-#include "parser.h"
 
 static void initSDL(SDL_Window** window, SDL_Renderer** renderer);
 static void quitSDL(SDL_Window** window);
@@ -31,8 +30,7 @@ int main(){
     initEntities(game);
     
     int frameCounter = 0;
-    int arr[6][4] = {0};
-    parse(arr,6,"tiles.config");
+
     SDL_Event event;
     while(IS_RUNNING(game)){
         uint32_t cap_time = SDL_GetTicks();
