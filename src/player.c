@@ -25,14 +25,7 @@ Player initPlayer(int x,int y,int width,int height){
 }
 
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer){
-
-    if(p->face == EAST){
-    drawFrame(manager,PLAYER_TEXTURE,p->position.x,p->position.y,p->width,p->height,1,p->current_frame,renderer,SDL_FLIP_HORIZONTAL);
-
-    } else {
-    drawFrame(manager,PLAYER_TEXTURE,p->position.x,p->position.y,p->width,p->height,1,p->current_frame,renderer,SDL_FLIP_NONE);
-
-    }
+    draw(manager,PLAYER_TEXTURE,100,100,60,60,renderer,SDL_FLIP_NONE);
 }
 
 void playerUpdate(Player p){

@@ -40,9 +40,9 @@ static char* readFileToBuffer(const char* map_path){
     FILE* map = fopen(map_path, "r");
     if(!map) {ERR("Couldn't open map");exit(1);}
     
-    fseek(map,1L,SEEK_END);
+    fseek(map,0,SEEK_END);
     size_t file_size = ftell(map);
-    fseek(map,1L,SEEK_SET);
+    fseek(map,0,SEEK_SET);
     char* buffer = (char*)malloc(sizeof(char)* (file_size + 1));
     if(!buffer) exit(1);
     fread(buffer,file_size,1,map);
@@ -71,7 +71,7 @@ static void loadTilesMap(Game game, const char* map_path){
 
 void loadTextures(Game game){
     //createMenuUI(game);
-    load(game->texture_manager,game->renderer,"character.png",PLAYER_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/character.png",PLAYER_TEXTURE);
     load(game->texture_manager,game->renderer,"res/walls.png",TILE_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
@@ -145,9 +145,11 @@ void renderEntities(Game game){
 }
 
 static void drawMap(Game game){
-    for(int i = 0; i < 475;i++){
-       // int current_frame = (game->map[i]/2 + 1) == 2 ? 0 : game->map[i];
-        drawFrame(game->texture_manager,TILE_TEXTURE,i%25 * 32,i%19 * 32,32,32,(game->map[i]/2) + 1,game->map[i]%2,game->renderer,SDL_FLIP_NONE);      
+    for(int row = 0 ; row < 19;row++){
+        for(int col = 0; col < 25;col++){
+            drawFrame(game->texture_manager,TILE_TEXTURE,col * 32,row * 32,32,32,(game->map[row * 25 + col]/2) + 1,game->map[row * 25 + col]%2,game->renderer,SDL_FLIP_NONE);      
+
+        }
     }
 }
 
