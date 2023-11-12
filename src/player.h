@@ -20,16 +20,12 @@ typedef struct player_t {
     Vector2f vel;
     int height;
     int width;
-    bool isMoving;
-    PlayerFace face;
-    OBJECT target_object;
-    Vector2f target_position;
     int level;
     uint32_t current_xp;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);
-void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer);
+void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera);
 void playerUpdate(Player p);
 void destroyPlayer(Player p);
 

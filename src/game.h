@@ -9,10 +9,7 @@
 #include "taskManager.h"
 #include "TextureManager.h"
 
-#define SCREEN_HEIGHT 600
-#define SCREEN_WIDTH 800
-
-#define PLAYERS_COUNT 1
+#include "common.h"
 
 #define IS_RUNNING(game) ((game)->state != QUIT_STATE)
 
@@ -31,6 +28,7 @@ typedef struct game_t {
     TextureManager texture_manager;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
+    SDL_Rect camera;
     int mouse_x;
     int mouse_y;
     uint8_t handeled_event;

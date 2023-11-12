@@ -1,6 +1,7 @@
 #include "player.h"
 #include "stdlib.h"
 #include "memory.h"
+#include "common.h"
 
 #define TILE_STARTER 10
 
@@ -12,24 +13,19 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->position = pos;
     new_p->width = width;
     new_p->height = height;
-    new_p->isMoving = false;
     Vector2f vel = {10,10};
     new_p->vel = vel;
-    new_p->face = NORTH;
     new_p->level = 0;
     new_p->current_xp = 0;
-    new_p->target_object = NULL;
-    new_p->target_position.x = 0;
-    new_p->target_position.y = 0;
     return new_p;
 }
 
-void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer){
-    draw(manager,PLAYER_TEXTURE,100,100,60,60,renderer,SDL_FLIP_NONE);
+void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera){
+    draw(manager,PLAYER_TEXTURE,p->position.x - camera.x,p->position.y - camera.y,60,60,renderer,SDL_FLIP_NONE);    
 }
 
 void playerUpdate(Player p){
-    p->current_frame = (int)(SDL_GetTicks()/100) % 12;
+    //p->current_frame = (int)(SDL_GetTicks()/100) % 12;
 }
 
 

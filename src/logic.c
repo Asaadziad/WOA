@@ -12,8 +12,8 @@
 
 void handleLogic(Game game,uint32_t time) {
     //initPlayerMovement(game->players);
-    handleMovement(PLAYER_TYPE,game->players[0],time);
-    handleTasks(game->task_manager,game->players[0]);
+    //handleMovement(PLAYER_TYPE,game->players[0],time);
+   // handleTasks(game->task_manager,game->players[0]);
    // handleTilesMovement(game->players[0],game->players[0]->tile_list);
 }
 

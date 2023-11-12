@@ -39,8 +39,8 @@ int main(){
         */
         handleEvents(&event, game);
 
-        gameUpdate(game);
         handleLogic(game, cap_time);
+        gameUpdate(game);
 
         /* Rendering */
         initRendering(game);

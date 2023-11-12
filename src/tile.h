@@ -4,16 +4,8 @@
 #include "SDL2/SDL.h"
 #include "vector.h"
 
-#define TILE_WIDTH 20
-#define TILE_HEIGHT 20
-#define TOTAL_TILES 12
-#define TOTAL_TILE_SPRITES 12
-
-//The different tile sprites
-#define TILE_RED 0
-#define TILE_GREEN 1
-#define TILE_BLUE 2
-#define TILE_CENTER 3
+#define TILE_WIDTH 32
+#define TILE_HEIGHT 32
 
 
 typedef enum {
