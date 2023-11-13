@@ -17,6 +17,8 @@ typedef enum {
 typedef struct player_t {
     int current_frame;
     Vector2f position;
+    int screenX;
+    int screenY;
     Vector2f vel;
     int height;
     int width;
@@ -26,7 +28,7 @@ typedef struct player_t {
 
 Player initPlayer(int x,int y,int width,int height);
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera);
-void playerUpdate(Player p);
+void playerUpdate(Player p,SDL_Rect camera);
 void destroyPlayer(Player p);
 
 #endif

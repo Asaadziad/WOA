@@ -53,7 +53,6 @@ static char* readFileToBuffer(const char* map_path){
     if(!buffer) exit(1);
     fread(buffer,file_size,1,map);
     buffer[file_size] = '\0';
-    fprintf(stderr,"%ld\n",file_size);
     fclose(map);
     return buffer;
 }
@@ -65,15 +64,14 @@ static void loadTilesMap(Game game, const char* map_path){
     
     int i = 0;
     while(*tiles_string != '\0'){
-        if(*tiles_string == ' ' || *tiles_string == '\n' || *tiles_string == '\r'){
+        if(*tiles_string == ' ' || *tiles_string == '\n' || *tiles_string == '\r' || *tiles_string == '\t'){
             tiles_string++;
             continue;
         }
         game->map[i] = *tiles_string - '0';
-        
         i++;
         tiles_string++;
-    }
+    } 
     free(to_free);
 }
 
@@ -95,7 +93,7 @@ static void handleKey(Game game,SDL_Keycode code){
         handlePlayerMovement(asaad,MOVE_LEFT);
         break;
         case SDLK_RIGHT:
-        
+        fprintf(stderr,"CAMERA-X: %d CAMERA-Y:%d",game->camera.x,game->camera.y);
         handlePlayerMovement(asaad,MOVE_RIGHT);
         break;
         case SDLK_UP:
@@ -153,11 +151,12 @@ void renderEntities(Game game){
 static void drawMap(Game game){
     for(int row = 0 ; row < MAX_WORLD_ROWS;row++){
         for(int col = 0; col < MAX_WORLD_COLS;col++){
-            int worldX = row * TILE_WIDTH;
-            int worldY = col * TILE_HEIGHT;
-            int screenX = worldX - game->players[0]->position.x + (game->camera.x);
-            int screenY = worldY - game->players[0]->position.y + (game->camera.y);
-           
+            int worldX = col * TILE_WIDTH;
+            int worldY = row * TILE_HEIGHT;
+
+            int screenX = worldX - game->camera.x;
+            int screenY = worldY - game->camera.y;
+
             drawFrame(game->texture_manager,TILE_TEXTURE,screenX,screenY,32,32,(game->map[row * 50 + col]/2) + 1,game->map[row * 50 + col]%2,game->renderer,SDL_FLIP_NONE);
 
 
@@ -200,7 +199,7 @@ static void checkCamera(SDL_Rect* camera){
         camera->y = 0;
     }
     if(camera->x > WORLD_WIDTH - camera->w){
-        camera->x = WORLD_WIDTH - camera->w;
+        camera->x =  WORLD_WIDTH - camera->w;
     }
     if(camera->y > WORLD_HEIGHT - camera->h){
         camera->y = WORLD_HEIGHT - camera->h;
@@ -208,14 +207,11 @@ static void checkCamera(SDL_Rect* camera){
 }
 
 void gameUpdate(Game game){
-    playerUpdate(game->players[0]);
-    game->camera.x = (game->players[0]->position.x + TILE_WIDTH - game->camera.w/2);
-    game->camera.y = (game->players[0]->position.y + TILE_HEIGHT - game->camera.h/2);
+    game->camera.x = (game->players[0]->position.x - game->camera.w/2);
+    game->camera.y = (game->players[0]->position.y - game->camera.h/2);
     checkCamera(&game->camera);
-    if(game->camera.x < 0){
+    playerUpdate(game->players[0],game->camera);
 
-    fprintf(stderr,"%d\n",game->camera.x);
-    }
 }
 
 

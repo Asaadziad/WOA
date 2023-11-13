@@ -11,6 +11,8 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->current_frame = 1;
     Vector2f pos = {x,y};
     new_p->position = pos;
+    new_p->screenX = SCREEN_WIDTH/2 - (TILE_WIDTH/2);
+    new_p->screenY = SCREEN_HEIGHT/2 - (TILE_HEIGHT/2);
     new_p->width = width;
     new_p->height = height;
     Vector2f vel = {10,10};
@@ -24,7 +26,7 @@ void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect 
     draw(manager,PLAYER_TEXTURE,p->position.x - camera.x,p->position.y - camera.y,60,60,renderer,SDL_FLIP_NONE);    
 }
 
-void playerUpdate(Player p){
+void playerUpdate(Player p,SDL_Rect camera){
     //p->current_frame = (int)(SDL_GetTicks()/100) % 12;
 }
 

@@ -31,7 +31,7 @@ void handlePlayerMovement(Player p, MovementType m_type){
         break;
   
         case MOVE_RIGHT:
-        if(p->position.x >= WORLD_WIDTH) return;
+        if(p->position.x + TILE_WIDTH >= WORLD_WIDTH) return;
         p->position.x += checkXout(p->position.x + p->width) ? 0 : p->vel.x;
         break;
 
