@@ -27,8 +27,8 @@ static Texture loopAndFindTexture(TextureManager manager,TexType type){
 TextureManager textureManagerInit(){
     TextureManager manager = (TextureManager)malloc(sizeof(*manager));
     if(!manager) return NULL;
-    manager->textures = listCreate(freeTexturePtr,NULL);
-    manager->labels = listCreate(freeTexturePtr,NULL);
+    manager->textures = listCreate(freeTexturePtr,NULL,NULL);
+    manager->labels = listCreate(freeTexturePtr,NULL,NULL);
     return manager;
 }
 

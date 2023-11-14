@@ -16,19 +16,21 @@ struct list_t {
     Node tail;
     size_t size;
     elemDestroy destroy_function;
+    elemFind compare_function;
     elemPrint print_function;
 };
 
 /*
 * Creates an empty list
 */
-List listCreate(elemDestroy destroy_function,elemPrint print_function){
+List listCreate(elemDestroy destroy_function,elemFind compare_function,elemPrint print_function){
     List list = (List)malloc(sizeof(*list));
     if(!list) return NULL;
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
     list->destroy_function = destroy_function;
+    list->compare_function = compare_function;
     list->print_function = print_function;
     return list;
 }
@@ -129,6 +131,19 @@ void listPrint(List list){
     if(!list) return;
     loopAndMap(list,list->print_function);
     printf("\n");
+}
+
+Element listFind(List list, Element element){
+    if(!list) return NULL;
+    Node current = list->head;
+    while(current != NULL){
+        Node tmp = current->next;
+        if(list->compare_function(current->data,element)){
+            return current->data;
+        }
+        current = tmp;
+    }
+    return NULL;
 }
 
 size_t getListSize(List list){

@@ -10,7 +10,7 @@ struct queue_t {
 QUEUE createQueue(elemDestroy destroy_function, elemPrint print_function){
     QUEUE q = (QUEUE)malloc(sizeof(*q));
     if(!q) return NULL;
-    q->data = listCreate(destroy_function,print_function);
+    q->data = listCreate(destroy_function,NULL,print_function);
     if(!q->data) return NULL;
     return q;
 }

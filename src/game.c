@@ -25,10 +25,11 @@ Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
-    new_g->textures = listCreate(freeTexturePtr,NULL);
-    new_g->objects = listCreate(freeObjectPtr,NULL);
+    new_g->textures = listCreate(freeTexturePtr,NULL,NULL);
+    new_g->objects = listCreate(freeObjectPtr,NULL,NULL);
     new_g->task_manager = taskManagerInit();
     new_g->texture_manager = textureManagerInit();
+    new_g->components_manager = initComponentsManager();
     new_g->handeled_event = 0;
     SDL_Rect camera;
     camera.x = 0;
@@ -79,10 +80,10 @@ void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"res/character.png",PLAYER_TEXTURE);
     load(game->texture_manager,game->renderer,"res/walls.png",TILE_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/inventory.png",UI_INVENTORY_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     loadTilesMap(game, "world.txt");
-    
 }
 
 static void handleKey(Game game,SDL_Keycode code){
@@ -144,8 +145,12 @@ void initEntities(Game game){
     listInsert(game->objects,fish);  
 }
 
-void renderEntities(Game game){
+static void renderEntities(Game game){
     playerDraw(game->texture_manager,game->players[0],game->renderer,game->camera);
+}
+
+static void renderUI(Game game){
+    draw(game->texture_manager,UI_INVENTORY_TEXTURE,SCREEN_WIDTH/2,SCREEN_HEIGHT - 50,50,50,game->renderer,SDL_FLIP_NONE);
 }
 
 static void drawMap(Game game){
@@ -157,6 +162,8 @@ static void drawMap(Game game){
             int screenX = worldX - game->camera.x;
             int screenY = worldY - game->camera.y;
 
+
+            // TODO :: Add conditional rendering (for process improvements)
             drawFrame(game->texture_manager,TILE_TEXTURE,screenX,screenY,32,32,(game->map[row * 50 + col]/2) + 1,game->map[row * 50 + col]%2,game->renderer,SDL_FLIP_NONE);
 
 
@@ -177,6 +184,7 @@ void initRendering(Game game){
     } else {
         drawMap(game);
         renderEntities(game);
+        renderUI(game);
     }
 
     updateScreen(game);

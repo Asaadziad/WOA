@@ -9,4 +9,7 @@
 #define WORLD_WIDTH 1600
 #define PLAYERS_COUNT 1
 
+#include "stdbool.h"
+
+
 #endif

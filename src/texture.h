@@ -13,6 +13,7 @@ typedef enum {
     PLAYER_TEXTURE,
     LABEL_TEXTURE,
     TILE_TEXTURE,
+    UI_INVENTORY_TEXTURE,
 } TexType;
 
 typedef struct texture_t{
