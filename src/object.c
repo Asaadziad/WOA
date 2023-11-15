@@ -1,6 +1,7 @@
 #include "object.h"
 
 
+
 struct object_t {
     ObjectType type;
     SDL_Rect src;
@@ -17,6 +18,27 @@ OBJECT createObject(int height, int width, int x, int y,ObjectType type){
     obj->src = src;
     obj->type = type;
     return obj;
+}
+
+void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer){
+    switch(obj->type){
+        case TREE_OBJECT:
+            drawFrame(manager,TREE_TEXTURE,obj->src.x,obj->src.y,obj->src.w,obj->src.h,50,50,1,0,renderer,SDL_FLIP_NONE);
+        break;
+        default:break;
+    }
+}
+
+void objectUpdate(OBJECT obj){
+    switch (obj->type)
+    {
+    case TREE_OBJECT:
+        
+        break;
+    
+    default:
+        break;
+    }
 }
 
 void destroyObject(OBJECT obj){

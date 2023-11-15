@@ -9,7 +9,6 @@ static uint8_t isObjectClicked(int x, int y,SDL_Rect src){
     return (x >= src.x && x <= (src.x + src.w)) && ((y <= (src.y + src.h)) && (y >= src.y));
     
 }
-
 /*
 * Need to walk through objects and check if the player clicked on one of them
 */

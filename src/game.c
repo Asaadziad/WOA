@@ -1,6 +1,6 @@
 #include "game.h"
 #include "stdlib.h"
-
+#include "stdbool.h"
 #include "logic.h"
 #include "memory.h"
 #include "rendering.h"
@@ -12,6 +12,7 @@
 #include "lib/assets.h"
 #include "task.h"
 #include "Player/playerClick.h"
+#include "CollisionDetection.h"
 
 static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
@@ -80,7 +81,8 @@ void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"res/character.png",PLAYER_TEXTURE);
     load(game->texture_manager,game->renderer,"res/walls.png",TILE_TEXTURE);
-    load(game->texture_manager,game->renderer,"res/inventory.png",UI_INVENTORY_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/uisheet.png",UI_INVENTORY_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/woodcutting.png",TREE_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     loadTilesMap(game, "world.txt");
@@ -119,6 +121,7 @@ static void handleKey(Game game,SDL_Keycode code){
 
 void handleEvents(SDL_Event* e,Game game){
     while(SDL_PollEvent(e) != 0){
+        SDL_GetMouseState(&(game->mouse_x),&(game->mouse_y));
         switch(e->type){
             case SDL_QUIT:
                 game->state = QUIT_STATE;
@@ -129,6 +132,7 @@ void handleEvents(SDL_Event* e,Game game){
             case SDL_MOUSEBUTTONDOWN:
                 int x,y;
                 SDL_GetMouseState(&(x),&(y));
+                
                 handlePlayerClick(game,x,y);
                 fprintf(stderr,"MOUSE-X: %d MOUSE-Y:%d\n",x,y);
             break;
@@ -140,17 +144,40 @@ void handleEvents(SDL_Event* e,Game game){
 void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
     Player asaad = initPlayer(0,0,32,32);
-    game->players[0] = asaad;
-    OBJECT fish = createObject(50,50,50,50,FISHING_SPOT);
-    listInsert(game->objects,fish);  
+    game->players[0] = asaad; 
 }
 
 static void renderEntities(Game game){
     playerDraw(game->texture_manager,game->players[0],game->renderer,game->camera);
 }
 
+static void renderObjects(Game game){
+    drawFrame(game->texture_manager,TREE_TEXTURE,100,100,32,32,50,50,1,0,game->renderer,SDL_FLIP_NONE);
+}
+
+static bool mouseInRect(Game game, SDL_Rect rect){
+    if((game->mouse_x > (rect.x + rect.w)) || (game->mouse_x < rect.x)) {
+        return false;
+    }
+    if((game->mouse_y > (rect.y)) || (game->mouse_y < rect.y - 50)) {
+        return false;
+    }
+    return true;
+}
+
 static void renderUI(Game game){
-    draw(game->texture_manager,UI_INVENTORY_TEXTURE,SCREEN_WIDTH/2,SCREEN_HEIGHT - 50,50,50,game->renderer,SDL_FLIP_NONE);
+    SDL_Rect dst;
+    dst.x = SCREEN_WIDTH/2;
+    dst.y = SCREEN_HEIGHT;
+    dst.w = 50;
+    dst.h = 50;
+    //fprintf(stderr,"MOUSE-MOTION-X: %d MOUSE-MOTION-Y: %d\n",game->mouse_x,game->mouse_y);
+    if(mouseInRect(game,dst)){
+        
+        drawFrame(game->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,1,game->renderer,SDL_FLIP_NONE);
+    } else {
+        drawFrame(game->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,game->renderer,SDL_FLIP_NONE);
+    }
 }
 
 static void drawMap(Game game){
@@ -164,7 +191,7 @@ static void drawMap(Game game){
 
 
             // TODO :: Add conditional rendering (for process improvements)
-            drawFrame(game->texture_manager,TILE_TEXTURE,screenX,screenY,32,32,(game->map[row * 50 + col]/2) + 1,game->map[row * 50 + col]%2,game->renderer,SDL_FLIP_NONE);
+            drawFrame(game->texture_manager,TILE_TEXTURE,screenX,screenY,32,32,32,32,(game->map[row * 50 + col]/2) + 1,game->map[row * 50 + col]%2,game->renderer,SDL_FLIP_NONE);
 
 
         }
@@ -184,6 +211,7 @@ void initRendering(Game game){
     } else {
         drawMap(game);
         renderEntities(game);
+        renderObjects(game);
         renderUI(game);
     }
 
@@ -219,7 +247,6 @@ void gameUpdate(Game game){
     game->camera.y = (game->players[0]->position.y - game->camera.h/2);
     checkCamera(&game->camera);
     playerUpdate(game->players[0],game->camera);
-
 }
 
 

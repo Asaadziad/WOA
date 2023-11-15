@@ -65,8 +65,8 @@ void draw(TextureManager manager,TexType texture_type,int x,int y,
     SDL_RenderCopyEx(renderer,to_render->texture,&src,&dst,0,0,flip);
 }
 
-void drawFrame(TextureManager manager,TexType texture_type,int x,int y,int width,
-            int height,int current_row,int current_frame,
+void drawFrame(TextureManager manager,TexType texture_type,int x,int y,int frame_width,
+            int frame_height,int render_width,int render_height,int current_row,int current_frame,
             SDL_Renderer* renderer, SDL_RendererFlip flip){
 
     Texture to_render = loopAndFindTexture(manager,texture_type);
@@ -74,10 +74,12 @@ void drawFrame(TextureManager manager,TexType texture_type,int x,int y,int width
     
     SDL_Rect src;
     SDL_Rect dst;
-    src.x = width * current_frame;
-    src.y = height * (current_row - 1);
-    src.h = dst.h = height;
-    src.w = dst.w = width;
+    src.x = frame_width * current_frame;
+    src.y = frame_height * (current_row - 1);
+    src.h = frame_height;
+    src.w = frame_width;
+    dst.w = render_width;
+    dst.h = render_height;
     dst.x = x;
     dst.y = y;
 
