@@ -3,6 +3,7 @@
 #include "movementHandler.h"
 #include "player.h"
 #include "common.h"
+#include "CollisionDetection.h"
 
 static bool checkXout(int x){
     
@@ -14,7 +15,6 @@ static bool checkYout(int y){
 }
 
 void handlePlayerMovement(Player p, MovementType m_type){
-    
     fprintf(stderr,"COORD-X: %f COORD-Y: %f\n",p->position.x,p->position.y);
     switch(m_type){
         case MOVE_UP:

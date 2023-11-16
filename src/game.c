@@ -145,6 +145,8 @@ void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
     Player asaad = initPlayer(0,0,32,32);
     game->players[0] = asaad; 
+    OBJECT tree = createObject(50,50,100,100,TREE_OBJECT);
+    listInsert(game->objects,tree);
 }
 
 static void renderEntities(Game game){
@@ -152,7 +154,16 @@ static void renderEntities(Game game){
 }
 
 static void renderObjects(Game game){
-    drawFrame(game->texture_manager,TREE_TEXTURE,100,100,32,32,50,50,1,0,game->renderer,SDL_FLIP_NONE);
+    Node current = getHead(game->objects);
+    if(!current) return;
+    while(current){
+        OBJECT tmp = getNodeData(current);
+        SDL_Rect obj_rect = objectGetRect(tmp);
+        if(!(game->camera.x > obj_rect.x + obj_rect.w)){
+            drawFrame(game->texture_manager,TREE_TEXTURE,obj_rect.x,obj_rect.y,32,32,obj_rect.w,obj_rect.h,1,0,game->renderer,SDL_FLIP_NONE);
+            }
+        current = getNextNode(current);
+    }
 }
 
 static bool mouseInRect(Game game, SDL_Rect rect){
@@ -242,11 +253,31 @@ static void checkCamera(SDL_Rect* camera){
     }
 }
 
+static void checkCollisions(Game game){
+    Node current = getHead(game->objects);
+    if(!current) return;
+    while (current)
+    {
+        OBJECT tmp  = getNodeData(current);
+        if(checkCollision(game->players[0],objectGetRect(tmp))){
+            switch(objectGetType(tmp)){
+                case TREE_OBJECT:
+
+                break;
+                default: break;
+            }
+        }
+        current = getNextNode(current);
+    }
+    
+}
+
 void gameUpdate(Game game){
     game->camera.x = (game->players[0]->position.x - game->camera.w/2);
     game->camera.y = (game->players[0]->position.y - game->camera.h/2);
     checkCamera(&game->camera);
     playerUpdate(game->players[0],game->camera);
+    checkCollisions(game);
 }
 
 
