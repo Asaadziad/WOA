@@ -31,6 +31,7 @@ Game initGame(){
     new_g->task_manager = taskManagerInit();
     new_g->texture_manager = textureManagerInit();
     new_g->components_manager = initComponentsManager();
+    new_g->object_manager = initObjectManager();
     new_g->handeled_event = 0;
     SDL_Rect camera;
     camera.x = 0;
@@ -145,8 +146,7 @@ void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
     Player asaad = initPlayer(0,0,32,32);
     game->players[0] = asaad; 
-    OBJECT tree = createObject(50,50,100,100,TREE_OBJECT);
-    listInsert(game->objects,tree);
+    setupObjects(game->object_manager,"objects.txt");
 }
 
 static void renderEntities(Game game){
@@ -158,10 +158,7 @@ static void renderObjects(Game game){
     if(!current) return;
     while(current){
         OBJECT tmp = getNodeData(current);
-        SDL_Rect obj_rect = objectGetRect(tmp);
-        if(!(game->camera.x > obj_rect.x + obj_rect.w)){
-            drawFrame(game->texture_manager,TREE_TEXTURE,obj_rect.x,obj_rect.y,32,32,obj_rect.w,obj_rect.h,1,0,game->renderer,SDL_FLIP_NONE);
-            }
+        objectDraw(game->texture_manager,tmp,game->renderer,game->camera);
         current = getNextNode(current);
     }
 }
@@ -262,7 +259,7 @@ static void checkCollisions(Game game){
         if(checkCollision(game->players[0],objectGetRect(tmp))){
             switch(objectGetType(tmp)){
                 case TREE_OBJECT:
-
+                    LOG("COLLIDED");
                 break;
                 default: break;
             }

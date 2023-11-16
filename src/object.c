@@ -20,10 +20,12 @@ OBJECT createObject(int height, int width, int x, int y,ObjectType type){
     return obj;
 }
 
-void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer){
+void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rect camera){
+    int screenX = obj->src.x - camera.x;
+    int screenY = obj->src.y - camera.y;
     switch(obj->type){
         case TREE_OBJECT:
-            drawFrame(manager,TREE_TEXTURE,obj->src.x,obj->src.y,obj->src.w,obj->src.h,50,50,1,0,renderer,SDL_FLIP_NONE);
+            drawFrame(manager,TREE_TEXTURE,screenX,screenY,32,32,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
         break;
         default:break;
     }

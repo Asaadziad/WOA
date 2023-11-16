@@ -15,7 +15,7 @@ typedef struct object_t* OBJECT;
 
 OBJECT createObject(int height, int width, int x, int y,ObjectType type);
 void destroyObject(OBJECT obj);
-void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer);
+void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rect camera);
 
 void objectUpdate(OBJECT obj);
 ObjectType objectGetType(OBJECT obj);

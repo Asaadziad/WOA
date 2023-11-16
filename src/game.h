@@ -9,6 +9,7 @@
 #include "taskManager.h"
 #include "TextureManager.h"
 #include "ComponentsManager.h"
+#include "ObjectManager.h"
 #include "common.h"
 
 #define IS_RUNNING(game) ((game)->state != QUIT_STATE)
@@ -27,6 +28,7 @@ typedef struct game_t {
     TaskManager task_manager;
     TextureManager texture_manager;
     ComponenetsManager components_manager;
+    ObjectManager object_manager;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
     SDL_Rect camera;
