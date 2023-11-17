@@ -21,6 +21,9 @@ OBJECT createObject(int height, int width, int x, int y,ObjectType type){
 }
 
 void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rect camera){
+    if(!obj) {
+        return;
+    }
     int screenX = obj->src.x - camera.x;
     int screenY = obj->src.y - camera.y;
     switch(obj->type){

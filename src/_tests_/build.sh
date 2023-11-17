@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gcc main.c list_test.c ../DS/list.c -o ./test
+gcc tokenizer_test.c -o ./test

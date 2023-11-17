@@ -39,19 +39,23 @@ Token* tokenize(char* line){
     Token* arr = (Token*)malloc(sizeof(*arr) * 5); // hardcoded for test purposes
     if(!arr) return NULL;
     int i = 0;
-    while(*line != '\n'){
-        char* start = line;
-        int len = 0;
-        while(*line != ' ' || *line != '\t' || *line != '\r'){
-            len++;
+    char* first_letter = line;
+    int len = 0;
+    while(*line != '\0'){
+        if(*line == ' ' || *line == '\t' || *line == '\r' || *line == '\n'){
             line++;
+            char* ident = (char*)malloc(sizeof(*ident) * (len+1));
+            if(!ident) return NULL;
+            strncpy(ident,first_letter,len);
+            ident[len] = '\0';
+            arr[i] = tokenCreate(ident);
+            i++;
+            len = 0;
+            first_letter = line;
+            continue;
         }
-        char* ident = (char*)malloc(sizeof(char) * (len+1));
-        if(!ident) return NULL;
-        strncpy(ident,start,len);
-        ident[len] = '\0';
-        arr[i] = tokenCreate(ident);
-        i++;        
+        len++;
+        line++;        
     }
     return arr;
 }
@@ -60,7 +64,7 @@ static OBJECT createObjectFromLine(char* line){
     if(!line) return NULL;
     Token* tokens = tokenize(line);
     if(!tokens) return NULL;
-    OBJECT tmp;
+    OBJECT tmp = NULL;
     char* obj_type = tokens[0]->literal;
     if(strcmp(obj_type,"TREE_OBJECT") == 0){
         tmp = createObject(atoi(tokens[1]->literal),
@@ -69,6 +73,10 @@ static OBJECT createObjectFromLine(char* line){
                             atoi(tokens[4]->literal),
                             TREE_OBJECT);
     }
+    for(int i = 0; i < 5;i++){
+        free(tokens[i]->literal);
+    }
+    free(tokens);
 
     return tmp;
 }
@@ -79,7 +87,22 @@ void setupObjects(ObjectManager manager,const char* file_path){
     size_t len = 0;
     size_t read;
     while ((read = getline(&line, &len, objects_file)) != -1) {
-        listInsert(manager->objects,createObjectFromLine(line));
+        OBJECT tmp  = createObjectFromLine(line);
+        if(tmp){
+            listInsert(manager->objects,tmp);
+        }
     }
     fclose(objects_file);
+}
+
+void renderObjects(ObjectManager manager,TextureManager texture_manager, SDL_Renderer* renderer,SDL_Rect camera){
+    Node current = getHead(manager->objects);
+    if(!current) {
+        return;
+    }
+    for(int i = 0; i < getListSize(manager->objects);i++){
+        OBJECT tmp = getNodeData(current);
+        objectDraw(texture_manager,tmp,renderer,camera);
+        current = getNextNode(current);
+    }
 }

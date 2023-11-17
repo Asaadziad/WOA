@@ -153,16 +153,6 @@ static void renderEntities(Game game){
     playerDraw(game->texture_manager,game->players[0],game->renderer,game->camera);
 }
 
-static void renderObjects(Game game){
-    Node current = getHead(game->objects);
-    if(!current) return;
-    while(current){
-        OBJECT tmp = getNodeData(current);
-        objectDraw(game->texture_manager,tmp,game->renderer,game->camera);
-        current = getNextNode(current);
-    }
-}
-
 static bool mouseInRect(Game game, SDL_Rect rect){
     if((game->mouse_x > (rect.x + rect.w)) || (game->mouse_x < rect.x)) {
         return false;
@@ -219,7 +209,7 @@ void initRendering(Game game){
     } else {
         drawMap(game);
         renderEntities(game);
-        renderObjects(game);
+        renderObjects(game->object_manager,game->texture_manager,game->renderer,game->camera);
         renderUI(game);
     }
 
