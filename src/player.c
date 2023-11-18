@@ -19,15 +19,26 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->vel = vel;
     new_p->level = 0;
     new_p->current_xp = 0;
+    new_p->canMoveDown = true;
+    new_p->canMoveUp = true;
+    new_p->canMoveLeft = true;
+    new_p->canMoveRight = true;
     return new_p;
 }
 
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera){
-    draw(manager,PLAYER_TEXTURE,p->position.x - camera.x,p->position.y - camera.y,60,60,renderer,SDL_FLIP_NONE);    
+    drawFrame(manager,PLAYER_TEXTURE,p->position.x - camera.x,p->position.y - camera.y,32,32,60,60,(p->current_frame/3) + 1,p->current_frame % 3,renderer,SDL_FLIP_NONE);
+    
 }
 
 void playerUpdate(Player p,SDL_Rect camera){
-    //p->current_frame = (int)(SDL_GetTicks()/100) % 12;
+    if(p->current_frame >= 9){
+        p->current_frame = 0;
+    }
+    p->canMoveUp = true;
+    p->canMoveDown = true;
+    p->canMoveLeft = true;
+    p->canMoveRight = true;
 }
 
 

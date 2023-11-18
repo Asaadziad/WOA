@@ -5,20 +5,13 @@
 #include "common.h"
 #include "CollisionDetection.h"
 
-static bool checkXout(int x){
-    
-    return false;
-}
-static bool checkYout(int y){
-
-    return false;
-}
-
 void handlePlayerMovement(Player p, MovementType m_type){
-    fprintf(stderr,"COORD-X: %f COORD-Y: %f\n",p->position.x,p->position.y);
+
+    p->current_frame++;
     switch(m_type){
         case MOVE_UP:
-        p->position.y -= checkYout(p->position.y) ? 0 : p->vel.y;
+
+        p->position.y -=  1;
         if(p->position.y < 0) {
             p->position.y = 0;
             return;
@@ -27,16 +20,20 @@ void handlePlayerMovement(Player p, MovementType m_type){
         
         case MOVE_DOWN:
         if(p->position.y >= WORLD_HEIGHT) return;
-        p->position.y += checkYout(p->position.y + p->height) ? 0 : p->vel.y;
+
+
+        p->position.y +=  1;
         break;
   
         case MOVE_RIGHT:
+
         if(p->position.x + TILE_WIDTH >= WORLD_WIDTH) return;
-        p->position.x += checkXout(p->position.x + p->width) ? 0 : p->vel.x;
+
+        p->position.x +=  1;
         break;
 
         case MOVE_LEFT:
-        p->position.x -= checkXout(p->position.x) ? 0 : p->vel.x ;
+        p->position.x -= 1 ;
         if(p->position.x < 0) {
             p->position.x = 0;
             return;

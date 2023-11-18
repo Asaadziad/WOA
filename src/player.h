@@ -24,6 +24,10 @@ typedef struct player_t {
     int width;
     int level;
     uint32_t current_xp;
+    bool canMoveLeft;
+    bool canMoveRight;
+    bool canMoveUp;
+    bool canMoveDown;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);

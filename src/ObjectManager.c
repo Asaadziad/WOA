@@ -1,17 +1,22 @@
 #include "ObjectManager.h"
-#include "DS/list.h"
 #include "stdlib.h"
 #include "stdio.h"
 #include "object.h"
+#include "CollisionDetection.h"
+#include "logger.h"
 
 struct objm_t{
     List objects;
 };
 
+static void destroyObjPtr(void* elem){
+    destroyObject((OBJECT)elem);
+}
+
 ObjectManager initObjectManager(){
     ObjectManager manager = (ObjectManager)malloc(sizeof(*manager));
     if(!manager) return NULL;
-    manager->objects = listCreate(NULL,NULL,NULL);
+    manager->objects = listCreate(destroyObjPtr,NULL,NULL);
     return manager;
 }
 
@@ -105,4 +110,30 @@ void renderObjects(ObjectManager manager,TextureManager texture_manager, SDL_Ren
         objectDraw(texture_manager,tmp,renderer,camera);
         current = getNextNode(current);
     }
+}
+
+Node getObjectsList(ObjectManager manager){
+    Node tmp = getHead(manager->objects);
+    return tmp;
+}
+
+void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
+    Node current = getHead(manager->objects);
+    for(int i = 0;i < getListSize(manager->objects);i++){
+        OBJECT tmp  = getNodeData(current);
+        if(checkCollision(p,objectGetRect(tmp))){
+            switch(objectGetType(tmp)){
+                case TREE_OBJECT:
+                    
+                break;
+                default: break;
+            }
+        }
+        current = getNextNode(current);
+    }
+}
+
+void destroyObjectManager(ObjectManager manager){
+    listDestroy(manager->objects);
+    free(manager);
 }

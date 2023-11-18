@@ -14,20 +14,11 @@
 #include "Player/playerClick.h"
 #include "CollisionDetection.h"
 
-static void freeTexturePtr(void* elem){
-    freeTexture((Texture)elem);
-}
-
-static void freeObjectPtr(void* elem){
-    destroyObject((OBJECT)elem);
-}
 
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
-    new_g->textures = listCreate(freeTexturePtr,NULL,NULL);
-    new_g->objects = listCreate(freeObjectPtr,NULL,NULL);
     new_g->task_manager = taskManagerInit();
     new_g->texture_manager = textureManagerInit();
     new_g->components_manager = initComponentsManager();
@@ -97,7 +88,6 @@ static void handleKey(Game game,SDL_Keycode code){
         handlePlayerMovement(asaad,MOVE_LEFT);
         break;
         case SDLK_RIGHT:
-        fprintf(stderr,"CAMERA-X: %d CAMERA-Y:%d",game->camera.x,game->camera.y);
         handlePlayerMovement(asaad,MOVE_RIGHT);
         break;
         case SDLK_UP:
@@ -137,7 +127,7 @@ void handleEvents(SDL_Event* e,Game game){
                 handlePlayerClick(game,x,y);
                 fprintf(stderr,"MOUSE-X: %d MOUSE-Y:%d\n",x,y);
             break;
-            default: {}
+            default: break;
         }
     }
 }
@@ -187,7 +177,7 @@ static void drawMap(Game game){
             int screenX = worldX - game->camera.x;
             int screenY = worldY - game->camera.y;
 
-
+            
             // TODO :: Add conditional rendering (for process improvements)
             drawFrame(game->texture_manager,TILE_TEXTURE,screenX,screenY,32,32,32,32,(game->map[row * 50 + col]/2) + 1,game->map[row * 50 + col]%2,game->renderer,SDL_FLIP_NONE);
 
@@ -240,31 +230,12 @@ static void checkCamera(SDL_Rect* camera){
     }
 }
 
-static void checkCollisions(Game game){
-    Node current = getHead(game->objects);
-    if(!current) return;
-    while (current)
-    {
-        OBJECT tmp  = getNodeData(current);
-        if(checkCollision(game->players[0],objectGetRect(tmp))){
-            switch(objectGetType(tmp)){
-                case TREE_OBJECT:
-                    LOG("COLLIDED");
-                break;
-                default: break;
-            }
-        }
-        current = getNextNode(current);
-    }
-    
-}
-
 void gameUpdate(Game game){
     game->camera.x = (game->players[0]->position.x - game->camera.w/2);
     game->camera.y = (game->players[0]->position.y - game->camera.h/2);
     checkCamera(&game->camera);
     playerUpdate(game->players[0],game->camera);
-    checkCollisions(game);
+    checkPlayerCollisionWithObjects(game->object_manager,game->players[0]);
 }
 
 
@@ -275,7 +246,7 @@ void quitGame(Game game){
         destroyPlayer(game->players[i]);
     }
     //fclose(game->map);
-    listDestroy(game->textures);
+    //destroyObjectManager(game->object_manager);
     free(game->players);
     free(game);
 }
