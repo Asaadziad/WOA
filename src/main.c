@@ -38,10 +38,7 @@ int main(){
         * This function keeps listening to events and handles it accordinlgy
         */
         handleEvents(&event, game);
-
-        handleLogic(game, cap_time);
         gameUpdate(game);
-
         /* Rendering */
         initRendering(game);
         /* End of Rendering */

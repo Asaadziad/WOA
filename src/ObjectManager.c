@@ -20,11 +20,6 @@ ObjectManager initObjectManager(){
     return manager;
 }
 
-typedef enum {
-    LITERAL_TOKEN,
-    NUMERIC_TOKEN,
-} TokenType;
-
 typedef struct token_t* Token;
 struct token_t {
     char* literal;
@@ -103,7 +98,7 @@ void setupObjects(ObjectManager manager,const char* file_path){
 void renderObjects(ObjectManager manager,TextureManager texture_manager, SDL_Renderer* renderer,SDL_Rect camera){
     Node current = getHead(manager->objects);
     if(!current) {
-        return;
+        exit(1);
     }
     for(int i = 0; i < getListSize(manager->objects);i++){
         OBJECT tmp = getNodeData(current);

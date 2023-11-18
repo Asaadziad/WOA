@@ -31,7 +31,7 @@ Game initGame(){
     camera.h = SCREEN_HEIGHT;
     new_g->camera = camera;
     int* new_map = (int*)malloc(sizeof(*new_map) * (MAX_WORLD_ROWS*MAX_WORLD_COLS));
-    if(!new_map) return NULL;
+    if(!new_map) {exit(1);}
     new_g->map = new_map;
     return new_g;
 }
@@ -44,7 +44,7 @@ static char* readFileToBuffer(const char* map_path){
     size_t file_size = ftell(map);
     fseek(map,0,SEEK_SET);
     char* buffer = (char*)malloc(sizeof(char)* (file_size + 1));
-    if(!buffer) exit(1);
+    if(!buffer) {ERR("Couldn't allocate buffer memory"); exit(1);}
     fread(buffer,file_size,1,map);
     buffer[file_size] = '\0';
     fclose(map);
