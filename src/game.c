@@ -13,7 +13,7 @@
 #include "task.h"
 #include "Player/playerClick.h"
 #include "CollisionDetection.h"
-
+#include "npcManager.h"
 
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
@@ -23,6 +23,7 @@ Game initGame(){
     new_g->texture_manager = textureManagerInit();
     new_g->components_manager = initComponentsManager();
     new_g->object_manager = initObjectManager();
+    new_g->npc_manager = initNPCManager();
     new_g->handeled_event = 0;
     SDL_Rect camera;
     camera.x = 0;
@@ -75,6 +76,7 @@ void loadTextures(Game game){
     load(game->texture_manager,game->renderer,"res/walls.png",TILE_TEXTURE);
     load(game->texture_manager,game->renderer,"res/uisheet.png",UI_INVENTORY_TEXTURE);
     load(game->texture_manager,game->renderer,"res/woodcutting.png",TREE_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/npc.png",NPC_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     loadTilesMap(game, "world.txt");
@@ -137,10 +139,12 @@ void initEntities(Game game){
     Player asaad = initPlayer(0,0,32,32);
     game->players[0] = asaad; 
     setupObjects(game->object_manager,"objects.txt");
+    setupNPCs(game->npc_manager);
 }
 
 static void renderEntities(Game game){
     playerDraw(game->texture_manager,game->players[0],game->renderer,game->camera);
+    renderNPCs(game->npc_manager,game->texture_manager,game->renderer,game->camera);
 }
 
 static bool mouseInRect(Game game, SDL_Rect rect){
@@ -200,6 +204,7 @@ void initRendering(Game game){
         drawMap(game);
         renderEntities(game);
         renderObjects(game->object_manager,game->texture_manager,game->renderer,game->camera);
+        
         renderUI(game);
     }
 
@@ -235,7 +240,9 @@ void gameUpdate(Game game){
     game->camera.y = (game->players[0]->position.y - game->camera.h/2);
     checkCamera(&game->camera);
     playerUpdate(game->players[0],game->camera);
+    updateNPCs(game->npc_manager);
     checkPlayerCollisionWithObjects(game->object_manager,game->players[0]);
+    checkPlayerCollisionWithNPCs(game->npc_manager,game->players[0]);
 }
 
 

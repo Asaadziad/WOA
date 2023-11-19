@@ -11,7 +11,7 @@ void handlePlayerMovement(Player p, MovementType m_type){
     switch(m_type){
         case MOVE_UP:
 
-        p->position.y -=  1;
+        p->position.y -=  p->vel.y;
         if(p->position.y < 0) {
             p->position.y = 0;
             return;
@@ -22,18 +22,18 @@ void handlePlayerMovement(Player p, MovementType m_type){
         if(p->position.y >= WORLD_HEIGHT) return;
 
 
-        p->position.y +=  1;
+        p->position.y +=  p->vel.y;
         break;
   
         case MOVE_RIGHT:
 
         if(p->position.x + TILE_WIDTH >= WORLD_WIDTH) return;
 
-        p->position.x +=  1;
+        p->position.x +=  p->vel.x;
         break;
 
         case MOVE_LEFT:
-        p->position.x -= 1 ;
+        p->position.x -= p->vel.x;
         if(p->position.x < 0) {
             p->position.x = 0;
             return;
