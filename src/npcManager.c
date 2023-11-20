@@ -52,6 +52,7 @@ void checkPlayerCollisionWithNPCs(NpcManager manager,Player p){
         NPC tmp  = getNodeData(current);
         SDL_Rect rect = getRect(tmp);
         if(checkCollision(p,rect)){
+            p->hp -= 10;
             fprintf(stderr,"OUCH");
         }
         current = getNextNode(current);

@@ -79,6 +79,7 @@ void loadTextures(Game game){
     load(game->texture_manager,game->renderer,"res/npc.png",NPC_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
+    loadText(game->texture_manager,game->renderer,game->global_font,"HP");
     loadTilesMap(game, "world.txt");
 }
 
@@ -92,6 +93,8 @@ static void handleKey(Game game,SDL_Keycode code){
         case SDLK_RIGHT:
         handlePlayerMovement(asaad,MOVE_RIGHT);
         break;
+    }
+    switch(code){
         case SDLK_UP:
         
         handlePlayerMovement(asaad,MOVE_UP);
@@ -157,6 +160,17 @@ static bool mouseInRect(Game game, SDL_Rect rect){
     return true;
 }
 
+static void drawHP(TextureManager manager,SDL_Renderer* renderer,int playerHp){
+    SDL_Color black = {0,0,0,0};
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = 200;
+    rect.h = 50;
+    drawRect(rect.x,rect.y,rect.h,rect.w,black,true,(float)((float)playerHp/100)*rect.w,renderer);
+    drawText(manager,2,rect.x + rect.w/2 - 25/2,rect.y + rect.h/2 - 25/2,25,25,black,renderer);
+}
+
 static void renderUI(Game game){
     SDL_Rect dst;
     dst.x = SCREEN_WIDTH/2;
@@ -170,6 +184,7 @@ static void renderUI(Game game){
     } else {
         drawFrame(game->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,game->renderer,SDL_FLIP_NONE);
     }
+    drawHP(game->texture_manager,game->renderer,game->players[0]->hp);
 }
 
 static void drawMap(Game game){
@@ -197,8 +212,8 @@ void initRendering(Game game){
     if(game->state == MENU_STATE){
         int actual_center_x = SCREEN_WIDTH/2 - 125;
         int actual_center_y = SCREEN_HEIGHT/2 - 50;
-        drawText(game->texture_manager,0,actual_center_x,actual_center_y,250,50,game->renderer);
-        drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,game->renderer);
+        drawText(game->texture_manager,0,actual_center_x,actual_center_y,250,50,(SDL_Color){0,0,0,0},game->renderer);
+        drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,(SDL_Color){0,0,0,0},game->renderer);
     
     } else {
         drawMap(game);

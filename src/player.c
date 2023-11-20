@@ -9,6 +9,7 @@ Player initPlayer(int x,int y,int width,int height){
     Player new_p = (Player)malloc(sizeof(*new_p));
     if(!new_p) return NULL;
     new_p->current_frame = 1;
+    new_p->hp = 100;
     Vector2f pos = {x,y};
     new_p->position = pos;
     new_p->screenX = SCREEN_WIDTH/2 - (TILE_WIDTH/2);
@@ -35,10 +36,9 @@ void playerUpdate(Player p,SDL_Rect camera){
     if(p->current_frame >= 9){
         p->current_frame = 0;
     }
-    p->canMoveUp = true;
-    p->canMoveDown = true;
-    p->canMoveLeft = true;
-    p->canMoveRight = true;
+    if(p->hp <= 0){
+        p->hp = 0;
+    }
 }
 
 
