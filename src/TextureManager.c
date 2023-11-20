@@ -29,19 +29,20 @@ TextureManager textureManagerInit(){
     if(!manager) return NULL;
     manager->textures = listCreate(freeTexturePtr,NULL,NULL);
     manager->labels = listCreate(freeTexturePtr,NULL,NULL);
+    if(!manager->textures || !manager->labels) exit(1);
     return manager;
 }
 
 void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,TexType texture_type){
     Texture new_t = loadTextureFromFile(renderer,file_name,texture_type);
-    if(!new_t) return;
+    if(!new_t) {exit(1);}
     new_t->label_id = getListSize(manager->textures);
     listInsert(manager->textures,new_t);
 }
 
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text){
     Texture font_texture = loadTextureFromText(renderer,font,text);
-    if(!font_texture) return;
+    if(!font_texture) {exit(1);}
     font_texture->label_id = getListSize(manager->labels);
     listInsert(manager->labels,font_texture);
 }
@@ -148,4 +149,11 @@ void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float
         SDL_RenderDrawRect(renderer,&rect);
 
     }
+}
+
+
+void destroyTextureManager(TextureManager manager){
+    listDestroy(manager->labels);
+    listDestroy(manager->textures);
+    free(manager);
 }

@@ -25,6 +25,7 @@ int main(){
     game->global_font = TTF_OpenFont("src/assets/AlbertText-Bold.ttf",28);
     if(!game->global_font){
         fprintf(stderr,"%s", TTF_GetError());
+        exit(1);
     }
     loadTextures(game);
     initEntities(game);

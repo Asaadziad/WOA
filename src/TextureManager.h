@@ -8,6 +8,7 @@
 typedef struct texturem_t* TextureManager;
 
 TextureManager textureManagerInit();
+void destroyTextureManager(TextureManager manager);
 
 void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,TexType texture_type);
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text);

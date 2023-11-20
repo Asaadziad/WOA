@@ -12,6 +12,6 @@ TaskManager taskManagerInit();
 
 void addTask(TaskManager manager,uint32_t id,TaskType type);
 void handleTasks(TaskManager manager,Player p);
-
+void destroyTaskManager(TaskManager manager);
 
 #endif

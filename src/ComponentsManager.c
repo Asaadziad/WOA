@@ -34,3 +34,8 @@ COMPONENT findComponent(ComponenetsManager manager, ComponentType type){
     destroyComponent(tmp);
     return found;
 }
+
+void destroyComponentsManager(ComponenetsManager manager){
+    listDestroy(manager->components);
+    free(manager);
+}

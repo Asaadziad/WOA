@@ -16,6 +16,7 @@ typedef enum {
     UI_INVENTORY_TEXTURE,
     TREE_TEXTURE,
     NPC_TEXTURE,
+    WEAPONS_TEXTURE,
 } TexType;
 
 typedef struct texture_t{

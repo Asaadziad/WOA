@@ -77,6 +77,7 @@ void loadTextures(Game game){
     load(game->texture_manager,game->renderer,"res/uisheet.png",UI_INVENTORY_TEXTURE);
     load(game->texture_manager,game->renderer,"res/woodcutting.png",TREE_TEXTURE);
     load(game->texture_manager,game->renderer,"res/npc.png",NPC_TEXTURE);
+    load(game->texture_manager,game->renderer,"res/weapons.png",WEAPONS_TEXTURE);
     loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
     loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
     loadText(game->texture_manager,game->renderer,game->global_font,"HP");
@@ -148,6 +149,9 @@ void initEntities(Game game){
 static void renderEntities(Game game){
     playerDraw(game->texture_manager,game->players[0],game->renderer,game->camera);
     renderNPCs(game->npc_manager,game->texture_manager,game->renderer,game->camera);
+    drawFrame(game->texture_manager,WEAPONS_TEXTURE,300 - game->camera.x,300 - game->camera.y,32,32,40,40,1,0,game->renderer,SDL_FLIP_NONE);
+    drawFrame(game->texture_manager,WEAPONS_TEXTURE,300 - game->camera.x,390 - game->camera.y,32,32,40,40,1,1,game->renderer,SDL_FLIP_NONE);
+
 }
 
 static bool mouseInRect(Game game, SDL_Rect rect){
@@ -267,8 +271,12 @@ void quitGame(Game game){
     for(int i = 0; i < PLAYERS_COUNT;i++){
         destroyPlayer(game->players[i]);
     }
-    //fclose(game->map);
-    //destroyObjectManager(game->object_manager);
+    destroyObjectManager(game->object_manager);
+    destroyTaskManager(game->task_manager);
+    destroyTextureManager(game->texture_manager);
+    destroyComponentsManager(game->components_manager);
+    destroyNPCManager(game->npc_manager);
+    free(game->map);
     free(game->players);
     free(game);
 }

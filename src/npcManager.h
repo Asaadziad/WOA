@@ -8,11 +8,13 @@
 typedef struct npcmanager_t* NpcManager;
 
 NpcManager initNPCManager();
+void destroyNPCManager(NpcManager manager);
 
 void setupNPCs(NpcManager manager);
 void renderNPCs(NpcManager manager,TextureManager texture_manager,SDL_Renderer* renderer,SDL_Rect camera);
 void updateNPCs(NpcManager manager);
 
 void checkPlayerCollisionWithNPCs(NpcManager manager,Player p);
+
 
 #endif

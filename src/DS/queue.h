@@ -14,5 +14,5 @@ void queuePush(QUEUE q,Q_ELEMENT elem);
 void queuePop(QUEUE q);
 
 Q_ELEMENT getFirstElement(QUEUE q);
-
+void destroyQueue(QUEUE q);
 #endif

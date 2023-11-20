@@ -58,3 +58,8 @@ void checkPlayerCollisionWithNPCs(NpcManager manager,Player p){
         current = getNextNode(current);
     }
 }
+
+void destroyNPCManager(NpcManager manager){
+    listDestroy(manager->npc_list);
+    free(manager);
+}

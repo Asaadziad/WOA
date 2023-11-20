@@ -15,6 +15,6 @@ void addComponent(ComponenetsManager manager,COMPONENT c);
 */
 COMPONENT findComponent(ComponenetsManager manager, ComponentType type);
 
-
+void destroyComponentsManager(ComponenetsManager manager);
 
 #endif
