@@ -18,7 +18,8 @@
 typedef enum {
     RUNNING_STATE,
     QUIT_STATE,
-    MENU_STATE
+    MENU_STATE,
+    DIALOUGE_STATE,
 } GameState;
 
 typedef struct game_t {

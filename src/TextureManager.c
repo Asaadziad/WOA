@@ -134,19 +134,18 @@ void drawSprite(TextureManager manager, TexType texture_type,int x,int y, int wi
 }
 
 void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float fill_width,SDL_Renderer* renderer){
+    SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a);
     SDL_Rect rect;
     rect.x =x;
     rect.y = y;
     rect.h = height;
     rect.w = width;
     if(isFill){
-        SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a);
         SDL_RenderDrawRect(renderer,&rect);
         rect.w = fill_width - 2;
         rect.h -=2;
         rect.x +=1;
         rect.y += 1;
-        SDL_SetRenderDrawColor(renderer,255,0,0,0);
         SDL_RenderFillRect(renderer,&rect);
     } else {
         SDL_RenderDrawRect(renderer,&rect);

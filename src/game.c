@@ -70,6 +70,13 @@ static void loadTilesMap(Game game, const char* map_path){
     free(to_free);
 }
 
+static void loadDialouges(Game game){
+    // 1 dialouge manually loaded for now
+    loadText(game->texture_manager,game->renderer,game->global_font,"Hello asaad"); // id : 3
+    loadText(game->texture_manager,game->renderer,game->global_font,"Would you like to pickup this sword?");
+    loadText(game->texture_manager,game->renderer,game->global_font,"press SPACE for Yes and ESC for No.");
+}
+
 void loadTextures(Game game){
     //createMenuUI(game);
     load(game->texture_manager,game->renderer,"res/character.png",PLAYER_TEXTURE);
@@ -78,9 +85,10 @@ void loadTextures(Game game){
     load(game->texture_manager,game->renderer,"res/woodcutting.png",TREE_TEXTURE);
     load(game->texture_manager,game->renderer,"res/npc.png",NPC_TEXTURE);
     load(game->texture_manager,game->renderer,"res/weapons.png",WEAPONS_TEXTURE);
-    //loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
-   // loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
-    //loadText(game->texture_manager,game->renderer,game->global_font,"HP");
+    loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
+    loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
+    loadText(game->texture_manager,game->renderer,game->global_font,"HP");
+    loadDialouges(game);
     loadTilesMap(game, "world.txt");
 }
 
@@ -94,15 +102,14 @@ static void handleKey(Game game,SDL_Keycode code){
         case SDLK_RIGHT:
         handlePlayerMovement(asaad,MOVE_RIGHT);
         break;
-    }
-    switch(code){
         case SDLK_UP:
-        
         handlePlayerMovement(asaad,MOVE_UP);
         break;
         case SDLK_DOWN:
-        
         handlePlayerMovement(asaad,MOVE_DOWN);
+        break;
+        case SDLK_v:
+        LOG("Pick up");
         break;
         case SDLK_SPACE:
             if(game->state == MENU_STATE){
@@ -151,7 +158,6 @@ static void renderEntities(Game game){
     renderNPCs(game->npc_manager,game->texture_manager,game->renderer,game->camera);
     drawFrame(game->texture_manager,WEAPONS_TEXTURE,300 - game->camera.x,300 - game->camera.y,32,32,40,40,1,0,game->renderer,SDL_FLIP_NONE);
     drawFrame(game->texture_manager,WEAPONS_TEXTURE,300 - game->camera.x,390 - game->camera.y,32,32,40,40,1,1,game->renderer,SDL_FLIP_NONE);
-
 }
 
 static bool mouseInRect(Game game, SDL_Rect rect){
@@ -168,11 +174,26 @@ static void drawHP(TextureManager manager,SDL_Renderer* renderer,int playerHp){
     SDL_Color black = {0,0,0,0};
     SDL_Rect rect;
     rect.x = 0;
-    rect.y = 0;
+    rect.y = SCREEN_HEIGHT - 50;
     rect.w = 200;
     rect.h = 50;
     drawRect(rect.x,rect.y,rect.h,rect.w,black,true,(float)((float)playerHp/100)*rect.w,renderer);
-    //drawText(manager,2,rect.x + rect.w/2 - 25/2,rect.y + rect.h/2 - 25/2,25,25,black,renderer);
+    drawText(manager,2,rect.x + rect.w/2 - 25/2,rect.y + rect.h/2 - 25/2,25,25,black,renderer);
+}
+
+static void drawDialougeBox(Game game){
+    SDL_Rect box;
+    box.x = 50;
+    box.y = 50;
+    box.w = 400;
+    box.h = 200;
+    drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,1},false,0,game->renderer);
+}
+
+static void renderDialouges(Game game,SDL_Rect dialouge_box){
+    drawText(game->texture_manager,3,dialouge_box.x + 5,dialouge_box.y + 5,100,50,(SDL_Color){255,255,255,255},game->renderer);
+    drawText(game->texture_manager,4,dialouge_box.x + 5,dialouge_box.y + 55,dialouge_box.w - 5,50,(SDL_Color){255,255,255,255},game->renderer);
+    drawText(game->texture_manager,5,dialouge_box.x + 5,dialouge_box.y + 105,dialouge_box.w - 5,50,(SDL_Color){255,255,255,255},game->renderer);
 }
 
 static void renderUI(Game game){
@@ -189,6 +210,11 @@ static void renderUI(Game game){
         drawFrame(game->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,game->renderer,SDL_FLIP_NONE);
     }
     drawHP(game->texture_manager,game->renderer,game->players[0]->hp);
+
+    if(game->state == DIALOUGE_STATE){
+        drawDialougeBox(game);
+        
+    }
 }
 
 static void drawMap(Game game){
@@ -212,19 +238,35 @@ static void drawMap(Game game){
 
 void initRendering(Game game){
     clearScreen(game);
-        
-    if(game->state == MENU_STATE){
-       /* int actual_center_x = SCREEN_WIDTH/2 - 125;
+    
+    switch(game->state){
+        case MENU_STATE:
+        int actual_center_x = SCREEN_WIDTH/2 - 125;
         int actual_center_y = SCREEN_HEIGHT/2 - 50;
         drawText(game->texture_manager,0,actual_center_x,actual_center_y,250,50,(SDL_Color){0,0,0,0},game->renderer);
         drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,(SDL_Color){0,0,0,0},game->renderer);
-    */
-    } else {
+
+        break;
+        case DIALOUGE_STATE:
         drawMap(game);
         renderEntities(game);
         renderObjects(game->object_manager,game->texture_manager,game->renderer,game->camera);
-        
         renderUI(game);
+        break;
+        case RUNNING_STATE:
+        drawMap(game);
+        renderEntities(game);
+        renderObjects(game->object_manager,game->texture_manager,game->renderer,game->camera);
+        renderUI(game);
+        SDL_Rect box;
+        box.x = 50;
+        box.y = 50;
+        box.w = 400;
+        box.h = 200;
+        drawDialougeBox(game);
+        renderDialouges(game,box);
+        break;
+        default:break;
     }
 
     updateScreen(game);

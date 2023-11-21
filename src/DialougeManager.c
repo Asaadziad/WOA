@@ -20,6 +20,10 @@ DialougeManager initDialougeManager(){
 void setupDialouges(DialougeManager manager,const char* file_path){
 }
 
+void renderDialouge(TextureManager manager,int* dialouge_ids){
+    
+
+}
 
 void sendDialouge(int dialouge_id){   
 }

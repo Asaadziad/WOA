@@ -79,7 +79,7 @@ static void initSDL(SDL_Window** window, SDL_Renderer** renderer){
         fprintf(stderr,"Could'nt initiate renderer: %s \n", SDL_GetError());
         exit(1);
     }
-
+    
     //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
     if( !( IMG_Init( imgFlags ) & imgFlags ) ){
