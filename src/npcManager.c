@@ -60,6 +60,7 @@ void checkPlayerCollisionWithNPCs(NpcManager manager,Player p){
 }
 
 void destroyNPCManager(NpcManager manager){
+    if(!manager) return;
     listDestroy(manager->npc_list);
     free(manager);
 }

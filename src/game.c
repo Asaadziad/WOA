@@ -19,7 +19,7 @@ Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
-    new_g->task_manager = taskManagerInit();
+    //new_g->task_manager = taskManagerInit();
     new_g->texture_manager = textureManagerInit();
     new_g->components_manager = initComponentsManager();
     new_g->object_manager = initObjectManager();
@@ -78,9 +78,9 @@ void loadTextures(Game game){
     load(game->texture_manager,game->renderer,"res/woodcutting.png",TREE_TEXTURE);
     load(game->texture_manager,game->renderer,"res/npc.png",NPC_TEXTURE);
     load(game->texture_manager,game->renderer,"res/weapons.png",WEAPONS_TEXTURE);
-    loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
-    loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
-    loadText(game->texture_manager,game->renderer,game->global_font,"HP");
+    //loadText(game->texture_manager,game->renderer,game->global_font,"Welcome to the world of asaad");
+   // loadText(game->texture_manager,game->renderer,game->global_font,"Press space to enter");
+    //loadText(game->texture_manager,game->renderer,game->global_font,"HP");
     loadTilesMap(game, "world.txt");
 }
 
@@ -172,7 +172,7 @@ static void drawHP(TextureManager manager,SDL_Renderer* renderer,int playerHp){
     rect.w = 200;
     rect.h = 50;
     drawRect(rect.x,rect.y,rect.h,rect.w,black,true,(float)((float)playerHp/100)*rect.w,renderer);
-    drawText(manager,2,rect.x + rect.w/2 - 25/2,rect.y + rect.h/2 - 25/2,25,25,black,renderer);
+    //drawText(manager,2,rect.x + rect.w/2 - 25/2,rect.y + rect.h/2 - 25/2,25,25,black,renderer);
 }
 
 static void renderUI(Game game){
@@ -214,11 +214,11 @@ void initRendering(Game game){
     clearScreen(game);
         
     if(game->state == MENU_STATE){
-        int actual_center_x = SCREEN_WIDTH/2 - 125;
+       /* int actual_center_x = SCREEN_WIDTH/2 - 125;
         int actual_center_y = SCREEN_HEIGHT/2 - 50;
         drawText(game->texture_manager,0,actual_center_x,actual_center_y,250,50,(SDL_Color){0,0,0,0},game->renderer);
         drawText(game->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,(SDL_Color){0,0,0,0},game->renderer);
-    
+    */
     } else {
         drawMap(game);
         renderEntities(game);
@@ -271,11 +271,11 @@ void quitGame(Game game){
     for(int i = 0; i < PLAYERS_COUNT;i++){
         destroyPlayer(game->players[i]);
     }
-    destroyObjectManager(game->object_manager);
     destroyTaskManager(game->task_manager);
     destroyTextureManager(game->texture_manager);
     destroyComponentsManager(game->components_manager);
     destroyNPCManager(game->npc_manager);
+    destroyObjectManager(game->object_manager);
     free(game->map);
     free(game->players);
     free(game);

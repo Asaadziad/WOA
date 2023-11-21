@@ -61,6 +61,7 @@ void handleTasks(TaskManager manager,Player p){
 }
 
 void destroyTaskManager(TaskManager manager){
+    if(!manager) return;
     destroyQueue(manager->tasks);
     free(manager);
 }

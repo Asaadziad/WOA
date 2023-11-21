@@ -42,7 +42,10 @@ void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,Te
 
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text){
     Texture font_texture = loadTextureFromText(renderer,font,text);
-    if(!font_texture) {exit(1);}
+    if(!font_texture) {
+        fprintf(stderr,"Could'nt create texture");
+        return;
+    }
     font_texture->label_id = getListSize(manager->labels);
     listInsert(manager->labels,font_texture);
 }
@@ -153,6 +156,7 @@ void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float
 
 
 void destroyTextureManager(TextureManager manager){
+    if(!manager) return;
     listDestroy(manager->labels);
     listDestroy(manager->textures);
     free(manager);

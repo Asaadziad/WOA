@@ -47,14 +47,17 @@ static Node nodeCreate(Element element){
 static void nodeDestroy(Node node,elemDestroy destroy){
     if(!node) return;
     if(destroy == NULL){
-        
         free(node->data);
     } else { 
-        destroy(node->data);
+        destroy(node->data); 
     }
+    
+   if(node){
     node->next = NULL;
     node->prev = NULL;
     free(node);
+   }
+
 }
 
 
@@ -114,15 +117,18 @@ void listEmpty(List list){
     Node current = list->head;
     while(current != NULL){
         Node tmp = current->next;
-        nodeDestroy(current,list->destroy_function);
+        nodeDestroy(current,list->destroy_function);    
         current = tmp;
     }
+
     list->head = NULL;
+    list->tail = NULL;
     list->size = 0;
 }
 
 
 void listDestroy(List list){
+    if(!list) return;
     listEmpty(list);
     free(list);
 }

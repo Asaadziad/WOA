@@ -36,6 +36,7 @@ COMPONENT findComponent(ComponenetsManager manager, ComponentType type){
 }
 
 void destroyComponentsManager(ComponenetsManager manager){
+    if(!manager) return;
     listDestroy(manager->components);
     free(manager);
 }

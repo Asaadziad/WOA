@@ -31,6 +31,7 @@ Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type
         return NULL;
     }
     Texture t = initTexture(0,0,type);
+    if(!t) return NULL;
     t->texture = texture;
     t->height = surface->h;
     t->width = surface->w;
@@ -50,6 +51,10 @@ Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* te
     label = SDL_CreateTextureFromSurface(renderer , surface );
 
     Texture texture = initTexture(0,0,LABEL_TEXTURE);
+    if(!texture) {
+        SDL_FreeSurface( surface );
+        return NULL;
+    }
     texture->texture = label;
     texture->height = surface->h;
     texture->width = surface->w;

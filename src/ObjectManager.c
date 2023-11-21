@@ -13,10 +13,14 @@ static void destroyObjPtr(void* elem){
     destroyObject((OBJECT)elem);
 }
 
+static void printObjectPtr(void* elem){
+    printObject((OBJECT)elem);
+}
+
 ObjectManager initObjectManager(){
     ObjectManager manager = (ObjectManager)malloc(sizeof(*manager));
     if(!manager) return NULL;
-    manager->objects = listCreate(destroyObjPtr,NULL,NULL);
+    manager->objects = listCreate(destroyObjPtr,NULL,printObjectPtr);
     return manager;
 }
 
@@ -42,7 +46,7 @@ Token* tokenize(char* line){
     char* first_letter = line;
     int len = 0;
     while(*line != '\0'){
-        if(*line == ' ' || *line == '\t' || *line == '\r' || *line == '\n'){
+        if(*line == ' ' || *line == '\t' || *line == '\r' || *line == '\n' || *line == '\0'){
             line++;
             char* ident = (char*)malloc(sizeof(*ident) * (len+1));
             if(!ident) return NULL;
@@ -72,9 +76,13 @@ static OBJECT createObjectFromLine(char* line){
                             atoi(tokens[3]->literal),
                             atoi(tokens[4]->literal),
                             TREE_OBJECT);
+        
     }
     for(int i = 0; i < 5;i++){
+        if(tokens[i]){
+
         free(tokens[i]->literal);
+        }
     }
     free(tokens);
 
@@ -88,10 +96,12 @@ void setupObjects(ObjectManager manager,const char* file_path){
     size_t read;
     while ((read = getline(&line, &len, objects_file)) != -1) {
         OBJECT tmp  = createObjectFromLine(line);
-        if(tmp){
+        if(tmp){ 
+            
             listInsert(manager->objects,tmp);
         }
     }
+
     fclose(objects_file);
 }
 
@@ -129,6 +139,9 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
 }
 
 void destroyObjectManager(ObjectManager manager){
+    if(!manager) return;
+    if(manager->objects){
     listDestroy(manager->objects);
+    }
     free(manager);
 }

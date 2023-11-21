@@ -47,7 +47,12 @@ void objectUpdate(OBJECT obj){
 }
 
 void destroyObject(OBJECT obj){
+    if(!obj) return;
     free(obj);
+}
+
+void printObject(OBJECT obj){
+    fprintf(stderr,"%d %d %d %d %d\n",obj->type,obj->src.x,obj->src.y,obj->src.w,obj->src.w);
 }
 
 ObjectType objectGetType(OBJECT obj){

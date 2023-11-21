@@ -24,7 +24,7 @@ int main(){
     initSDL(&window,&game->renderer);
     game->global_font = TTF_OpenFont("src/assets/AlbertText-Bold.ttf",28);
     if(!game->global_font){
-        fprintf(stderr,"%s", TTF_GetError());
+        fprintf(stderr,"MAMA MIA");
         exit(1);
     }
     loadTextures(game);
