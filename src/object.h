@@ -7,6 +7,7 @@
 typedef enum {
     FISHING_SPOT,
     TREE_OBJECT,
+    SWORD_OBJECT,
 } ObjectType;
 
 

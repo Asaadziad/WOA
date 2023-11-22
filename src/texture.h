@@ -30,8 +30,7 @@ typedef struct texture_t{
 
 Texture initTexture(int render_x,int render_y,TexType type);
 Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type);
-Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text);
-
+Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color);
 
 
 void freeTexture(Texture texture);

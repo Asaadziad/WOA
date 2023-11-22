@@ -30,6 +30,9 @@ void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rec
         case TREE_OBJECT:
             drawFrame(manager,TREE_TEXTURE,screenX,screenY,32,32,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
         break;
+        case SWORD_OBJECT:
+            drawFrame(manager,WEAPONS_TEXTURE,screenX,screenY,32,32,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
+        break;
         default:break;
     }
 }

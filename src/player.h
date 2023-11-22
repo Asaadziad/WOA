@@ -6,6 +6,7 @@
 #include "tile.h"
 #include "object.h"
 #include "TextureManager.h"
+#include "Dialouge.h"
 
 typedef enum {
     NORTH,
@@ -29,6 +30,8 @@ typedef struct player_t {
     bool canMoveRight;
     bool canMoveUp;
     bool canMoveDown;
+    bool isInDialouge;
+    DialougeKind current_dialouge;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);

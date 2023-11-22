@@ -4,6 +4,7 @@
 #include "object.h"
 #include "CollisionDetection.h"
 #include "logger.h"
+#include "DialougeManager.h"
 
 struct objm_t{
     List objects;
@@ -77,6 +78,12 @@ static OBJECT createObjectFromLine(char* line){
                             atoi(tokens[4]->literal),
                             TREE_OBJECT);
         
+    } else if(strcmp(obj_type,"SWORD_OBJECT") == 0){
+        tmp = createObject(atoi(tokens[1]->literal),
+                            atoi(tokens[2]->literal),
+                            atoi(tokens[3]->literal),
+                            atoi(tokens[4]->literal),
+                            SWORD_OBJECT);
     }
     for(int i = 0; i < 5;i++){
         if(tokens[i]){
@@ -130,6 +137,10 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
             switch(objectGetType(tmp)){
                 case TREE_OBJECT:
                     
+                break;
+                case SWORD_OBJECT:
+                    p->isInDialouge = true;
+                    p->current_dialouge = SWORD_DIALOUGE;
                 break;
                 default: break;
             }

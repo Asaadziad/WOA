@@ -24,6 +24,7 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->canMoveUp = true;
     new_p->canMoveLeft = true;
     new_p->canMoveRight = true;
+    new_p->isInDialouge = false;
     return new_p;
 }
 

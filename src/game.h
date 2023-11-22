@@ -12,7 +12,7 @@
 #include "ObjectManager.h"
 #include "npcManager.h"
 #include "common.h"
-
+#include "DialougeManager.h"
 #define IS_RUNNING(game) ((game)->state != QUIT_STATE)
 
 typedef enum {
@@ -32,6 +32,7 @@ typedef struct game_t {
     ComponenetsManager components_manager;
     ObjectManager object_manager;
     NpcManager npc_manager;
+    DialougeManager dialouge_manager;
     TTF_Font* global_font;
     SDL_Renderer* renderer;
     SDL_Rect camera;
@@ -39,7 +40,6 @@ typedef struct game_t {
     int mouse_y;
     uint8_t handeled_event;
     int* map;
-
 } *Game;
 
 Game initGame();

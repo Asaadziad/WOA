@@ -41,11 +41,16 @@ Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type
     return t;
 }
 
-Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text){
+Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color){
     SDL_Texture* label;
 
     SDL_Color black = {0,0,0,0};
-    SDL_Surface* surface = TTF_RenderText_Solid(font,text,black);
+    SDL_Surface* surface;
+    if(color){
+        surface = TTF_RenderText_Solid(font,text,*color);
+    } else {
+        surface = TTF_RenderText_Solid(font,text,black);
+    }
     if(!surface) return NULL;
 
     label = SDL_CreateTextureFromSurface(renderer , surface );

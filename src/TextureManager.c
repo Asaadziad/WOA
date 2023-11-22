@@ -40,8 +40,12 @@ void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,Te
     listInsert(manager->textures,new_t);
 }
 
-void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text){
-    Texture font_texture = loadTextureFromText(renderer,font,text);
+void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color){
+    SDL_Color* c = NULL;
+    if(color){
+        c = color;
+    }
+    Texture font_texture = loadTextureFromText(renderer,font,text,c);
     if(!font_texture) {
         fprintf(stderr,"Could'nt create texture");
         return;
@@ -108,8 +112,6 @@ void drawText(TextureManager manager,int label_id,int x,int y,
                 dst.h = height;
                 dst.x = x;
                 dst.y = y;
-               // SDL_SetRenderDrawColor(renderer,color.r,color.g,color.b,color.a);
-                SDL_SetTextureColorMod(tmp->texture,color.r,color.g,color.b);
                 SDL_RenderCopy(renderer,tmp->texture,&src, &dst);
             }
             current = getNextNode(current);
