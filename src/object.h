@@ -18,9 +18,13 @@ OBJECT createObject(int height, int width, int x, int y,ObjectType type);
 void destroyObject(OBJECT obj);
 void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rect camera);
 void printObject(OBJECT obj);
-
+bool checkObjectsTypes(OBJECT obj1,OBJECT obj2);
+void setObjectFrame(OBJECT obj,int frame);
+int getObjectFrame(OBJECT obj);
 void objectUpdate(OBJECT obj);
+void setObjectRenderable(OBJECT obj, bool isRenderable);
 ObjectType objectGetType(OBJECT obj);
 SDL_Rect objectGetRect(OBJECT obj);
+bool isObjectRenderable(OBJECT obj);
 
 #endif

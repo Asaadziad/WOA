@@ -15,6 +15,7 @@
 #include "CollisionDetection.h"
 #include "npcManager.h"
 
+
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
@@ -95,31 +96,61 @@ static void handleKey(Game game,SDL_Keycode code){
     Player asaad = game->players[0];
     switch(code){
         case SDLK_LEFT:
-        
+        if(asaad->isInDialouge) break;
         handlePlayerMovement(asaad,MOVE_LEFT);
         break;
         case SDLK_RIGHT:
+        if(asaad->isInDialouge) break;
+
         handlePlayerMovement(asaad,MOVE_RIGHT);
         break;
         case SDLK_UP:
+        if(asaad->isInDialouge) break;
         handlePlayerMovement(asaad,MOVE_UP);
         break;
         case SDLK_DOWN:
+        if(asaad->isInDialouge) break;
         handlePlayerMovement(asaad,MOVE_DOWN);
         break;
         case SDLK_v:
             asaad->isInDialouge = !asaad->isInDialouge;
         break;
+        case SDLK_i:
+            asaad->isInInventory = !asaad->isInInventory;
+        break;
         case SDLK_SPACE:
             if(game->state == MENU_STATE){
                 game->state = RUNNING_STATE;
             } else {
-                LOG("Running state");
+                if(asaad->isInDialouge){
+                    switch(asaad->current_dialouge){
+                        case SWORD_DIALOUGE:
+                            // pickup system
+                            // pickup the object - remove it from the map
+                            OBJECT o = findObject(game->object_manager,SWORD_OBJECT);
+                            setObjectRenderable(o,false);
+                            asaad->inventory_objects[asaad->current_slot] = SWORD_OBJECT;
+                            asaad->current_slot++;
+                            asaad->isInDialouge = false;
+                        break;
+                        default :break;
+                    }
+                }
             }
         break;
         default:
         break;
     }
+}
+
+static bool mouseInRect(Game game, SDL_Rect rect){
+    if((game->mouse_x > (rect.x + rect.w)) || (game->mouse_x < rect.x)) {
+        return false;
+    }
+    if((game->mouse_y > (rect.y)) || (game->mouse_y < rect.y - 50)) {
+        return false;
+    }
+    return true;
 }
 
 void handleEvents(SDL_Event* e,Game game){
@@ -130,19 +161,20 @@ void handleEvents(SDL_Event* e,Game game){
                 game->state = QUIT_STATE;
             break;
             case SDL_KEYDOWN:
-                if(!game->players[0]->isInDialouge){
-                    handleKey(game,e->key.keysym.sym);
-                } else {
-                    if(e->key.keysym.sym == SDLK_SPACE || e->key.keysym.sym == SDLK_v){
-                        handleKey(game,e->key.keysym.sym);
-                    }
-                }
-
+                handleKey(game,e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
                 int x,y;
                 SDL_GetMouseState(&(x),&(y));
                 handlePlayerClick(game,x,y);
+                SDL_Rect dst;
+                dst.x = SCREEN_WIDTH/2;
+                dst.y = SCREEN_HEIGHT;
+                dst.w = 50;
+                dst.h = 50;
+                if(mouseInRect(game,dst)){
+                    game->players[0]->isInInventory = !game->players[0]->isInInventory;
+                }
                 fprintf(stderr,"MOUSE-X: %d MOUSE-Y:%d\n",x,y);
             break;
             default: break;
@@ -163,15 +195,7 @@ static void renderEntities(Game game){
     renderNPCs(game->npc_manager,game->texture_manager,game->renderer,game->camera);
 }
 
-static bool mouseInRect(Game game, SDL_Rect rect){
-    if((game->mouse_x > (rect.x + rect.w)) || (game->mouse_x < rect.x)) {
-        return false;
-    }
-    if((game->mouse_y > (rect.y)) || (game->mouse_y < rect.y - 50)) {
-        return false;
-    }
-    return true;
-}
+
 
 static void drawHP(TextureManager manager,SDL_Renderer* renderer,int playerHp){
     SDL_Rect rect;
@@ -198,6 +222,19 @@ static void renderUI(Game game){
         drawFrame(game->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,game->renderer,SDL_FLIP_NONE);
     }
     drawHP(game->texture_manager,game->renderer,game->players[0]->hp);
+}
+
+static void renderInventory(Game game){
+    SDL_Rect box;
+    box.w = 400;
+    box.h = 300;
+    box.x = 200;
+    box.y = 100;
+    drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,0},false,box.w,game->renderer);
+    for(int i = 0; i < game->players[0]->current_slot;i++){
+        OBJECT tmp = findObject(game->object_manager,game->players[0]->inventory_objects[i]);
+        drawFrame(game->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,32,32,60,60,1,getObjectFrame(tmp),game->renderer,SDL_FLIP_NONE);
+    }
 }
 
 static void drawMap(Game game){
@@ -236,6 +273,10 @@ void initRendering(Game game){
         renderUI(game);
         if(game->players[0]->isInDialouge){
             renderDialouge(game->dialouge_manager,game->texture_manager,game->renderer,game->players[0]->current_dialouge);
+        }
+        if(game->players[0]->isInInventory){
+            //draw the inventory
+            renderInventory(game);
         }
         break;
         default:break;

@@ -8,6 +8,8 @@
 #include "TextureManager.h"
 #include "Dialouge.h"
 
+#define INVENTORY_SLOTS 8
+
 typedef enum {
     NORTH,
     SOUTH,
@@ -32,6 +34,9 @@ typedef struct player_t {
     bool canMoveDown;
     bool isInDialouge;
     DialougeKind current_dialouge;
+    bool isInInventory;
+    ObjectType* inventory_objects;
+    int current_slot;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);

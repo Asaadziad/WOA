@@ -18,10 +18,14 @@ static void printObjectPtr(void* elem){
     printObject((OBJECT)elem);
 }
 
+static bool compareObjectPtr(void* elem1,void* elem2){
+    return checkObjectsTypes((OBJECT)elem1,(OBJECT)elem2);
+}
+
 ObjectManager initObjectManager(){
     ObjectManager manager = (ObjectManager)malloc(sizeof(*manager));
     if(!manager) return NULL;
-    manager->objects = listCreate(destroyObjPtr,NULL,printObjectPtr);
+    manager->objects = listCreate(destroyObjPtr,compareObjectPtr,printObjectPtr);
     return manager;
 }
 
@@ -84,6 +88,7 @@ static OBJECT createObjectFromLine(char* line){
                             atoi(tokens[3]->literal),
                             atoi(tokens[4]->literal),
                             SWORD_OBJECT);
+        setObjectFrame(tmp,0);
     }
     for(int i = 0; i < 5;i++){
         if(tokens[i]){
@@ -119,7 +124,9 @@ void renderObjects(ObjectManager manager,TextureManager texture_manager, SDL_Ren
     }
     for(int i = 0; i < getListSize(manager->objects);i++){
         OBJECT tmp = getNodeData(current);
-        objectDraw(texture_manager,tmp,renderer,camera);
+        if(isObjectRenderable(tmp)){
+            objectDraw(texture_manager,tmp,renderer,camera);
+        }
         current = getNextNode(current);
     }
 }
@@ -149,6 +156,11 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
     }
 }
 
+OBJECT findObject(ObjectManager manager,ObjectType type){
+    OBJECT tmp = createObject(0,0,0,0,SWORD_OBJECT);
+    OBJECT to_find = listFind(manager->objects,tmp);
+    return to_find;
+}
 void destroyObjectManager(ObjectManager manager){
     if(!manager) return;
     if(manager->objects){

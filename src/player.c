@@ -25,6 +25,10 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->canMoveLeft = true;
     new_p->canMoveRight = true;
     new_p->isInDialouge = false;
+    new_p->isInInventory = false;
+    new_p->inventory_objects = (ObjectType*)malloc(sizeof(*new_p->inventory_objects) * INVENTORY_SLOTS);
+    if(!new_p->inventory_objects) return NULL;
+    new_p->current_slot = 0;
     return new_p;
 }
 
