@@ -2,17 +2,26 @@
 #include "stdlib.h"
 
 
-Tile createTile(int x, int y,int height, int width,TileType type){
+Tile createTile(int x, int y,TileType type){
     Tile t = (Tile)malloc(sizeof(*t));
     if(!t) return NULL;
-    SDL_Rect src;
-    src.x = x;
-    src.y = y;
-    src.h = height;
-    src.w = width;
-    t->tile_box = src;
     t->type = type;
+    t->worldX = x;
+    t->worldY = y;
     return t;
+}
+
+TileType getTileType(Tile tile){
+    if(!tile) return EARTH_TILE;
+    return tile->type;
+}
+int getTileWorldX(Tile tile){
+    if(!tile) return 0;
+    return tile->worldX;
+}
+int getTileWorldY(Tile tile){
+    if(!tile) return 0;
+    return tile->worldY;
 }
 
 void destroyTile(Tile t){

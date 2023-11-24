@@ -14,18 +14,18 @@
 #include "Player/playerClick.h"
 #include "CollisionDetection.h"
 #include "npcManager.h"
-
+#include "TileManager.h"
 
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
-    //new_g->task_manager = taskManagerInit();
     new_g->texture_manager = textureManagerInit();
     new_g->components_manager = initComponentsManager();
     new_g->object_manager = initObjectManager();
     new_g->npc_manager = initNPCManager();
     new_g->dialouge_manager = initDialougeManager();
+    new_g->tile_manager = initTileManager();
     new_g->handeled_event = 0;
     SDL_Rect camera;
     camera.x = 0;
@@ -33,43 +33,7 @@ Game initGame(){
     camera.w = SCREEN_WIDTH;
     camera.h = SCREEN_HEIGHT;
     new_g->camera = camera;
-    int* new_map = (int*)malloc(sizeof(*new_map) * (MAX_WORLD_ROWS*MAX_WORLD_COLS));
-    if(!new_map) {exit(1);}
-    new_g->map = new_map;
     return new_g;
-}
-
-static char* readFileToBuffer(const char* map_path){
-    FILE* map = fopen(map_path, "r");
-    if(!map) {ERR("Couldn't open map");exit(1);}
-    
-    fseek(map,0,SEEK_END);
-    size_t file_size = ftell(map);
-    fseek(map,0,SEEK_SET);
-    char* buffer = (char*)malloc(sizeof(char)* (file_size + 1));
-    if(!buffer) {ERR("Couldn't allocate buffer memory"); exit(1);}
-    fread(buffer,file_size,1,map);
-    buffer[file_size] = '\0';
-    fclose(map);
-    return buffer;
-}
-
-
-static void loadTilesMap(Game game, const char* map_path){
-    char* tiles_string = readFileToBuffer(map_path);
-    char* to_free = tiles_string;
-    
-    int i = 0;
-    while(*tiles_string != '\0'){
-        if(*tiles_string == ' ' || *tiles_string == '\n' || *tiles_string == '\r' || *tiles_string == '\t'){
-            tiles_string++;
-            continue;
-        }
-        game->map[i] = *tiles_string - '0';
-        i++;
-        tiles_string++;
-    } 
-    free(to_free);
 }
 
 void loadTextures(Game game){
@@ -89,7 +53,7 @@ void loadTextures(Game game){
     loadText(game->texture_manager,game->renderer,game->global_font,"Would you like to pickup this sword?",&white);
     loadText(game->texture_manager,game->renderer,game->global_font,"Yes No",&white);
     setupDialouges(game->dialouge_manager,NULL);
-    loadTilesMap(game, "world.txt");
+    setupTiles(game->tile_manager,"world.txt");
 }
 
 static void handleKey(Game game,SDL_Keycode code){
@@ -238,21 +202,7 @@ static void renderInventory(Game game){
 }
 
 static void drawMap(Game game){
-    for(int row = 0 ; row < MAX_WORLD_ROWS;row++){
-        for(int col = 0; col < MAX_WORLD_COLS;col++){
-            int worldX = col * TILE_WIDTH;
-            int worldY = row * TILE_HEIGHT;
-
-            int screenX = worldX - game->camera.x;
-            int screenY = worldY - game->camera.y;
-
-            
-            // TODO :: Add conditional rendering (for process improvements)
-            drawFrame(game->texture_manager,TILE_TEXTURE,screenX,screenY,32,32,32,32,(game->map[row * 50 + col]/2) + 1,game->map[row * 50 + col]%2,game->renderer,SDL_FLIP_NONE);
-
-
-        }
-    }
+    renderTiles(game->tile_manager,game->texture_manager,game->renderer,game->camera);
 }
 
 
@@ -268,6 +218,7 @@ void initRendering(Game game){
         break;
         case RUNNING_STATE:
         drawMap(game);
+        
         renderEntities(game);
         renderObjects(game->object_manager,game->texture_manager,game->renderer,game->camera);
         renderUI(game);
@@ -332,6 +283,7 @@ void quitGame(Game game){
     destroyNPCManager(game->npc_manager);
     destroyObjectManager(game->object_manager);
     destroyDialogeManager(game->dialouge_manager);
+    destroyTileManager(game->tile_manager);
     free(game->map);
     free(game->players);
     free(game);
