@@ -51,9 +51,9 @@ void checkPlayerCollisionWithNPCs(NpcManager manager,Player p){
     for(int i = 0;i < getListSize(manager->npc_list);i++){
         NPC tmp  = getNodeData(current);
         SDL_Rect rect = getRect(tmp);
-        if(checkCollision(p,rect)){
-            p->hp -= 10;
-            fprintf(stderr,"OUCH");
+        if(checkCollision(p,rect) && ( p->invincible_frames == 0)){
+            p->hp -= 1;
+            p->invincible_frames = 60;
         }
         current = getNextNode(current);
     }

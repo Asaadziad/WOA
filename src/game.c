@@ -82,6 +82,9 @@ static void handleKey(Game game,SDL_Keycode code){
         case SDLK_i:
             asaad->isInInventory = !asaad->isInInventory;
         break;
+        case SDLK_q:
+            playerAttack(asaad);
+        break;
         case SDLK_SPACE:
             if(game->state == MENU_STATE){
                 game->state = RUNNING_STATE;

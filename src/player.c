@@ -29,6 +29,9 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->inventory_objects = (ObjectType*)malloc(sizeof(*new_p->inventory_objects) * INVENTORY_SLOTS);
     if(!new_p->inventory_objects) return NULL;
     new_p->current_slot = 0;
+    new_p->invincible_frames = 0;
+    new_p->isAttacking = false;
+    new_p->attacking_frames = 0;
     return new_p;
 }
 
@@ -37,12 +40,27 @@ void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect 
     
 }
 
+void playerAttack(Player p){
+    p->isAttacking = true;
+}
+
 void playerUpdate(Player p,SDL_Rect camera){
-    if(p->current_frame >= 9){
+    if(p->current_frame >= 9 && (!p->isAttacking)){
         p->current_frame = 0;
+    }
+    if(p->isAttacking){
+        p->current_frame = 10 + (p->attacking_frames%3); // 10 11 12
+        p->attacking_frames++;
     }
     if(p->hp <= 0){
         p->hp = 0;
+    }
+    if(p->invincible_frames > 0){
+        p->invincible_frames--;
+    }
+    if(p->attacking_frames >= 3){
+        p->attacking_frames = 0;
+        p->isAttacking = false;
     }
 }
 

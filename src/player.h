@@ -37,10 +37,14 @@ typedef struct player_t {
     bool isInInventory;
     ObjectType* inventory_objects;
     int current_slot;
+    int invincible_frames;
+    bool isAttacking;
+    int attacking_frames;
 } *Player;
 
 Player initPlayer(int x,int y,int width,int height);
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera);
+void playerAttack(Player p);
 void playerUpdate(Player p,SDL_Rect camera);
 void destroyPlayer(Player p);
 
