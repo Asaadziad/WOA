@@ -17,6 +17,7 @@ void renderObjects(ObjectManager manager,TextureManager texture_manager,SDL_Rend
 void checkPlayerCollisionWithObjects(ObjectManager manager,Player p);
 
 OBJECT findObject(ObjectManager manager,ObjectType type);
+void deleteObject(ObjectManager manager, ObjectType type);
 Node getObjectsList(ObjectManager manager);
 void destroyObjectManager(ObjectManager manager);
 #endif

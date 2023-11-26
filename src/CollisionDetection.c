@@ -1,12 +1,13 @@
 #include "CollisionDetection.h"
 
 // Checks collision with a certain rectangle
-bool checkCollision(Player p, SDL_Rect dst){
+bool checkCollision(Player p, SDL_Rect dst,bool reposition){
     SDL_Rect src;
     src.x = p->position.x;
     src.y = p->position.y;
     src.h = p->height;
     src.w = p->width;
+    if(reposition){
     if(src.x + src.w >= dst.x && (src.x < dst.x) && (src.y >= dst.y && src.y <= dst.y + dst.h)){
         p->position.x = dst.x - p->width;
     }
@@ -18,6 +19,8 @@ bool checkCollision(Player p, SDL_Rect dst){
     }
     if(src.y + src.h >= dst.y && src.y < dst.y && (src.x >= dst.x && src.x <= dst.x + dst.w)){
         p->position.y = dst.y - p->height;
+    }
+
     }
     if((src.x + src.w > dst.x) 
     && (src.x < dst.x + dst.w)

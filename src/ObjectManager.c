@@ -140,7 +140,11 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
     Node current = getHead(manager->objects);
     for(int i = 0;i < getListSize(manager->objects);i++){
         OBJECT tmp  = getNodeData(current);
-        if(checkCollision(p,objectGetRect(tmp))){
+        if(!isObjectRenderable(tmp)){
+            current = getNextNode(current);
+             continue;
+        }
+        if(checkCollision(p,objectGetRect(tmp),true)){
             switch(objectGetType(tmp)){
                 case TREE_OBJECT:
                     
@@ -161,6 +165,12 @@ OBJECT findObject(ObjectManager manager,ObjectType type){
     OBJECT to_find = listFind(manager->objects,tmp);
     return to_find;
 }
+
+void deleteObject(ObjectManager manager, ObjectType type){
+    // to be added
+}
+
+
 void destroyObjectManager(ObjectManager manager){
     if(!manager) return;
     if(manager->objects){

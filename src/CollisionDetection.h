@@ -4,7 +4,7 @@
 #include "stdbool.h"
 #include "player.h"
 
-bool checkCollision(Player p, SDL_Rect dst);
+bool checkCollision(Player p, SDL_Rect dst,bool reposition);
 
 
 #endif
