@@ -83,7 +83,12 @@ static void handleKey(Game game,SDL_Keycode code){
             asaad->isInInventory = !asaad->isInInventory;
         break;
         case SDLK_q:
-            playerAttack(asaad);
+            //Check if player has sword
+            if(playerCheckInventory(asaad,SWORD_OBJECT)){
+                playerAttack(asaad);
+            } else {
+                LOG("You dont have SWORD!");
+            }
         break;
         case SDLK_SPACE:
             if(game->state == MENU_STATE){

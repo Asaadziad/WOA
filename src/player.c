@@ -36,8 +36,18 @@ Player initPlayer(int x,int y,int width,int height){
 }
 
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera){
-    drawFrame(manager,PLAYER_TEXTURE,p->position.x - camera.x,p->position.y - camera.y,32,32,60,60,(p->current_frame/3) + 1,p->current_frame % 3,renderer,SDL_FLIP_NONE);
+    drawFrame(manager,PLAYER_TEXTURE,p->position.x - camera.x,p->position.y - camera.y,32,32,60,60,1,p->current_frame,renderer,SDL_FLIP_NONE);
     
+}
+
+bool playerCheckInventory(Player p,ObjectType item_type){
+    int inv_size = p->current_slot;
+    for(int i = 0;i<inv_size;i++){
+        if(p->inventory_objects[i] == item_type){
+            return true;
+        }
+    }
+    return false;
 }
 
 void playerAttack(Player p){
@@ -49,18 +59,27 @@ void playerUpdate(Player p,SDL_Rect camera){
         p->current_frame = 0;
     }
     if(p->isAttacking){
-        p->current_frame = 10 + (p->attacking_frames%3); // 10 11 12
+        p->current_frame = 10 + (p->attacking_frames);
         p->attacking_frames++;
+
+        if(p->attacking_frames <= 5) {
+            p->current_frame = 10;
+        }
+        if(p->attacking_frames > 5 && p->attacking_frames <= 25) {
+            p->current_frame = 13;
+            
+        }
+        if(p->attacking_frames > 25){
+            p->attacking_frames = 0;
+            p->isAttacking = false;
+            p->current_frame = 0;
+        }
     }
     if(p->hp <= 0){
         p->hp = 0;
     }
     if(p->invincible_frames > 0){
         p->invincible_frames--;
-    }
-    if(p->attacking_frames >= 3){
-        p->attacking_frames = 0;
-        p->isAttacking = false;
     }
 }
 

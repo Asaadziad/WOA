@@ -45,6 +45,7 @@ typedef struct player_t {
 Player initPlayer(int x,int y,int width,int height);
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera);
 void playerAttack(Player p);
+bool playerCheckInventory(Player p,ObjectType item_type);
 void playerUpdate(Player p,SDL_Rect camera);
 void destroyPlayer(Player p);
 
