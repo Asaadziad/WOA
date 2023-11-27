@@ -19,6 +19,8 @@ typedef enum {
 
 typedef struct player_t {
     int current_frame;
+    int frame_row;
+    
     int hp;
     Vector2f position;
     int screenX;

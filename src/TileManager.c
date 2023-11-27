@@ -84,27 +84,9 @@ void renderTiles(TileManger manager,TextureManager texture_manager,SDL_Renderer*
             int screenX = worldX - camera.x;
             int screenY = worldY - camera.y;
 
-            
-            // TODO :: Add conditional rendering (for process improvements)
-            int current_row = 0; // row of the sprite sheet
-            int current_frame = 0;
-            switch(getTileType(tile)){
-                case 0:
-                
-                current_frame = 0;
-                current_row = 1;
-                break;
-                case 1:
-                current_frame = 1;
-                current_row = 1;
-                break;
-                case 2:
-                current_frame = 0;
-                current_row = 2;
-                break;
-            }
+            int current_frame = getTileType(tile);
             //fprintf(stderr,"%d - %d\n",current_row,current_frame);
-            drawFrame(texture_manager,TILE_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,current_row,current_frame,renderer,SDL_FLIP_NONE);
+            drawFrame(texture_manager,TILE_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,current_frame,renderer,SDL_FLIP_NONE);
 
 
         }

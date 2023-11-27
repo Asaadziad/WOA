@@ -76,17 +76,17 @@ static OBJECT createObjectFromLine(char* line){
     OBJECT tmp = NULL;
     char* obj_type = tokens[0]->literal;
     if(strcmp(obj_type,"TREE_OBJECT") == 0){
-        tmp = createObject(atoi(tokens[1]->literal),
-                            atoi(tokens[2]->literal),
-                            atoi(tokens[3]->literal),
-                            atoi(tokens[4]->literal),
+        tmp = createObject(TILE_WIDTH,
+                            TILE_HEIGHT,
+                            atoi(tokens[3]->literal)*TILE_WIDTH,
+                            atoi(tokens[4]->literal)*TILE_WIDTH,
                             TREE_OBJECT);
         
     } else if(strcmp(obj_type,"SWORD_OBJECT") == 0){
-        tmp = createObject(atoi(tokens[1]->literal),
-                            atoi(tokens[2]->literal),
-                            atoi(tokens[3]->literal),
-                            atoi(tokens[4]->literal),
+        tmp = createObject(TILE_WIDTH,
+                            TILE_HEIGHT,
+                            atoi(tokens[3]->literal) * TILE_WIDTH,
+                            atoi(tokens[4]->literal) * TILE_WIDTH,
                             SWORD_OBJECT);
         setObjectFrame(tmp,0);
     }
@@ -142,13 +142,10 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
         OBJECT tmp  = getNodeData(current);
         if(!isObjectRenderable(tmp)){
             current = getNextNode(current);
-             continue;
+            continue;
         }
         if(checkCollision(p,objectGetRect(tmp),true)){
             switch(objectGetType(tmp)){
-                case TREE_OBJECT:
-                    
-                break;
                 case SWORD_OBJECT:
                     p->isInDialouge = true;
                     p->current_dialouge = SWORD_DIALOUGE;
@@ -159,6 +156,7 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
         current = getNextNode(current);
     }
 }
+
 
 OBJECT findObject(ObjectManager manager,ObjectType type){
     OBJECT tmp = createObject(0,0,0,0,SWORD_OBJECT);

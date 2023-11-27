@@ -19,7 +19,7 @@ void handlePlayerMovement(Player p, MovementType m_type){
         break;
         
         case MOVE_DOWN:
-        if(p->position.y >= WORLD_HEIGHT) return;
+        if(p->position.y >= (TILE_HEIGHT * MAX_WORLD_ROWS)) return;
 
 
         p->position.y +=  p->vel.y;
@@ -27,7 +27,7 @@ void handlePlayerMovement(Player p, MovementType m_type){
   
         case MOVE_RIGHT:
 
-        if(p->position.x + TILE_WIDTH >= WORLD_WIDTH) return;
+        if(p->position.x + TILE_WIDTH >= (TILE_WIDTH * MAX_WORLD_COLS)) return;
 
         p->position.x +=  p->vel.x;
         break;

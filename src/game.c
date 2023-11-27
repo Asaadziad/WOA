@@ -156,7 +156,7 @@ void handleEvents(SDL_Event* e,Game game){
 
 void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
-    Player asaad = initPlayer(0,0,32,32);
+    Player asaad = initPlayer(0,0,TILE_WIDTH,TILE_HEIGHT);
     game->players[0] = asaad; 
     setupObjects(game->object_manager,"objects.txt");
     setupNPCs(game->npc_manager);
@@ -205,7 +205,7 @@ static void renderInventory(Game game){
     drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,0},false,box.w,game->renderer);
     for(int i = 0; i < game->players[0]->current_slot;i++){
         OBJECT tmp = findObject(game->object_manager,game->players[0]->inventory_objects[i]);
-        drawFrame(game->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,32,32,60,60,1,getObjectFrame(tmp),game->renderer,SDL_FLIP_NONE);
+        drawFrame(game->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,1,getObjectFrame(tmp),game->renderer,SDL_FLIP_NONE);
     }
 }
 
@@ -260,11 +260,11 @@ static void checkCamera(SDL_Rect* camera){
     if(camera->y < 0){
         camera->y = 0;
     }
-    if(camera->x > WORLD_WIDTH - camera->w){
-        camera->x =  WORLD_WIDTH - camera->w;
+    if(camera->x > (TILE_WIDTH * MAX_WORLD_COLS) - camera->w){
+        camera->x = (TILE_WIDTH * MAX_WORLD_COLS) - camera->w;
     }
-    if(camera->y > WORLD_HEIGHT - camera->h){
-        camera->y = WORLD_HEIGHT - camera->h;
+    if(camera->y > (TILE_HEIGHT * MAX_WORLD_ROWS) - camera->h){
+        camera->y = (TILE_HEIGHT * MAX_WORLD_ROWS) - camera->h;
     }
 }
 

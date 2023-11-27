@@ -3,8 +3,8 @@
 
 #include "SDL2/SDL.h"
 
-#define TILE_WIDTH 32
-#define TILE_HEIGHT 32
+#define TILE_WIDTH 48
+#define TILE_HEIGHT 48
 
 
 typedef enum {
