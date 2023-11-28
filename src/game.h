@@ -20,6 +20,7 @@ typedef enum {
     RUNNING_STATE,
     QUIT_STATE,
     MENU_STATE,
+    GAME_OVER_STATE,
     DIALOUGE_STATE,
 } GameState;
 

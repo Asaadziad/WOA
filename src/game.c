@@ -52,6 +52,8 @@ void loadTextures(Game game){
     loadText(game->texture_manager,game->renderer,game->global_font,"Hello asaad",&white);
     loadText(game->texture_manager,game->renderer,game->global_font,"Would you like to pickup this sword?",&white);
     loadText(game->texture_manager,game->renderer,game->global_font,"Yes No",&white);
+    loadText(game->texture_manager,game->renderer,game->global_font,"Game Over",&black);
+    loadText(game->texture_manager,game->renderer,game->global_font,"press space to restart",&black);
     setupDialouges(game->dialouge_manager,NULL);
     setupTiles(game->tile_manager,"world.txt");
 }
@@ -213,6 +215,12 @@ static void drawMap(Game game){
     renderTiles(game->tile_manager,game->texture_manager,game->renderer,game->camera);
 }
 
+void static renderGameOverScreen(Game game){
+    SDL_Color black = {0,0,0,0};
+    drawText(game->texture_manager,6,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,200,50,black,game->renderer);
+    drawText(game->texture_manager,7,SCREEN_WIDTH/2,SCREEN_HEIGHT/2 + 50,200,50,black,game->renderer);
+}
+
 
 void initRendering(Game game){
     clearScreen(game);
@@ -236,6 +244,9 @@ void initRendering(Game game){
         if(game->players[0]->isInInventory){
             //draw the inventory
             renderInventory(game);
+        }
+        if(game->state == GAME_OVER_STATE){
+            renderGameOverScreen(game);
         }
         break;
         default:break;
@@ -276,6 +287,9 @@ void gameUpdate(Game game){
     updateNPCs(game->npc_manager);
     checkPlayerCollisionWithObjects(game->object_manager,game->players[0]);
     checkPlayerCollisionWithNPCs(game->npc_manager,game->players[0]);
+    if(game->players[0]->hp <= 0){
+        game->state = GAME_OVER_STATE;
+    }
 }
 
 
