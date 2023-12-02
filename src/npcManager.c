@@ -58,7 +58,8 @@ void checkPlayerCollisionWithNPCs(NpcManager manager,Player p){
         } else {
             setNpcAttacking(tmp,false);
         }
-        if(checkCollision(p,attack_range,false) && (p->isAttacking) && (!isNpcInvincible(tmp))){
+        if(checkCollision(p,attack_range,false) && (p->isAttacking)
+            && (!isNpcInvincible(tmp))){
             setNPCHp(tmp,getNPCHp(tmp) - 5);
             setNpcInvincible(tmp);
             fprintf(stderr,"%d",getNPCHp(tmp));
