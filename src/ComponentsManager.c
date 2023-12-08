@@ -1,4 +1,4 @@
-#include "ComponentsManager.h"
+
 #include "DS/list.h"
 #include "common.h"
 
@@ -10,7 +10,8 @@ static void freeComponentPtr(void* elem){
     destroyComponent((COMPONENT)elem);
 }
 
-static bool compareComponentPtr(void* elem1,void* elem2){
+static bool 
+compareComponentPtr(void* elem1,void* elem2){
     bool t = componentsCompare((COMPONENT)elem1,(COMPONENT)(elem2));
     return t;
 }
