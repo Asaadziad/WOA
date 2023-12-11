@@ -4,6 +4,10 @@
 #include <X11/Xlib.h>
 #include <X11/keysymdef.h>
 
+#define internal static
+#define local_var static
+
+
 int main(){
 
 	Display* display = XOpenDisplay(NULL);
@@ -12,14 +16,22 @@ int main(){
 		exit(1);
 	}
 	int screen = XDefaultScreen(display);
-	Window w = XCreateSimpleWindow(display, RootWindow(display,screen), 0, 0, 960, 540, 1 ,BlackPixel(display,screen), WhitePixel(display,screen));
-	
-	XEvent event;
-	XSelectInput(display, w, KeyPressMask);
+	Window w = XCreateSimpleWindow(display,
+								RootWindow(display,screen),
+								0, 0,
+								960, 540,
+								0 ,
+								0,
+								0);
+
+	Atom wm_delete_window = XInternAtom(display,"WM_DELETE_WINDOW",False);
+	XSetWMProtocols(display,w, &wm_delete_window,1);
+ 	XSelectInput(display, w, KeyPressMask);
  	XMapWindow(display, w);
-	bool running = true;
+	local_var bool running = true;
 	while(running){
-		if(XPending(display)){
+	XEvent event = {0};
+    if(XPending(display)){
 			XNextEvent(display, &event);
 			if(event.type == KeyPress){
 			//TODO:: find a way to deal with key presses without hardcoding it gkdsljjkldgjslk			
@@ -29,12 +41,21 @@ int main(){
 				break;
 			
 			default:break;
-			}	
 			}
+      }
+			if(event.type == ClientMessage){
+    	        
+        if((Atom)event.xclient.data.l[0] == wm_delete_window){
+					running = false;
+				}  
+      
+      }
+		
+			
 		}
+
 	}
 
-	XDestroyWindow(display, w);
 	XCloseDisplay(display);
 	return 0;
 
