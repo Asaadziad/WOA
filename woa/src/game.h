@@ -14,6 +14,7 @@
 #include "common.h"
 #include "DialougeManager.h"
 #include "TileManager.h"
+
 #define IS_RUNNING(game) ((game)->state != QUIT_STATE)
 
 typedef enum {
@@ -24,11 +25,7 @@ typedef enum {
     DIALOUGE_STATE,
 } GameState;
 
-typedef struct game_t {
-    Player* players;
-    GameState state;
-    List textures;
-    List objects;
+struct game_managers {
     TaskManager task_manager;
     TextureManager texture_manager;
     ComponenetsManager components_manager;
@@ -36,23 +33,47 @@ typedef struct game_t {
     NpcManager npc_manager;
     DialougeManager dialouge_manager;
     TileManger tile_manager;
+};
+
+struct game_window {
     TTF_Font* global_font;
     SDL_Renderer* renderer;
     SDL_Rect camera;
     int mouse_x;
     int mouse_y;
-    uint8_t handeled_event;
+};
+
+typedef struct game_t {
+    Player* players;
+    GameState state;
+    struct game_managers* managers;
+    struct game_window* window;
+    Int8 handeled_event;
     int* map;
 } *Game;
+
+
+/*{
+  Accept Resources() // from another  source/ Component - Data file/ Network (multiplayer thing) / ...
+  Update& render()
+}*/
 
 Game initGame();
 void handleEvents(SDL_Event* e,Game game);
 void initEntities(Game game);
+
+// Game get resources 
+void loadTextures(Game game);
+
+// loop once and do 2 operations
+void gameUpdateAndRender(Game game);
+
+// loop twice and do 2 operations
 void initRendering(Game game);
 void gameUpdate(Game game);
 
-void loadTextures(Game game);
 
+// window functions - window class or something
 void clearScreen(Game game);
 void updateScreen(Game game);
 void quitGame(Game game);

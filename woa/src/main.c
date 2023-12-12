@@ -6,8 +6,8 @@
 #include "logic.h"
 #include "timer.h"
 
-static void initSDL(SDL_Window** window, SDL_Renderer** renderer);
-static void quitSDL(SDL_Window** window);
+internal void initSDL(SDL_Window** window, SDL_Renderer** renderer);
+internal void quitSDL(SDL_Window** window);
 
 int main(){
     
@@ -39,9 +39,11 @@ int main(){
         * This function keeps listening to events and handles it accordinlgy
         */
         handleEvents(&event, game);
-        gameUpdate(game);
+       
+        gameUpdateAndRender(game);
+        //gameUpdate(game);
         /* Rendering */
-        initRendering(game);
+        //initRendering(game);
         /* End of Rendering */
 
         ++frameCounter;
@@ -52,8 +54,7 @@ int main(){
             SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
         }
     }
-   //freeTexture(game->head);
-
+   
     
     quitGame(game);
     quitSDL(&window);

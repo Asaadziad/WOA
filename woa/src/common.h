@@ -9,6 +9,14 @@
 #define WORLD_WIDTH 1600
 #define PLAYERS_COUNT 1
 
+#define local_var static
+#define internal static
+#define global_var static
+
+//typedef's
+typedef uint8_t Int8;
+
+
 #include "stdbool.h"
 
 

@@ -16,23 +16,39 @@
 #include "npcManager.h"
 #include "TileManager.h"
 
-Game initGame(){
-    Game new_g = (Game)malloc(sizeof(*new_g));
-    if(!new_g) return NULL;
-    new_g->state = MENU_STATE;
-    new_g->texture_manager = textureManagerInit();
-    new_g->components_manager = initComponentsManager();
-    new_g->object_manager = initObjectManager();
-    new_g->npc_manager = initNPCManager();
-    new_g->dialouge_manager = initDialougeManager();
-    new_g->tile_manager = initTileManager();
-    new_g->handeled_event = 0;
+internal
+void initManagers(struct game_managers* managers){
+ managers->texture_manager = textureManagerInit();
+    managers->components_manager = initComponentsManager();
+    managers->object_manager = initObjectManager();
+    managers->npc_manager = initNPCManager();
+    managers->dialouge_manager = initDialougeManager();
+    managers->tile_manager = initTileManager();
+}
+
+internal
+void initWindow(struct game_window* window){
     SDL_Rect camera;
     camera.x = 0;
     camera.y = 0;
     camera.w = SCREEN_WIDTH;
     camera.h = SCREEN_HEIGHT;
-    new_g->camera = camera;
+    window->camera = camera;
+}
+
+Game initGame(){
+    Game new_g = (Game)malloc(sizeof(*new_g));
+    if(!new_g) return NULL;
+    new_g->state = MENU_STATE;
+    new_g->handeled_event = 0;
+    new_g->managers = malloc(sizeof(*new_g->managers));
+    new_g->window = malloc(sizeof(*new_g->window));
+    if(!new_g->window || !new_g->managers){
+      fprintf(stderr, "Could not allocate managers and window");
+      return NULL;
+    }
+    initManagers(new_g->managers);
+    initWindow(new_g->window);    
     return new_g;
 }
 
@@ -138,7 +154,8 @@ void handleEvents(SDL_Event* e,Game game){
                 handleKey(game,e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
-                int x,y;
+                int x = 0;
+				int y = 0;
                 SDL_GetMouseState(&(x),&(y));
                 handlePlayerClick(game,x,y);
                 SDL_Rect dst;
