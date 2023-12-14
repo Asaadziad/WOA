@@ -21,11 +21,10 @@ int main(){
     if(!game){
         exit(1);
     }
-    initSDL(&window,&game->renderer);
-    game->global_font = TTF_OpenFont("src/assets/AlbertText-Bold.ttf",28);
-    if(!game->global_font){
-        fprintf(stderr,"MAMA MIA");
-        exit(1);
+    initSDL(&window,&game->window->renderer);
+    game->window->global_font = TTF_OpenFont("./AlbertText-Bold.ttf",28);
+    if(!game->window->global_font){
+        fprintf(stderr,"Couldn't initiate Font: %s",TTF_GetError());
     }
     loadTextures(game);
     initEntities(game);
@@ -40,10 +39,10 @@ int main(){
         */
         handleEvents(&event, game);
        
-        gameUpdateAndRender(game);
-        //gameUpdate(game);
+//        gameUpdateAndRender(game);
+        gameUpdate(game);
         /* Rendering */
-        //initRendering(game);
+        initRendering(game);
         /* End of Rendering */
 
         ++frameCounter;

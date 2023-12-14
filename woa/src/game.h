@@ -8,7 +8,6 @@
 #include "DS/list.h"
 #include "taskManager.h"
 #include "TextureManager.h"
-#include "ComponentsManager.h"
 #include "ObjectManager.h"
 #include "npcManager.h"
 #include "common.h"
@@ -28,7 +27,6 @@ typedef enum {
 struct game_managers {
     TaskManager task_manager;
     TextureManager texture_manager;
-    ComponenetsManager components_manager;
     ObjectManager object_manager;
     NpcManager npc_manager;
     DialougeManager dialouge_manager;

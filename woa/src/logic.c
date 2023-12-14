@@ -1,5 +1,4 @@
 #include "logic.h"
-#include "rendering.h"
 #include "entity.h"
 #include "movementHandler.h"
 #include "taskManager.h"
