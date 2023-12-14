@@ -1,7 +1,12 @@
 #include "game.h"
+
+
+//common
+#include "common.h"
+
+// needed(maybe?) includes
 #include "stdlib.h"
 #include "stdbool.h"
-#include "logic.h"
 #include "memory.h"
 #include "movementHandler.h"
 #include "tile.h"
@@ -14,6 +19,38 @@
 #include "CollisionDetection.h"
 #include "npcManager.h"
 #include "TileManager.h"
+#include "taskManager.h"
+#include "ObjectManager.h"
+#include "DialougeManager.h"
+
+/* MEMORY CHUNKS HERE  */
+struct game_managers {
+    TaskManager     task_manager;
+    TextureManager  texture_manager;
+    ObjectManager   object_manager;
+    NpcManager      npc_manager;
+    DialougeManager dialouge_manager;
+    TileManger      tile_manager;
+};
+
+struct game_window {
+    TTF_Font*     global_font;
+    SDL_Renderer* renderer;
+    SDL_Rect      camera;
+    int           mouse_x;
+    int           mouse_y;
+};
+
+struct game_t {
+    Player*    players;
+    GameState  state;
+    Int8       handeled_event;
+    int*       map;
+    Managers   managers;
+    Window     window;
+};
+
+
 
 internal
 void initManagers(struct game_managers* managers){
@@ -34,13 +71,6 @@ void initWindow(struct game_window* window){
     window->camera = camera;
 }
 
-void allocate(void* asset,size_t nbytes) {
-  asset = malloc(nbytes);
-  if(!asset) {
-    fprintf(stderr, "Could not allocate memory");
-  }
-}
-
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
@@ -57,6 +87,9 @@ Game initGame(){
     return new_g;
 }
 
+Renderer getRenderer(Game game){
+   return ((game) && (game->window)) ? game->window->renderer : NULL;
+}
 
 /*
  *  We save this for now in a global variable
@@ -83,22 +116,22 @@ void loadManagerResources(struct game_managers* managers,SDL_Renderer* renderer)
 */
 void loadTextures(Game game){
     //createMenuUI(game);
-    load(game->managers->texture_manager,game->window->renderer,"res/character.png",PLAYER_TEXTURE);
-    load(game->managers->texture_manager,game->window->renderer,"res/walls.png",TILE_TEXTURE);
-    load(game->managers->texture_manager,game->window->renderer,"res/uisheet.png",UI_INVENTORY_TEXTURE);
-    load(game->managers->texture_manager,game->window->renderer,"res/woodcutting.png",TREE_TEXTURE);
-    load(game->managers->texture_manager,game->window->renderer,"res/npc.png",NPC_TEXTURE);
-    load(game->managers->texture_manager,game->window->renderer,"res/weapons.png",WEAPONS_TEXTURE);
+    load(game->managers->texture_manager,getRenderer(game),"res/character.png",PLAYER_TEXTURE);
+    load(game->managers->texture_manager,getRenderer(game),"res/walls.png",TILE_TEXTURE);
+    load(game->managers->texture_manager,getRenderer(game),"res/uisheet.png",UI_INVENTORY_TEXTURE);
+    load(game->managers->texture_manager,getRenderer(game),"res/woodcutting.png",TREE_TEXTURE);
+    load(game->managers->texture_manager,getRenderer(game),"res/npc.png",NPC_TEXTURE);
+    load(game->managers->texture_manager,getRenderer(game),"res/weapons.png",WEAPONS_TEXTURE);
     SDL_Color black = {0,0,0,0};
     SDL_Color white = {255,255,255,255};
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"Welcome to the world of asaad",&black);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"Press space to enter",&black);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"HP",&white);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"Hello asaad",&white);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"Would you like to pickup this sword?",&white);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"Yes No",&white);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"Game Over",&black);
-    loadText(game->managers->texture_manager,game->window->renderer,game->window->global_font,"press space to restart",&black);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Welcome to the world of asaad",&black);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Press space to enter",&black);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"HP",&white);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Hello asaad",&white);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Would you like to pickup this sword?",&white);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Yes No",&white);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Game Over",&black);
+    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"press space to restart",&black);
     setupDialouges(game->managers->dialouge_manager,NULL);
     setupTiles(game->managers->tile_manager,"world.txt");
 }
@@ -211,13 +244,13 @@ void initEntities(Game game){
 }
 
 static void renderEntities(Game game){
-    playerDraw(game->managers->texture_manager,game->players[0],game->window->renderer,game->window->camera);
-    renderNPCs(game->managers->npc_manager,game->managers->texture_manager,game->window->renderer,game->window->camera);
+    playerDraw(game->managers->texture_manager,game->players[0],getRenderer(game),game->window->camera);
+    renderNPCs(game->managers->npc_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
 }
 
 
 
-static void drawHP(TextureManager manager,SDL_Renderer* renderer,int playerHp){
+static void drawHP(TextureManager manager,Renderer renderer,int playerHp){
     SDL_Rect rect;
     rect.x = 0;
     rect.y = SCREEN_HEIGHT - 50;
@@ -237,11 +270,11 @@ static void renderUI(Game game){
     //fprintf(stderr,"MOUSE-MOTION-X: %d MOUSE-MOTION-Y: %d\n",game->mouse_x,game->mouse_y);
     if(mouseInRect(game,dst)){
         
-        drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,1,game->window->renderer,SDL_FLIP_NONE);
+        drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,1,getRenderer(game),SDL_FLIP_NONE);
     } else {
-        drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,game->window->renderer,SDL_FLIP_NONE);
+        drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,getRenderer(game),SDL_FLIP_NONE);
     }
-    drawHP(game->managers->texture_manager,game->window->renderer,game->players[0]->hp);
+    drawHP(game->managers->texture_manager,getRenderer(game),game->players[0]->hp);
 }
 
 static void renderInventory(Game game){
@@ -250,21 +283,21 @@ static void renderInventory(Game game){
     box.h = 300;
     box.x = 200;
     box.y = 100;
-    drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,0},false,box.w,game->window->renderer);
+    drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,0},false,box.w,getRenderer(game));
     for(int i = 0; i < game->players[0]->current_slot;i++){
         OBJECT tmp = findObject(game->managers->object_manager,game->players[0]->inventory_objects[i]);
-        drawFrame(game->managers->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,1,getObjectFrame(tmp),game->window->renderer,SDL_FLIP_NONE);
+        drawFrame(game->managers->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,1,getObjectFrame(tmp),getRenderer(game),SDL_FLIP_NONE);
     }
 }
 
 static void drawMap(Game game){
-    renderTiles(game->managers->tile_manager,game->managers->texture_manager,game->window->renderer,game->window->camera);
+    renderTiles(game->managers->tile_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
 }
 
 void static renderGameOverScreen(Game game){
     SDL_Color black = {0,0,0,0};
-    drawText(game->managers->texture_manager,6,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,200,50,black,game->window->renderer);
-    drawText(game->managers->texture_manager,7,SCREEN_WIDTH/2,SCREEN_HEIGHT/2 + 50,200,50,black,game->window->renderer);
+    drawText(game->managers->texture_manager,6,SCREEN_WIDTH/2,SCREEN_HEIGHT/2,200,50,black,getRenderer(game));
+    drawText(game->managers->texture_manager,7,SCREEN_WIDTH/2,SCREEN_HEIGHT/2 + 50,200,50,black,getRenderer(game));
 }
 
 
@@ -275,17 +308,17 @@ void initRendering(Game game){
         case MENU_STATE:
         int actual_center_x = SCREEN_WIDTH/2 - 125;
         int actual_center_y = SCREEN_HEIGHT/2 - 50;
-        drawText(game->managers->texture_manager,0,actual_center_x,actual_center_y,250,50,(SDL_Color){0,0,0,0},game->window->renderer);
-        drawText(game->managers->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,(SDL_Color){0,0,0,0},game->window->renderer);
+        drawText(game->managers->texture_manager,0,actual_center_x,actual_center_y,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
+        drawText(game->managers->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
         break;
         case RUNNING_STATE:
         drawMap(game);
         
         renderEntities(game);
-        renderObjects(game->managers->object_manager,game->managers->texture_manager,game->window->renderer,game->window->camera);
+        renderObjects(game->managers->object_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
         renderUI(game);
         if(game->players[0]->isInDialouge){
-            renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,game->window->renderer,game->players[0]->current_dialouge);
+            renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,getRenderer(game),game->players[0]->current_dialouge);
         }
         if(game->players[0]->isInInventory){
             //draw the inventory
@@ -303,11 +336,11 @@ void initRendering(Game game){
 
 
 void clearScreen(Game game){
-    SDL_SetRenderDrawColor(game->window->renderer,0xff,0xff,0xff,0xff);
-    SDL_RenderClear(game->window->renderer);
+    SDL_SetRenderDrawColor(getRenderer(game),0xff,0xff,0xff,0xff);
+    SDL_RenderClear(getRenderer(game));
 }
 void updateScreen(Game game){
-    SDL_RenderPresent(game->window->renderer);
+    SDL_RenderPresent(getRenderer(game));
 }
 
 static void checkCamera(SDL_Rect* camera){

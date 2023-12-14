@@ -1,20 +1,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "SDL2/SDL_ttf.h"
-
-#include "texture.h"
-#include "player.h"
-#include "DS/list.h"
-#include "taskManager.h"
-#include "TextureManager.h"
-#include "ObjectManager.h"
-#include "npcManager.h"
-#include "common.h"
-#include "DialougeManager.h"
-#include "TileManager.h"
+#include "SDL2/SDL.h"
 
 #define IS_RUNNING(game) ((game)->state != QUIT_STATE)
+
+
+typedef SDL_Renderer* Renderer;
+typedef SDL_Event* Event;
+typedef struct game_managers* Managers;
+typedef struct game_window* Window;
+typedef struct game_t* Game;
 
 typedef enum {
     RUNNING_STATE,
@@ -24,32 +20,9 @@ typedef enum {
     DIALOUGE_STATE,
 } GameState;
 
-struct game_managers {
-    TaskManager task_manager;
-    TextureManager texture_manager;
-    ObjectManager object_manager;
-    NpcManager npc_manager;
-    DialougeManager dialouge_manager;
-    TileManger tile_manager;
-};
 
-struct game_window {
-    TTF_Font* global_font;
-    SDL_Renderer* renderer;
-    SDL_Rect camera;
-    int mouse_x;
-    int mouse_y;
-};
 
-typedef struct game_t {
-    Player* players;
-    GameState state;
-    struct game_managers* managers;
-    struct game_window* window;
-    Int8 handeled_event;
-    int* map;
-} *Game;
-
+Renderer getRenderer(Game game);
 
 /*{
   Accept Resources() // from another  source/ Component - Data file/ Network (multiplayer thing) / ...
@@ -57,7 +30,7 @@ typedef struct game_t {
 }*/
 
 Game initGame();
-void handleEvents(SDL_Event* e,Game game);
+void handleEvents(Event e,Game game);
 void initEntities(Game game);
 
 // Game get resources 
