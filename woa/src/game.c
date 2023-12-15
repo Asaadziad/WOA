@@ -120,25 +120,8 @@ void loadManagerResources(struct game_managers* managers,SDL_Renderer* renderer)
 }
 */
 void loadTextures(Game game){
-    //createMenuUI(game);
-    load(game->managers->texture_manager,getRenderer(game),"res/character.png",PLAYER_TEXTURE);
-    load(game->managers->texture_manager,getRenderer(game),"res/walls.png",TILE_TEXTURE);
-    load(game->managers->texture_manager,getRenderer(game),"res/uisheet.png",UI_INVENTORY_TEXTURE);
-    load(game->managers->texture_manager,getRenderer(game),"res/woodcutting.png",TREE_TEXTURE);
-    load(game->managers->texture_manager,getRenderer(game),"res/npc.png",NPC_TEXTURE);
-    load(game->managers->texture_manager,getRenderer(game),"res/weapons.png",WEAPONS_TEXTURE);
-    SDL_Color black = {0,0,0,0};
-    SDL_Color white = {255,255,255,255};
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Welcome to the world of asaad",&black);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Press space to enter",&black);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"HP",&white);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Hello asaad",&white);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Would you like to pickup this sword?",&white);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Yes No",&white);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"Game Over",&black);
-    loadText(game->managers->texture_manager,getRenderer(game),game->window->global_font,"press space to restart",&black);
-    setupDialouges(game->managers->dialouge_manager,NULL);
-    setupTiles(game->managers->tile_manager,"world.txt");
+  setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
+  setupTiles(game->managers->tile_manager,"world.txt");
 }
 
 void loadGameFont(Game game,const char* font_file_path,int size){
@@ -185,24 +168,7 @@ static void handleKey(Game game,SDL_Keycode code){
             }
         break;
         case SDLK_SPACE:
-            if(game->state == MENU_STATE){
-                game->state = RUNNING_STATE;
-            } else {
-                if(asaad->isInDialouge){
-                    switch(asaad->current_dialouge){
-                        case SWORD_DIALOUGE:
-                            // pickup system
-                            // pickup the object - remove it from the map
-                            OBJECT o = findObject(game->managers->object_manager,SWORD_OBJECT);
-                            setObjectRenderable(o,false);
-                            asaad->inventory_objects[asaad->current_slot] = SWORD_OBJECT;
-                            asaad->current_slot++;
-                            asaad->isInDialouge = false;
-                        break;
-                        default :break;
-                    }
-                }
-            }
+            
         break;
         default:
         break;

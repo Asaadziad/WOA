@@ -1,0 +1,15 @@
+[
+  {
+    "id": 0,
+    "length": 2,
+    "line1": "welcome to the world of asaad",
+    "line2": "press space to enter"
+  },
+  {
+    "id":1,
+    "length":3,
+    "line1": "Would you like to pick up the sword?",
+    "line2": "yes",
+    "line3": "no"
+  }
+]

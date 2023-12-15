@@ -10,7 +10,7 @@ typedef struct dialougem_t* DialougeManager;
 
 DialougeManager initDialougeManager();
 void setupDialouges(DialougeManager manager,const char* file_path);
-void renderDialouge(DialougeManager manager,TextureManager texture_manager,SDL_Renderer* renderer,DialougeKind dialouge_kind);
+void renderDialouge(DialougeManager manager,TextureManager texture_manager,SDL_Renderer* renderer,int dialouge_id);
 void sendDialouge(int dialouge_id);
 void destroyDialogeManager(DialougeManager manager);
 

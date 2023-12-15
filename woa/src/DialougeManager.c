@@ -5,22 +5,21 @@
 #include "Dialouge.h"
 
 struct dialougem_t {
-    List dialouges;        
+    int       size;       // Number of Dialouges
+    DIALOUGE* dialouges;  // Array of Dialouges      
 };
 
-static void dialougeDestroyPtr(void* elem){
-    destroyDialouge((DIALOUGE)elem);
-}
 
 DialougeManager initDialougeManager(){
     DialougeManager m = (DialougeManager)malloc(sizeof(*m));
     if(!m) return NULL;
-    m->dialouges = listCreate(dialougeDestroyPtr,NULL,NULL);
+    m->dialouges = NULL;
+    m->size = 0;
     return m;
 }
 
 /*
-* setting dialouges up manually until i need it automated
+* args: this shall take a path to json file. 
 */
 void setupDialouges(DialougeManager manager,const char* file_path){
     /*
@@ -30,13 +29,9 @@ void setupDialouges(DialougeManager manager,const char* file_path){
     * Yes - No
     * Note: Press space for YES and press v for NO
     */
-   int* sword_labels = (int*)malloc(sizeof(*sword_labels) * 3);
-   if(!sword_labels) return;
-   sword_labels[0] = 3;
-   sword_labels[1] = 4;
-   sword_labels[2] = 5;
-   DIALOUGE d = createDialouge(sword_labels,3,SWORD_DIALOUGE);
-   listInsert(manager->dialouges,d);
+    int current = manager->size;  
+    // JSONObject* json_objects = parse(file_path); 
+    // for each object in json_objects: createDialouge(object);
 }
 
 static void drawDialougeBox(SDL_Renderer* renderer){
@@ -48,7 +43,7 @@ static void drawDialougeBox(SDL_Renderer* renderer){
     drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,0},true,box.w,renderer);
 }
 
-void renderDialouge(DialougeManager manager,TextureManager texture_manager,SDL_Renderer* renderer,DialougeKind dialouge_kind){
+void renderDialouge(DialougeManager manager,TextureManager texture_manager,SDL_Renderer* renderer,int dialouge_id){
     SDL_Rect box;
     box.x = 50;
     box.y = 50;
@@ -56,18 +51,7 @@ void renderDialouge(DialougeManager manager,TextureManager texture_manager,SDL_R
     box.h = 200;
     SDL_Color white = {255,255,255,255};
     drawDialougeBox(renderer);
-    Node current = getHead(manager->dialouges);
-    if(!current) return;
-    for(int i = 0;i < getListSize(manager->dialouges);i++){
-        DIALOUGE tmp = getNodeData(current);
-        if(getDialougeKind(tmp) == dialouge_kind){
-            int* labels = getDialougeLabels(tmp);
-            int height = box.h / (getLabelsSize(tmp)+1);
-            for(int j = 0; j < getLabelsSize(tmp);j++){
-                drawText(texture_manager,labels[j],box.x + 5,box.y + 5 + j*height,box.w - 5,height,white,renderer);
-            }
-        }
-    }
+    // Here draw text
 
 }
 
@@ -75,6 +59,11 @@ void sendDialouge(int dialouge_id){
 }
 
 void destroyDialogeManager(DialougeManager manager){
-    listDestroy(manager->dialouges);
-    free(manager);
+  if(manager->dialouges){
+     for(int i = 0; i < manager->size;i++){
+        destroyDialouge(manager->dialouges[i]);
+      }  
+  }
+   
+  free(manager);
 }
