@@ -1,6 +1,14 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include "stdint.h"
+#include "stdbool.h"
+
+
+#define KILOBYTES(x) (x * 1024)
+#define MEGABYTES(x) ((KILOBYTES(x)) * 1024)
+#define GIGABYTES(x) ((MEGABYTES(x)) * 1024)
+
 #define SCREEN_HEIGHT 600
 #define SCREEN_WIDTH 800
 #define MAX_WORLD_COLS 50
@@ -14,10 +22,9 @@
 #define global_var static
 
 //typedef's
-typedef uint8_t Int8;
+typedef uint8_t  u8;
+typedef uint32_t u32;
 
-
-#include "stdbool.h"
 
 
 #endif

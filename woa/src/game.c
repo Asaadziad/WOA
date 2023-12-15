@@ -44,7 +44,7 @@ struct game_window {
 struct game_t {
     Player*    players;
     GameState  state;
-    Int8       handeled_event;
+    u8       handeled_event;
     int*       map;
     Managers   managers;
     Window     window;
@@ -91,6 +91,11 @@ Renderer getRenderer(Game game){
    return ((game) && (game->window)) ? game->window->renderer : NULL;
 }
 
+GameState getCurrentState(Game game){
+  if(!game) return 0;
+  return game->state;
+}
+
 /*
  *  We save this for now in a global variable
  *  later it will be saved in outside source / like a file
@@ -135,6 +140,15 @@ void loadTextures(Game game){
     setupDialouges(game->managers->dialouge_manager,NULL);
     setupTiles(game->managers->tile_manager,"world.txt");
 }
+
+void loadGameFont(Game game,const char* font_file_path,int size){
+    game->window->global_font = TTF_OpenFont(font_file_path,size);
+    if(!game->window->global_font){
+        fprintf(stderr,"Couldn't initiate Font: %s",TTF_GetError());
+    }
+}
+
+
 
 static void handleKey(Game game,SDL_Keycode code){
     Player asaad = game->players[0];

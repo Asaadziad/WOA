@@ -3,15 +3,14 @@
 #include "SDL2/SDL_ttf.h"
 
 #include "game.h"
-#include "logic.h"
 #include "timer.h"
+#include "common.h"
 
 internal void initSDL(SDL_Window** window, SDL_Renderer** renderer);
 internal void quitSDL(SDL_Window** window);
 
 int main(){
     
-
     const int SCREEN_FPS = 60;
     const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
@@ -21,11 +20,8 @@ int main(){
     if(!game){
         exit(1);
     }
-    initSDL(&window,&game->window->renderer);
-    game->window->global_font = TTF_OpenFont("./AlbertText-Bold.ttf",28);
-    if(!game->window->global_font){
-        fprintf(stderr,"Couldn't initiate Font: %s",TTF_GetError());
-    }
+    initSDL(&window,(getRenderer(game)));
+    loadGameFont(game,"./AlbertText-Bold.ttf",28);
     loadTextures(game);
     initEntities(game);
     
@@ -33,7 +29,7 @@ int main(){
 
     SDL_Event event;
     while(IS_RUNNING(game)){
-        uint32_t cap_time = SDL_GetTicks();
+        u32 cap_time = SDL_GetTicks();
         /*
         * This function keeps listening to events and handles it accordinlgy
         */
@@ -64,7 +60,7 @@ int main(){
 
 /*  STATIC FUNCTIONS  IMPLEMENTATION  */
 
-static void initSDL(SDL_Window** window, SDL_Renderer** renderer){
+static void initSDL(SDL_Window** window, SDL_Renderer* renderer){
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
         fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(1);
@@ -74,8 +70,8 @@ static void initSDL(SDL_Window** window, SDL_Renderer** renderer){
         fprintf(stderr,"Could'nt initiate window: %s \n", SDL_GetError());
         exit(1);
     }
-    *renderer = SDL_CreateRenderer(*window,-1 ,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if(!(*renderer)) {
+    SDL_Renderer* r = SDL_CreateRenderer(*window,-1 ,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if(!r) {
         fprintf(stderr,"Could'nt initiate renderer: %s \n", SDL_GetError());
         exit(1);
     }

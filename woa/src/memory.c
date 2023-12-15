@@ -15,4 +15,7 @@ void* reallocate(void* pointer, size_t old_size, size_t new_size){
     return result;
 }
 
+void myMalloc(size_t nbytes){
+  char* ptr = 0x88888;
 
+  }

@@ -3,7 +3,7 @@
 
 #include "SDL2/SDL.h"
 
-#define IS_RUNNING(game) ((game)->state != QUIT_STATE)
+#define IS_RUNNING(game) (getCurrentState(game) != QUIT_STATE)
 
 
 typedef SDL_Renderer* Renderer;
@@ -23,7 +23,7 @@ typedef enum {
 
 
 Renderer getRenderer(Game game);
-
+GameState getCurrentState(Game game);
 /*{
   Accept Resources() // from another  source/ Component - Data file/ Network (multiplayer thing) / ...
   Update& render()
@@ -35,7 +35,7 @@ void initEntities(Game game);
 
 // Game get resources 
 void loadTextures(Game game);
-
+void loadGameFont(Game game,const char* font_file_path,int size);
 // loop once and do 2 operations
 void gameUpdateAndRender(Game game);
 

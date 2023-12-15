@@ -3,7 +3,7 @@
 #include "DS/list.h"
 #include "texture.h"
 
-struct texturem_t{
+struct texturem_t {
     List textures;
     List labels;
 };
