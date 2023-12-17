@@ -4,10 +4,11 @@
 #include "string.h"
 
 
+#define START_SIZE 8
+
 typedef struct token {
   char* key;
   char* lValue;
-  int nValue;
 } *Token;
 
 struct json_obj {
@@ -19,29 +20,38 @@ struct json_obj {
 /*
  *  Creates an empty Json object
  * */
-JSONObject createJsonObj(){
+static JSONObject createJsonObj(){
   JSONObject j = (JSONObject)malloc(sizeof(*j));
   if(!j) {
     fprintf(stderr, "Couldn't create json object");
     return NULL;
   }
+  Token* ta = (Token*)malloc(sizeof(Token) * START_SIZE);
+  if(!ta) {
+    fprintf(stderr, "Couldn't create token array");
+    return NULL;
+  }
   j->size = 0;
-  j->tokens = NULL;
+  j->tokens = ta;
   return j;
 }
 
-Token tokenize(char* line){
+static Token tokenize(char* line){
   Token t = (Token)malloc(sizeof(*t));
   if(!t) return NULL;
   char* token = strtok(line, ":");
-  t->key = NULL;
-  t->lValue = NULL;
-  t->nValue = 0;
+    
+  t->key = token;
+  token = strtok(NULL,":");
+  t->lValue = token;
+  fprintf(stderr,"%s - %s",t->key,t->lValue);
+ 
+  
   return t;
 }
 
 
-char* strip_from_white_spaces(char* string) {
+static char* strip_from_white_spaces(char* string) {
   char* s_string = NULL;
   char* start_ptr = string;
   char *current = string;
@@ -78,27 +88,39 @@ JSONObject* parse(const char* file_path){
   char* buffer = NULL;
   size_t len = 0;
  
-  JSONObject* objects = NULL;
-
+  JSONObject* objects = (JSONObject*)malloc(sizeof(JSONObject) * START_SIZE);
+  if(!objects) return NULL;
+  int i = 0;
   while(getline(&buffer, &len,file ) != -1){
     //TODO:: if we read an object opener ( { ) : create json  
- /*   JSONObject obj = createJsonObj();
-    if(!obj) continue;
-    while(!strcmp(buffer, "}")){
-       obj->tokens[obj->size] = tokenize(buffer);    
-       obj->size++;
-       //TODO:: read next line
-    }
-*/
-    printf("%s",strip_from_white_spaces(buffer));
-    //TODO:: add obj to an array of JSon objects
-    }
+
+   char* stripped_line = strip_from_white_spaces(buffer);
+   if(strstr(stripped_line, "{")){
+         JSONObject obj = createJsonObj();
+         if(!obj) continue;
+         while(!strstr(stripped_line, "}")){
+            free(stripped_line);
+            getline(&buffer, &len,file); 
+            stripped_line = strip_from_white_spaces(buffer); 
+ 
+            if(strstr(stripped_line, "}")) break; 
+            obj->tokens[obj->size] = tokenize(stripped_line);    
+            obj->size++;                    
+         }
+         objects[i] = obj;
+         i++; 
+
+    } 
+           //TODO:: add obj to an array of JSon objects
+    
+  }
 
   fclose(file);
   if(buffer) free(buffer);
   return objects;
 }
  int main(){
-  parse("../data/dialouges.json");
- return 0;
+  JSONObject* objects = parse("../data/dialouges.json");
+  fprintf(stderr,"%d",objects[1]->size);
+  return 0;
  }
