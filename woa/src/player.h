@@ -35,7 +35,6 @@ typedef struct player_t {
     bool canMoveUp;
     bool canMoveDown;
     bool isInDialouge;
-    DialougeKind current_dialouge;
     bool isInInventory;
     ObjectType* inventory_objects;
     int current_slot;

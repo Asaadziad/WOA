@@ -6,7 +6,7 @@ struct component_t {
     int screenY;
     int width;
     int height;
-    TexType texture_type;
+//    TexType texture_type;
     ComponentType type;
     bool isHoverable;
     bool isInteractable;    
@@ -27,7 +27,7 @@ COMPONENT createComponent(int x,int y,int width,int height,ComponentType type,bo
 }
 
 void componentDraw(TextureManager manager,COMPONENT c,SDL_Renderer* renderer){
-    draw(manager,c->texture_type,c->screenX,c->screenY,c->width,c->height,renderer,SDL_FLIP_NONE);
+    //draw(manager,c->texture_type,c->screenX,c->screenY,c->width,c->height,renderer,SDL_FLIP_NONE);
 }
 
 bool componentsCompare(COMPONENT c1,COMPONENT c2){

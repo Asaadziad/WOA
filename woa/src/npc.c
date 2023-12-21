@@ -60,14 +60,14 @@ void drawNPC(TextureManager manager,SDL_Renderer* renderer,NPC npc,SDL_Rect came
     drawRect(npc->x - camera.x,npc->y - camera.y - 20,10,npc->width,(SDL_Color){0,255,0},true,((float)npc->hp/100)*npc->width,renderer);
 
     if(npc->direction == NPC_WEST){
-        drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,2,npc->current_frame,renderer,SDL_FLIP_HORIZONTAL);
+      //  drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,2,npc->current_frame,renderer,SDL_FLIP_HORIZONTAL);
 
     } else if(npc->direction == NPC_EAST) {
-        drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,2,npc->current_frame,renderer,SDL_FLIP_NONE);
+//        drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,2,npc->current_frame,renderer,SDL_FLIP_NONE);
     } else if(npc->direction == NPC_NORTH){
-        drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,3,npc->current_frame,renderer,SDL_FLIP_NONE);
+  //      drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,3,npc->current_frame,renderer,SDL_FLIP_NONE);
     } else if(npc->direction == NPC_SOUTH){
-        drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,npc->current_frame,renderer,SDL_FLIP_NONE);
+    //    drawFrame(manager,NPC_TEXTURE,npc->x - camera.x,npc->y - camera.y,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,npc->current_frame,renderer,SDL_FLIP_NONE);
 
     }
 }

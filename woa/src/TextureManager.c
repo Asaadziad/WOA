@@ -4,6 +4,8 @@
 #include "texture.h"
 
 struct texturem_t {
+    Texture* textures_arr;
+    Texture* labels_arr;
     List textures;
     List labels;
 };
@@ -12,11 +14,11 @@ static void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
 }
 
-static Texture loopAndFindTexture(TextureManager manager,TexType type){
+static Texture loopAndFindTexture(TextureManager manager,int id){
     Node current = getHead(manager->textures);
     while(current != NULL){
         Texture tmp = getNodeData(current);
-        if(tmp->type == type){
+        if(getTextureId(tmp) == id){
             return tmp;
         }
         current = getNextNode(current);
@@ -33,10 +35,10 @@ TextureManager textureManagerInit(){
     return manager;
 }
 
-void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,TexType texture_type){
-    Texture new_t = loadTextureFromFile(renderer,file_name,texture_type);
+void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,int id){
+    Texture new_t = loadTextureFromFile(renderer,file_name,id);
     if(!new_t) {exit(1);}
-    new_t->label_id = getListSize(manager->textures);
+    //new_t->label_id = getListSize(manager->textures);
     listInsert(manager->textures,new_t);
 }
 
@@ -50,15 +52,15 @@ void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, cons
         fprintf(stderr,"Could'nt create texture");
         return;
     }
-    font_texture->label_id = getListSize(manager->labels);
+    //font_texture->label_id = getListSize(manager->labels);
     listInsert(manager->labels,font_texture);
 }
 
-void draw(TextureManager manager,TexType texture_type,int x,int y,
+void draw(TextureManager manager,int id,int x,int y,
             int width, int height, SDL_Renderer* renderer,
             SDL_RendererFlip flip){
 
-    Texture to_render = loopAndFindTexture(manager,texture_type);
+    Texture to_render = loopAndFindTexture(manager, id);
     if(!to_render) return;
     
     SDL_Rect src;
@@ -70,14 +72,14 @@ void draw(TextureManager manager,TexType texture_type,int x,int y,
     dst.x = x;
     dst.y = y;
 
-    SDL_RenderCopyEx(renderer,to_render->texture,&src,&dst,0,0,flip);
+    SDL_RenderCopyEx(renderer,getTexturePtr(to_render),&src,&dst,0,0,flip);
 }
 
-void drawFrame(TextureManager manager,TexType texture_type,int x,int y,int frame_width,
+void drawFrame(TextureManager manager,int id,int x,int y,int frame_width,
             int frame_height,int render_width,int render_height,int current_row,int current_frame,
             SDL_Renderer* renderer, SDL_RendererFlip flip){
 
-    Texture to_render = loopAndFindTexture(manager,texture_type);
+    Texture to_render = loopAndFindTexture(manager,id);
     if(!to_render) return;
     
     SDL_Rect src;
@@ -91,7 +93,11 @@ void drawFrame(TextureManager manager,TexType texture_type,int x,int y,int frame
     dst.x = x;
     dst.y = y;
 
-    SDL_RenderCopyEx(renderer,to_render->texture,&src,&dst,0,0,flip);
+    SDL_RenderCopyEx(renderer,
+       getTexturePtr(to_render),
+       &src, &dst,
+       0,0, 
+       flip);
 }
 
 void drawText(TextureManager manager,int label_id,int x,int y,
@@ -101,26 +107,29 @@ void drawText(TextureManager manager,int label_id,int x,int y,
         while (current != NULL)
         {
             Texture tmp = getNodeData(current);
-            if(tmp->label_id == label_id){
+            if(getTextureLabelId(tmp) == label_id){
                 SDL_Rect src;
                 SDL_Rect dst;
                 src.x = 0;
                 src.y = 0;
-                src.h = tmp->height;
-                src.w = tmp->width; 
+                src.h = getTextureHeight(tmp);
+                src.w = getTextureWidth(tmp); 
                 dst.w = width;
                 dst.h = height;
                 dst.x = x;
                 dst.y = y;
-                SDL_RenderCopy(renderer,tmp->texture,&src, &dst);
+                SDL_RenderCopy(renderer, 
+                    getTexturePtr(tmp), 
+                    &src, 
+                    &dst);
             }
             current = getNextNode(current);
         }
                 
 }
 
-void drawSprite(TextureManager manager, TexType texture_type,int x,int y, int width,int height, int sprite_x,int sprite_y,SDL_Renderer* renderer){
-    Texture to_render = loopAndFindTexture(manager,texture_type);
+void drawSprite(TextureManager manager, int id,int x,int y, int width,int height, int sprite_x,int sprite_y,SDL_Renderer* renderer){
+    Texture to_render = loopAndFindTexture(manager,id);
     if(!to_render) return;
     
     SDL_Rect src;
@@ -132,7 +141,10 @@ void drawSprite(TextureManager manager, TexType texture_type,int x,int y, int wi
     dst.x = x;
     dst.y = y;
 
-    SDL_RenderCopy(renderer,to_render->texture,&src,&dst);
+    SDL_RenderCopy(renderer, 
+                  getTexturePtr(to_render), 
+                  &src, 
+                  &dst);
 }
 
 void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float fill_width,SDL_Renderer* renderer){

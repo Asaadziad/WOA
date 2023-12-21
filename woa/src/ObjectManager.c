@@ -148,8 +148,7 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
             switch(objectGetType(tmp)){
                 case SWORD_OBJECT:
                     p->isInDialouge = true;
-                    p->current_dialouge = SWORD_DIALOUGE;
-                break;
+                    break;
                 default: break;
             }
         }

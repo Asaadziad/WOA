@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "SDL2/SDL.h"
-
+#include "SDL2/SDL_ttf.h"
 #define IS_RUNNING(game) (getCurrentState(game) != QUIT_STATE)
 
 
@@ -21,8 +21,10 @@ typedef enum {
 } GameState;
 
 
-
+void setRenderer(Game game,SDL_Renderer* renderer);
 Renderer getRenderer(Game game);
+TTF_Font* getGlobalFont(Game game);
+
 GameState getCurrentState(Game game);
 /*{
   Accept Resources() // from another  source/ Component - Data file/ Network (multiplayer thing) / ...

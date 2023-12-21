@@ -6,17 +6,20 @@
 
 #define START_SIZE 8
 
-typedef struct token {
+struct token {
   char* key;
   char* lValue;
-} *Token;
+};
 
 struct json_obj {
     int    size; // num of tokens
     Token* tokens;
 };
 
-
+struct json_obj_arr {
+  size_t size;
+  JSONObject* array;
+};
 /*
  *  Creates an empty Json object
  * */
@@ -82,12 +85,16 @@ static char* strip_from_white_spaces(char* string) {
 }
 
 
-JSONObject* parse(const char* file_path){
+JSONObjectsArr parse(const char* file_path){
   FILE* file = fopen(file_path, "r");
   
   char* buffer = NULL;
   size_t len = 0;
- 
+  JSONObjectsArr arr = (JSONObjectsArr)malloc(sizeof(*arr));
+ if(!arr) {
+ fprintf(stderr, "Couldn't allocate JSON array");
+ return NULL;
+ } 
   JSONObject* objects = (JSONObject*)malloc(sizeof(JSONObject) * START_SIZE);
   if(!objects) return NULL;
   int i = 0;
@@ -114,10 +121,11 @@ JSONObject* parse(const char* file_path){
            //TODO:: add obj to an array of JSon objects
     
   }
-
+  arr->size = i+1;
+  arr->array = objects;
   fclose(file);
   if(buffer) free(buffer);
-  return objects;
+  return arr;
 }
  int main(){
   JSONObject* objects = parse("../data/dialouges.json");

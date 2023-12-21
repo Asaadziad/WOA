@@ -6,7 +6,7 @@
 #include "timer.h"
 #include "common.h"
 
-internal void initSDL(SDL_Window** window, SDL_Renderer** renderer);
+internal void initSDL(SDL_Window** window, Game game);
 internal void quitSDL(SDL_Window** window);
 
 int main(){
@@ -20,7 +20,8 @@ int main(){
     if(!game){
         exit(1);
     }
-    initSDL(&window,(getRenderer(game)));
+
+    initSDL(&window, game);
     loadGameFont(game,"./AlbertText-Bold.ttf",28);
     loadTextures(game);
     initEntities(game);
@@ -60,7 +61,7 @@ int main(){
 
 /*  STATIC FUNCTIONS  IMPLEMENTATION  */
 
-static void initSDL(SDL_Window** window, SDL_Renderer* renderer){
+static void initSDL(SDL_Window** window, Game game){
     if(SDL_Init(SDL_INIT_VIDEO) < 0){
         fprintf(stderr,"Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(1);
@@ -75,7 +76,7 @@ static void initSDL(SDL_Window** window, SDL_Renderer* renderer){
         fprintf(stderr,"Could'nt initiate renderer: %s \n", SDL_GetError());
         exit(1);
     }
-    
+    setRenderer(game, r);
     //Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
     if( !( IMG_Init( imgFlags ) & imgFlags ) ){

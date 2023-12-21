@@ -87,9 +87,17 @@ Game initGame(){
     return new_g;
 }
 
+void setRenderer(Game game,SDL_Renderer* renderer){
+  game->window->renderer = renderer;
+}
+
 Renderer getRenderer(Game game){
    return ((game) && (game->window)) ? game->window->renderer : NULL;
 }
+TTF_Font* getGlobalFont(Game game){
+  return ((game) && (game->window)) ? game->window->global_font : NULL;
+}
+
 
 GameState getCurrentState(Game game){
   if(!game) return 0;
@@ -114,12 +122,14 @@ internal
 void loadManagerResources(struct game_managers* managers,SDL_Renderer* renderer){
 #define textures_count 6
   for(int i = 0; i < textures_count;i++){
-     qmanagers->texture_manager,renderer,textures[i],PLAYER_TEXTURE);
+     managers->texture_manager,renderer,textures[i],PLAYER_TEXTURE);
 
   }
 }
 */
 void loadTextures(Game game){
+  
+  load(game->managers->texture_manager, getRenderer(game),"res/walls.png", 0);
   setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
   setupTiles(game->managers->tile_manager,"world.txt");
 }
@@ -168,7 +178,7 @@ static void handleKey(Game game,SDL_Keycode code){
             }
         break;
         case SDLK_SPACE:
-            
+           game->state = RUNNING_STATE; 
         break;
         default:
         break;
@@ -250,9 +260,9 @@ static void renderUI(Game game){
     //fprintf(stderr,"MOUSE-MOTION-X: %d MOUSE-MOTION-Y: %d\n",game->mouse_x,game->mouse_y);
     if(mouseInRect(game,dst)){
         
-        drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,1,getRenderer(game),SDL_FLIP_NONE);
+        //drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,1,getRenderer(game),SDL_FLIP_NONE);
     } else {
-        drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,getRenderer(game),SDL_FLIP_NONE);
+        //drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,getRenderer(game),SDL_FLIP_NONE);
     }
     drawHP(game->managers->texture_manager,getRenderer(game),game->players[0]->hp);
 }
@@ -265,8 +275,8 @@ static void renderInventory(Game game){
     box.y = 100;
     drawRect(box.x,box.y,box.h,box.w,(SDL_Color){0,0,0,0},false,box.w,getRenderer(game));
     for(int i = 0; i < game->players[0]->current_slot;i++){
-        OBJECT tmp = findObject(game->managers->object_manager,game->players[0]->inventory_objects[i]);
-        drawFrame(game->managers->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,1,getObjectFrame(tmp),getRenderer(game),SDL_FLIP_NONE);
+       // OBJECT tmp = findObject(game->managers->object_manager,game->players[0]->inventory_objects[i]);
+        //drawFrame(game->managers->texture_manager,WEAPONS_TEXTURE,box.x + 10,box.y + 10,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,1,getObjectFrame(tmp),getRenderer(game),SDL_FLIP_NONE);
     }
 }
 
@@ -298,7 +308,7 @@ void initRendering(Game game){
         renderObjects(game->managers->object_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
         renderUI(game);
         if(game->players[0]->isInDialouge){
-            renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,getRenderer(game),game->players[0]->current_dialouge);
+           // renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,getRenderer(game),game->players[0]->current_dialouge);
         }
         if(game->players[0]->isInInventory){
             //draw the inventory

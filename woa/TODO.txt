@@ -1,0 +1,9 @@
+Todos:
+1. Refactor Texture rendering
+2. clean game.c and main.c
+
+
+Done: 
+ - NONE -
+
+

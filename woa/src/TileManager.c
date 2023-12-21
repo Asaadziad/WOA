@@ -72,6 +72,7 @@ static void loadTilesMap(TileManger manager,const char* map_path){
 void setupTiles(TileManger manager,const char* file_path){
     //manager->tiles[0][0] = createTile(0,0,EARTH_TILE);
     loadTilesMap(manager,"world.txt");
+    fprintf(stderr, "hgello?");
 }
 
 void renderTiles(TileManger manager,TextureManager texture_manager,SDL_Renderer* renderer,SDL_Rect camera){
@@ -86,7 +87,7 @@ void renderTiles(TileManger manager,TextureManager texture_manager,SDL_Renderer*
 
             int current_frame = getTileType(tile);
             //fprintf(stderr,"%d - %d\n",current_row,current_frame);
-            drawFrame(texture_manager,TILE_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,current_frame,renderer,SDL_FLIP_NONE);
+            drawFrame(texture_manager,0,screenX,screenY,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,current_frame,renderer,SDL_FLIP_NONE);
 
 
         }

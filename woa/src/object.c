@@ -31,10 +31,12 @@ void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rec
     int screenY = obj->src.y - camera.y;
     switch(obj->type){
         case TREE_OBJECT:
-            drawFrame(manager,TREE_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_HEIGHT,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
+
+      //TODO:: add better drawing to screen    
+      //            drawFrame(manager,TREE_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_HEIGHT,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
         break;
         case SWORD_OBJECT:
-            drawFrame(manager,WEAPONS_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_HEIGHT,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
+           // drawFrame(manager,WEAPONS_TEXTURE,screenX,screenY,TILE_WIDTH,TILE_HEIGHT,obj->src.w,obj->src.h,1,0,renderer,SDL_FLIP_NONE);
         break;
         default:break;
     }

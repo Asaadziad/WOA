@@ -6,30 +6,19 @@
 
 #include "vector.h"
 
-/*
-* Need to find better solution for this.. but for now lets stick with it
-*/
-typedef enum {
-    PLAYER_TEXTURE,
-    LABEL_TEXTURE,
-    TILE_TEXTURE,
-    UI_INVENTORY_TEXTURE,
-    TREE_TEXTURE,
-    NPC_TEXTURE,
-    WEAPONS_TEXTURE,
-} TexType;
 
-typedef struct texture_t{
-    int height;
-    int width;
-    Vector2f render_pos;
-    SDL_Texture* texture;
-    TexType type;
-    int label_id;
-} *Texture;
+typedef struct texture_t* Texture;
 
-Texture initTexture(int render_x,int render_y,TexType type);
-Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,TexType type);
+int getTextureId(Texture t);
+int getTextureLabelId(Texture t);
+int getTextureHeight(Texture t);
+int getTextureWidth(Texture t);
+SDL_Texture* getTexturePtr(Texture t);
+
+
+
+Texture initTexture(int render_x,int render_y,int id);
+Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id);
 Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color);
 
 
