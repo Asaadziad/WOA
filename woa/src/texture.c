@@ -1,6 +1,9 @@
 #include "texture.h"
 #include "string.h"
-#include "logger.h"
+#include "vector.h"
+
+#include "SDL2/SDL_ttf.h"
+
 
 struct texture_t {
     int height;
@@ -10,6 +13,27 @@ struct texture_t {
     int id;    
     int label_id;
 };
+
+void setTexturePtr(Texture t, SDL_Texture* t_ptr) {
+  t->texture = t_ptr;
+}
+
+void setTextureId(Texture t, int id){
+  t->id = id;
+}
+
+void setTextureLabelId(Texture t, int label_id){
+  t->label_id = label_id;
+}
+
+
+void setTextureHeight(Texture t, int height){
+  t->height = height;
+}
+
+void setTextureWidth(Texture t, int width) {
+  t->width = width;
+}
 
 int getTextureId(Texture t){
   return t->id;
@@ -31,8 +55,6 @@ SDL_Texture* getTexturePtr(Texture t){
   return t->texture;
 }
 
-
-
 Texture initTexture(int render_x,int render_y,int texture_id){
     
     Texture new_texture = (Texture)malloc(sizeof(*new_texture));
@@ -45,58 +67,6 @@ Texture initTexture(int render_x,int render_y,int texture_id){
     new_texture->id = texture_id;
     new_texture->label_id = -1;
     return new_texture;
-}
-
-Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id){
-    SDL_Texture* texture;
-
-    SDL_Surface* surface = IMG_Load(path);
-    if(!surface) {
-        ERR("Couldn't load file");
-        return NULL;
-    }
-
-    texture = SDL_CreateTextureFromSurface( renderer, surface );
-    if(!texture) {
-        ERR("Couldn't create texture");
-        return NULL;
-    }
-    Texture t = initTexture(0,0,id);
-    if(!t) return NULL;
-    t->texture = texture;
-    t->height = surface->h;
-    t->width = surface->w;
-    
-    SDL_FreeSurface( surface );
-
-    return t;
-}
-
-Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color){
-    SDL_Texture* label;
-
-    SDL_Color black = {0,0,0,0};
-    SDL_Surface* surface;
-    if(color){
-        surface = TTF_RenderText_Solid(font,text,*color);
-    } else {
-        surface = TTF_RenderText_Solid(font,text,black);
-    }
-    if(!surface) return NULL;
-
-    label = SDL_CreateTextureFromSurface(renderer , surface );
-
-    Texture texture = initTexture(0,0,1);
-    if(!texture) {
-        SDL_FreeSurface( surface );
-        return NULL;
-    }
-    texture->texture = label;
-    texture->height = surface->h;
-    texture->width = surface->w;
-    SDL_FreeSurface( surface );
-
-    return texture;
 }
 
 void freeTexture(Texture texture){

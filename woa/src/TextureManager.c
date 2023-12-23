@@ -2,10 +2,14 @@
 
 #include "DS/list.h"
 #include "texture.h"
+#include "common.h"
+#include "logger.h"
 
 struct texturem_t {
     Texture* textures_arr;
+    int textures_top;
     Texture* labels_arr;
+    int labels_top;
     List textures;
     List labels;
 };
@@ -35,26 +39,74 @@ TextureManager textureManagerInit(){
     return manager;
 }
 
-void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,int id){
-    Texture new_t = loadTextureFromFile(renderer,file_name,id);
-    if(!new_t) {exit(1);}
-    //new_t->label_id = getListSize(manager->textures);
-    listInsert(manager->textures,new_t);
+static 
+int loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id){
+    SDL_Texture* texture;
+
+    SDL_Surface* surface = IMG_Load(path);
+    if(!surface) {
+        ERR("Couldn't load file");
+        return -1;
+    }
+
+    texture = SDL_CreateTextureFromSurface( renderer, surface );
+    if(!texture) {
+        ERR("Couldn't create texture");
+        return -1;
+    }
+    Texture t = initTexture(0,0,id);
+    if(!t) return -1;
+    setTexturePtr(t, texture);
+    setTextureHeight(t, surface->h);
+    setTextureWidth(t, surface->w);
+    
+    SDL_FreeSurface( surface );
+
+    return getTextureId(t);
 }
 
-void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color){
-    SDL_Color* c = NULL;
+static
+int loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color){
+    SDL_Texture* label;
+
+    SDL_Color black = {0,0,0,0};
+    SDL_Surface* surface;
     if(color){
-        c = color;
+        surface = TTF_RenderText_Solid(font,text,*color);
+    } else {
+        surface = TTF_RenderText_Solid(font,text,black);
     }
-    Texture font_texture = loadTextureFromText(renderer,font,text,c);
-    if(!font_texture) {
-        fprintf(stderr,"Could'nt create texture");
-        return;
+    if(!surface) return -1;
+
+    label = SDL_CreateTextureFromSurface(renderer , surface );
+
+    Texture texture = initTexture(0,0,0);
+    if(!texture) {
+        SDL_FreeSurface( surface );
+        return -1;
     }
-    //font_texture->label_id = getListSize(manager->labels);
-    listInsert(manager->labels,font_texture);
+    setTexturePtr(texture, label);
+    setTextureHeight( texture, surface->h);
+    setTextureWidth( texture, surface->w);
+    SDL_FreeSurface( surface );
+
+    return getTextureId(texture);
 }
+
+// TODO:: load shall return the id of the texture.
+int load(TextureManager manager,SDL_Renderer* renderer,const char* file_name){
+    int new_t_id = loadTextureFromFile(renderer,file_name, manager->textures_top++);
+    if(new_t_id == -1) {
+      ERR("Couldn't load texture");
+      manager->textures_top--;
+    }
+    
+    //TODO:: convert from list to array
+    //listInsert(manager->textures,new_t);
+    return new_t_id;
+}
+
+void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color){}
 
 void draw(TextureManager manager,int id,int x,int y,
             int width, int height, SDL_Renderer* renderer,

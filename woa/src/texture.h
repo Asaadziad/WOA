@@ -2,28 +2,24 @@
 #define TEXTURE_H
 
 #include "SDL2/SDL_image.h"
-#include "SDL2/SDL_ttf.h"
-
-#include "vector.h"
-
 
 typedef struct texture_t* Texture;
 
+// setters
+void setTextureId(Texture t, int id);
+void setTextureLabelId(Texture t, int label_id);
+void setTexturePtr(Texture t, SDL_Texture* t_ptr);
+void setTextureHeight(Texture t, int height);
+void setTextureWidth(Texture t, int width);
+
+// getters
 int getTextureId(Texture t);
 int getTextureLabelId(Texture t);
 int getTextureHeight(Texture t);
 int getTextureWidth(Texture t);
 SDL_Texture* getTexturePtr(Texture t);
 
-
-
 Texture initTexture(int render_x,int render_y,int id);
-Texture loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id);
-Texture loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color);
-
-
 void freeTexture(Texture texture);
-
-
 
 #endif

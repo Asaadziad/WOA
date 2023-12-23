@@ -104,12 +104,9 @@ GameState getCurrentState(Game game){
   return game->state;
 }
 
-/*
- *  We save this for now in a global variable
- *  later it will be saved in outside source / like a file
- */
-/*global_var 
-char*** textures[6] = {
+internal 
+void loadManagerResources(struct game_managers* managers,SDL_Renderer* renderer){
+char* textures_res[6] = {
   "res/character.png",
   "res/walls.png",
   "res/uisheet.png",
@@ -118,18 +115,15 @@ char*** textures[6] = {
   "res/weapons.png"
 };
 
-internal 
-void loadManagerResources(struct game_managers* managers,SDL_Renderer* renderer){
-#define textures_count 6
+const int textures_count = 6;
   for(int i = 0; i < textures_count;i++){
-     managers->texture_manager,renderer,textures[i],PLAYER_TEXTURE);
+    load(managers->texture_manager,renderer,textures_res[i]);
 
   }
 }
-*/
+
 void loadTextures(Game game){
-  
-  load(game->managers->texture_manager, getRenderer(game),"res/walls.png", 0);
+  loadManagerResources(game->managers, getRenderer(game));
   setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
   setupTiles(game->managers->tile_manager,"world.txt");
 }

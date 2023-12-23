@@ -5,6 +5,17 @@ I've always loved games and found that game programming resembles the foundation
 
 Note (9/12/2023) : After playing with SDL a little bit i've decided to lower the layer and play with something that requires more research and more in depth studying so i am going to make a platform layer for Linux using X11 then maybe in the future (not sure when yet) i will make a Windows platform layer too! :)
 
+# Game info
+
+Generated with [Game idea generator](https://letsmakeagame.net/game-idea-generator/)
+
+Genre: Real-Time Strategy x Souls-like
+
+Rule: Inconvenient Superpowers
+
+Setting: Steampunk
+
+Theme :Power and Corruption
 
 # Get Started
 

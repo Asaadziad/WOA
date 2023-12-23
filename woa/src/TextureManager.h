@@ -10,8 +10,20 @@ typedef struct texturem_t* TextureManager;
 TextureManager textureManagerInit();
 void destroyTextureManager(TextureManager manager);
 
-void load(TextureManager manager,SDL_Renderer* renderer,const char* file_name,int id);
+
+/* Loading functions */
+
+/*
+ * args   :  manager   - struct (TextureManager)
+ *          renderer   - the game renderer (current: SDL_Renderer)
+ *          file_name  - string
+ * return : texture id - int       
+ * */
+int load(TextureManager manager,SDL_Renderer* renderer,const char* file_name);
+//TODO:: loading text shall take as args only text and color
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color);
+
+/* Drawing functions  */
 void draw(TextureManager manager,int id,int x,int y,int width, int height, SDL_Renderer* renderer, SDL_RendererFlip flip);
 void drawFrame(TextureManager manager,int id,int x,int y,int frame_width, int frame_height,int render_width,int render_height,int current_row,int current_frame, SDL_Renderer* renderer, SDL_RendererFlip flip);
 void drawText(TextureManager manager,int label_id,int x,int y,
