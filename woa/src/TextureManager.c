@@ -14,11 +14,11 @@ struct texturem_t {
     List labels;
 };
 
-static void freeTexturePtr(void* elem){
+internal void freeTexturePtr(void* elem){
     freeTexture((Texture)elem);
 }
 
-static Texture loopAndFindTexture(TextureManager manager,int id){
+internal Texture loopAndFindTexture(TextureManager manager,int id){
     Node current = getHead(manager->textures);
     while(current != NULL){
         Texture tmp = getNodeData(current);
@@ -39,7 +39,7 @@ TextureManager textureManagerInit(){
     return manager;
 }
 
-static 
+internal
 int loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id){
     SDL_Texture* texture;
 
@@ -65,7 +65,7 @@ int loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id){
     return getTextureId(t);
 }
 
-static
+internal
 int loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color){
     SDL_Texture* label;
 
