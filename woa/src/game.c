@@ -75,7 +75,6 @@ Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
     new_g->state = MENU_STATE;
-    new_g->handeled_event = 0;
     new_g->managers = malloc(sizeof(*new_g->managers));
     new_g->window = malloc(sizeof(*new_g->window));
     if(!new_g->window || !new_g->managers){
@@ -87,7 +86,7 @@ Game initGame(){
     return new_g;
 }
 
-void setRenderer(Game game,SDL_Renderer* renderer){
+void setRenderer(Game game,Renderer renderer){
   game->window->renderer = renderer;
 }
 
@@ -105,7 +104,7 @@ GameState getCurrentState(Game game){
 }
 
 internal 
-void loadManagerResources(struct game_managers* managers,SDL_Renderer* renderer){
+void loadManagerResources(struct game_managers* managers,Renderer renderer){
 char* textures_res[6] = {
   "res/character.png",
   "res/walls.png",
@@ -115,7 +114,7 @@ char* textures_res[6] = {
   "res/weapons.png"
 };
 
-const int textures_count = 6;
+  const int textures_count = 6;
   for(int i = 0; i < textures_count;i++){
     load(managers->texture_manager,renderer,textures_res[i]);
 
