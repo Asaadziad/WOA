@@ -1,15 +1,15 @@
 #include "stdlib.h"
 
-#include "DS/queue.h"
+#include "../headers/queue.h"
 
-#include "taskManager.h"
-#include "task.h"
+#include "../headers/taskManager.h"
+#include "../headers/task.h"
 #include "stdint.h"
-#include "logger.h"
+#include "../headers/logger.h"
 #include "stdio.h"
-#include "Player/playerWalk.h"
-#include "player.h"
-#include "Player/playerFishing.h"
+#include "../headers/playerWalk.h"
+#include "../headers/player.h"
+#include "../headers/playerFishing.h"
 
 struct tmanager_t
 {

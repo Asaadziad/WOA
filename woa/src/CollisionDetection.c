@@ -1,4 +1,4 @@
-#include "CollisionDetection.h"
+#include "../headers/CollisionDetection.h"
 
 // Checks collision with a certain rectangle
 bool checkCollision(Player p, SDL_Rect dst,bool reposition){

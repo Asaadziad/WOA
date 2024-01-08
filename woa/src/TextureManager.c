@@ -1,9 +1,9 @@
-#include "TextureManager.h"
+#include "../headers/TextureManager.h"
 
-#include "DS/list.h"
-#include "texture.h"
-#include "common.h"
-#include "logger.h"
+#include "../headers/list.h"
+#include "../headers/texture.h"
+#include "../headers/common.h"
+#include "../headers/logger.h"
 
 struct texturem_t {
     Texture* textures_arr;

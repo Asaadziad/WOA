@@ -1,8 +1,8 @@
-#include "TileManager.h"
-#include "tile.h"
+#include "../headers/TileManager.h"
+#include "../headers/tile.h"
 #include "stdlib.h"
-#include "common.h"
-#include "logger.h"
+#include "../headers/common.h"
+#include "../headers/logger.h"
 
 struct tilemanager_t {
     Tile** tiles; // double pointers = an array of array's = a matrix

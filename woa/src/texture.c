@@ -1,6 +1,6 @@
-#include "texture.h"
+#include "../headers/texture.h"
 #include "string.h"
-#include "vector.h"
+#include "../headers/vector.h"
 
 #include "SDL2/SDL_ttf.h"
 

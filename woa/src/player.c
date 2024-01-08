@@ -1,7 +1,7 @@
-#include "player.h"
+#include "../headers/player.h"
 #include "stdlib.h"
-#include "memory.h"
-#include "common.h"
+#include "../headers/memory.h"
+#include "../headers/common.h"
 
 #define TILE_STARTER 10
 

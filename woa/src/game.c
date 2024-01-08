@@ -1,27 +1,28 @@
-#include "game.h"
+#include "../headers/game.h"
 
 
 //common
-#include "common.h"
+#include "../headers/common.h"
 
 // needed(maybe?) includes
 #include "stdlib.h"
 #include "stdbool.h"
-#include "memory.h"
-#include "movementHandler.h"
-#include "tile.h"
-#include "components.h"
-#include "logger.h"
-#include "DS/list.h"
-#include "lib/assets.h"
-#include "task.h"
-#include "Player/playerClick.h"
-#include "CollisionDetection.h"
-#include "npcManager.h"
-#include "TileManager.h"
-#include "taskManager.h"
-#include "ObjectManager.h"
-#include "DialougeManager.h"
+
+#include "../headers/memory.h"
+#include "../headers/movementHandler.h"
+#include "../headers/tile.h"
+#include "../headers/components.h"
+#include "../headers/logger.h"
+#include "../headers/list.h"
+#include "../headers/assets.h"
+#include "../headers/task.h"
+#include "../headers/playerClick.h"
+#include "../headers/CollisionDetection.h"
+#include "../headers/npcManager.h"
+#include "../headers/TileManager.h"
+#include "../headers/taskManager.h"
+#include "../headers/ObjectManager.h"
+#include "../headers/DialougeManager.h"
 
 /* MEMORY CHUNKS HERE  */
 struct game_managers {
@@ -124,7 +125,7 @@ char* textures_res[6] = {
 void loadTextures(Game game){
   loadManagerResources(game->managers, getRenderer(game));
   setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
-  setupTiles(game->managers->tile_manager,"world.txt");
+  setupTiles(game->managers->tile_manager,"./res/world.txt");
 }
 
 void loadGameFont(Game game,const char* font_file_path,int size){

@@ -1,4 +1,4 @@
-#include "Dialouge.h"
+#include "../headers/Dialouge.h"
 #include "stdlib.h"
 
 

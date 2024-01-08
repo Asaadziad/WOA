@@ -1,5 +1,5 @@
-#include "components.h"
-#include "common.h"
+#include "../headers/components.h"
+#include "../headers/common.h"
 
 struct component_t {
     int screenX;

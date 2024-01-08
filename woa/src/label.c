@@ -1,6 +1,6 @@
-#include "label.h"
+#include "../headers/label.h"
 #include "SDL2/SDL_ttf.h"
-#include "game.h"
+#include "../headers/game.h"
 
 Label createLabel(Game game,const char* text, int x, int y){
     Label s = (Label)malloc(sizeof(*s));

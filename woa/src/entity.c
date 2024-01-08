@@ -1,6 +1,6 @@
 #include "stdlib.h"
 
-#include "entity.h"
+#include "../headers/entity.h"
 
 Entity initEntity(EntityType type,unsigned int height, unsigned int width){
     Entity e = (Entity)malloc(sizeof(*e));

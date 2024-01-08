@@ -1,8 +1,8 @@
-#include "npcManager.h"
-#include "DS/list.h"
+#include "../headers/npcManager.h"
+#include "../headers/list.h"
 #include "stdlib.h"
-#include "npc.h"
-#include "CollisionDetection.h"
+#include "../headers/npc.h"
+#include "../headers/CollisionDetection.h"
 
 struct npcmanager_t {
     List npc_list;

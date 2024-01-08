@@ -1,6 +1,6 @@
-#include "object.h"
+#include "../headers/object.h"
 
-#include "tile.h"
+#include "../headers/tile.h"
 
 struct object_t {
     ObjectType type;

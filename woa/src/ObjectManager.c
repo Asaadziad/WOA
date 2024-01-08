@@ -1,10 +1,10 @@
-#include "ObjectManager.h"
+#include "../headers/ObjectManager.h"
 #include "stdlib.h"
 #include "stdio.h"
-#include "object.h"
-#include "CollisionDetection.h"
-#include "logger.h"
-#include "DialougeManager.h"
+#include "../headers/object.h"
+#include "../headers/CollisionDetection.h"
+#include "../headers/logger.h"
+#include "../headers/DialougeManager.h"
 
 struct objm_t{
     List objects;

@@ -1,4 +1,4 @@
-#include "logger.h"
+#include "../headers/logger.h"
 #include "stdio.h"
 
 void LOG(const char* message){

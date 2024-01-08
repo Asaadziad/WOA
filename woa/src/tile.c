@@ -1,4 +1,4 @@
-#include "tile.h"
+#include "../headers/tile.h"
 #include "stdlib.h"
 
 

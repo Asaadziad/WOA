@@ -1,5 +1,5 @@
-#include "playerFishing.h"
-#include "../logger.h"
+#include "../../headers/playerFishing.h"
+#include "../../headers/logger.h"
 
 static void levelUp(Player p){
     if(p->current_xp > p->level*69){

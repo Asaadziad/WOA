@@ -1,8 +1,8 @@
-#include "logic.h"
-#include "entity.h"
-#include "movementHandler.h"
-#include "taskManager.h"
-#include "Player/playerClick.h"
+#include "../headers/logic.h"
+#include "../headers/entity.h"
+#include "../headers/movementHandler.h"
+#include "../headers/taskManager.h"
+#include "../headers/playerClick.h"
 
 #define CHECK_BOUNDARYX(x) ((x > 0) && (x < SCREEN_WIDTH))
 #define CHECK_BOUNDARYY(y) ((y > 0) && (y < SCREEN_HEIGHT))

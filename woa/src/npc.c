@@ -1,8 +1,8 @@
-#include "npc.h"
+#include "../headers/npc.h"
 #include "stdlib.h"
-#include "TextureManager.h"
-#include "tile.h"
-#include "CollisionDetection.h"
+#include "../headers/TextureManager.h"
+#include "../headers/tile.h"
+#include "../headers/CollisionDetection.h"
 
 struct npc_t {
     int x;

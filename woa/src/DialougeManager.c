@@ -1,8 +1,8 @@
-#include "DialougeManager.h"
-#include "DS/list.h"
+#include "../headers/DialougeManager.h"
+#include "../headers/list.h"
 #include "stdlib.h"
-#include "TextureManager.h"
-#include "Dialouge.h"
+#include "../headers/TextureManager.h"
+#include "../headers/Dialouge.h"
 
 struct dialougem_t {
     int       size;       // Number of Dialouges

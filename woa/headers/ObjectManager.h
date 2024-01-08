@@ -4,7 +4,7 @@
 #include "TextureManager.h"
 #include "DialougeManager.h"
 #include "SDL2/SDL.h"
-#include "DS/list.h"
+#include "list.h"
 #include "player.h"
 
 typedef struct objm_t* ObjectManager;

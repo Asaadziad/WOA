@@ -1,5 +1,5 @@
-#include "playerWalk.h"
-#include "../logger.h"
+#include "../../headers/playerWalk.h"
+#include "../../headers/logger.h"
 
 void playerWalkTo(TASK task,Player p, int x, int y){
         if(p->position.x < x){

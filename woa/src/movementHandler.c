@@ -1,9 +1,9 @@
 #include "SDL2/SDL.h"
 
-#include "movementHandler.h"
-#include "player.h"
-#include "common.h"
-#include "CollisionDetection.h"
+#include "../headers/movementHandler.h"
+#include "../headers/player.h"
+#include "../headers/common.h"
+#include "../headers/CollisionDetection.h"
 
 void handlePlayerMovement(Player p, MovementType m_type){
 

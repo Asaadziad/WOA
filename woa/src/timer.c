@@ -1,4 +1,4 @@
-#include "timer.h"
+#include "../headers/timer.h"
 #include "SDL2/SDL.h"
 
 void startTimer(Timer timer){

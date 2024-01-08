@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "../headers/vector.h"
 #include "math.h"
 
 Vector2f addVectors(Vector2f v1, Vector2f v2){

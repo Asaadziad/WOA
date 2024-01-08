@@ -2,9 +2,9 @@
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_ttf.h"
 
-#include "game.h"
-#include "timer.h"
-#include "common.h"
+#include "../headers/game.h"
+#include "../headers/timer.h"
+#include "../headers/common.h"
 
 internal void initSDL(SDL_Window** window, Game game);
 internal void quitSDL(SDL_Window** window);
@@ -22,7 +22,7 @@ int main(){
     }
 
     initSDL(&window, game);
-    loadGameFont(game,"./AlbertText-Bold.ttf",28);
+    loadGameFont(game,"./res/AlbertText-Bold.ttf",28);
     loadTextures(game);
     initEntities(game);
     
