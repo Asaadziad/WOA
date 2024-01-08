@@ -27,8 +27,8 @@ void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rec
     if(!obj) {
         return;
     }
-    int screenX = obj->src.x - camera.x;
-    int screenY = obj->src.y - camera.y;
+    //int screenX = obj->src.x - camera.x;
+    //int screenY = obj->src.y - camera.y;
     switch(obj->type){
         case TREE_OBJECT:
 

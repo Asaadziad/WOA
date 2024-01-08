@@ -29,7 +29,7 @@ void setupDialouges(DialougeManager manager,const char* file_path){
     * Yes - No
     * Note: Press space for YES and press v for NO
     */
-    int current = manager->size;  
+//    int current = manager->size;  
     // JSONObject* json_objects = parse(file_path); 
     // for each object in json_objects: createDialouge(object);
 }
@@ -49,7 +49,6 @@ void renderDialouge(DialougeManager manager,TextureManager texture_manager,SDL_R
     box.y = 50;
     box.w = 400;
     box.h = 200;
-    SDL_Color white = {255,255,255,255};
     drawDialougeBox(renderer);
     // Here draw text
 

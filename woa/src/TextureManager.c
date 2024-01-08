@@ -65,34 +65,6 @@ int loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id){
     return getTextureId(t);
 }
 
-internal
-int loadTextureFromText(SDL_Renderer* renderer,TTF_Font* font,const char* text,SDL_Color* color){
-    SDL_Texture* label;
-
-    SDL_Color black = {0,0,0,0};
-    SDL_Surface* surface;
-    if(color){
-        surface = TTF_RenderText_Solid(font,text,*color);
-    } else {
-        surface = TTF_RenderText_Solid(font,text,black);
-    }
-    if(!surface) return -1;
-
-    label = SDL_CreateTextureFromSurface(renderer , surface );
-
-    Texture texture = initTexture(0,0,0);
-    if(!texture) {
-        SDL_FreeSurface( surface );
-        return -1;
-    }
-    setTexturePtr(texture, label);
-    setTextureHeight( texture, surface->h);
-    setTextureWidth( texture, surface->w);
-    SDL_FreeSurface( surface );
-
-    return getTextureId(texture);
-}
-
 // TODO:: load shall return the id of the texture.
 int load(TextureManager manager,SDL_Renderer* renderer,const char* file_name){
     int new_t_id = loadTextureFromFile(renderer,file_name, manager->textures_top++);

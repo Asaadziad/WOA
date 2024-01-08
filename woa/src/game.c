@@ -199,10 +199,7 @@ void handleEvents(SDL_Event* e,Game game){
                 handleKey(game,e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
-                int x = 0;
-				        int y = 0;
-                SDL_GetMouseState(&(x),&(y));
-                handlePlayerClick(game,x,y);
+                handlePlayerClick(game,game->window->mouse_x,game->window->mouse_y);
                 SDL_Rect dst;
                 dst.x = SCREEN_WIDTH/2;
                 dst.y = SCREEN_HEIGHT;
@@ -211,8 +208,8 @@ void handleEvents(SDL_Event* e,Game game){
                 if(mouseInRect(game,dst)){
                     game->players[0]->isInInventory = !game->players[0]->isInInventory;
                 }
-                fprintf(stderr,"MOUSE-X: %d MOUSE-Y:%d\n",x,y);
-            break;
+                
+                break;
             default: break;
         }
     }
@@ -289,10 +286,8 @@ void initRendering(Game game){
     
     switch(game->state){
         case MENU_STATE:
-        int actual_center_x = SCREEN_WIDTH/2 - 125;
-        int actual_center_y = SCREEN_HEIGHT/2 - 50;
-        drawText(game->managers->texture_manager,0,actual_center_x,actual_center_y,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
-        drawText(game->managers->texture_manager,1,actual_center_x,actual_center_y + 40,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
+        drawText(game->managers->texture_manager,0,0,0,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
+        drawText(game->managers->texture_manager,1,0,0,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
         break;
         case RUNNING_STATE:
         drawMap(game);

@@ -2,7 +2,7 @@
 #define HASHTABLE_H
 
 #include "../common.h"
-
+#include "stdlib.h"
 typedef struct hash_t* HashTable;
 typedef void*          KEY;
 typedef void*          VAL;
