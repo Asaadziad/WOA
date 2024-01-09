@@ -1,13 +1,12 @@
-#include "../headers/game.h"
+#include "stdlib.h"
+#include "stdbool.h"
 
+#include "../headers/game.h"
 
 //common
 #include "../headers/common.h"
 
 // needed(maybe?) includes
-#include "stdlib.h"
-#include "stdbool.h"
-
 #include "../headers/memory.h"
 #include "../headers/movementHandler.h"
 #include "../headers/tile.h"
@@ -104,15 +103,15 @@ GameState getCurrentState(Game game){
   return game->state;
 }
 
-internal 
+ 
 void loadManagerResources(struct game_managers* managers,Renderer renderer){
 char* textures_res[6] = {
-  "res/character.png",
-  "res/walls.png",
-  "res/uisheet.png",
-  "res/woodcutting.png",
-  "res/npc.png",
-  "res/weapons.png"
+  "./res/character.png",
+  "./res/walls.png",
+  "./res/uisheet.png",
+  "./res/woodcutting.png",
+  "./res/npc.png",
+  "./res/weapons.png"
 };
 
   const int textures_count = 6;
@@ -191,15 +190,15 @@ static bool mouseInRect(Game game, SDL_Rect rect){
 
 void handleEvents(SDL_Event* e,Game game){
     while(SDL_PollEvent(e) != 0){
-        SDL_GetMouseState(&(game->window->mouse_x),&(game->window->mouse_y));
         switch(e->type){
             case SDL_QUIT:
                 game->state = QUIT_STATE;
             break;
             case SDL_KEYDOWN:
-                handleKey(game,e->key.keysym.sym);
+                handleKey(game, e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
+                SDL_GetMouseState(&(game->window->mouse_x),&(game->window->mouse_y));
                 handlePlayerClick(game,game->window->mouse_x,game->window->mouse_y);
                 SDL_Rect dst;
                 dst.x = SCREEN_WIDTH/2;
@@ -220,7 +219,7 @@ void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
     Player asaad = initPlayer(0,0,TILE_WIDTH,TILE_HEIGHT);
     game->players[0] = asaad; 
-    setupObjects(game->managers->object_manager,"objects.txt");
+    setupObjects(game->managers->object_manager,"./res/objects.txt");
     setupNPCs(game->managers->npc_manager);
 }
 
@@ -332,7 +331,7 @@ static void checkCamera(SDL_Rect* camera){
     if(camera->x > (TILE_WIDTH * MAX_WORLD_COLS) - camera->w){
         camera->x = (TILE_WIDTH * MAX_WORLD_COLS) - camera->w;
     }
-    if(camera->y > (TILE_HEIGHT * MAX_WORLD_ROWS) - camera->h){
+  if(camera->y > (TILE_HEIGHT * MAX_WORLD_ROWS) - camera->h){
         camera->y = (TILE_HEIGHT * MAX_WORLD_ROWS) - camera->h;
     }
 }
@@ -363,6 +362,7 @@ void quitGame(Game game){
     destroyObjectManager(game->managers->object_manager);
     destroyDialogeManager(game->managers->dialouge_manager);
     destroyTileManager(game->managers->tile_manager);
+    
     free(game->map);
     free(game->players);
     free(game);

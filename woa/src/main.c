@@ -1,3 +1,7 @@
+#include "limits.h"
+#include "unistd.h"
+#include "stdio.h"
+
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_ttf.h"
@@ -5,18 +9,19 @@
 #include "../headers/game.h"
 #include "../headers/timer.h"
 #include "../headers/common.h"
+#include "../headers/assets.h"
 
 internal void initSDL(SDL_Window** window, Game game);
 internal void quitSDL(SDL_Window** window);
 
+
 int main(){
-    
     const int SCREEN_FPS = 60;
     const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
     SDL_Window* window = NULL;
 
-    Game game = initGame();
+    Game game = initGame(); // TODO::allocate a big chunk of memory once and for all??
     if(!game){
         exit(1);
     }

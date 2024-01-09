@@ -17,9 +17,9 @@ void destroyTextureManager(TextureManager manager);
  * args   :  manager   - struct (TextureManager)
  *          renderer   - the game renderer (current: SDL_Renderer)
  *          file_name  - string
- * return : texture id - int       
+ * return : texture    - Texture       
  * */
-int load(TextureManager manager,SDL_Renderer* renderer,const char* file_name);
+void load(TextureManager manager,SDL_Renderer* renderer,char* file_name);
 //TODO:: loading text shall take as args only text and color
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color);
 

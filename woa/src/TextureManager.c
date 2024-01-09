@@ -4,78 +4,60 @@
 #include "../headers/texture.h"
 #include "../headers/common.h"
 #include "../headers/logger.h"
+#include "../headers/hashtable.h"
 
 struct texturem_t {
-    Texture* textures_arr;
-    int textures_top;
-    Texture* labels_arr;
-    int labels_top;
-    List textures;
-    List labels;
+    HashTable texturesTable;
 };
 
-internal void freeTexturePtr(void* elem){
-    freeTexture((Texture)elem);
-}
 
-internal Texture loopAndFindTexture(TextureManager manager,int id){
-    Node current = getHead(manager->textures);
-    while(current != NULL){
-        Texture tmp = getNodeData(current);
-        if(getTextureId(tmp) == id){
-            return tmp;
-        }
-        current = getNextNode(current);
-    }
-    return NULL;
-}
 
 TextureManager textureManagerInit(){
     TextureManager manager = (TextureManager)malloc(sizeof(*manager));
     if(!manager) return NULL;
-    manager->textures = listCreate(freeTexturePtr,NULL,NULL);
-    manager->labels = listCreate(freeTexturePtr,NULL,NULL);
-    if(!manager->textures || !manager->labels) exit(1);
+    manager->texturesTable = createTable();
+    if(!manager->texturesTable) {return NULL;}
     return manager;
 }
 
 internal
-int loadTextureFromFile(SDL_Renderer* renderer,const char* path,int id){
+Texture loadTextureFromFile(SDL_Renderer* renderer, const char* path){
     SDL_Texture* texture;
 
     SDL_Surface* surface = IMG_Load(path);
     if(!surface) {
         ERR("Couldn't load file");
-        return -1;
+        return NULL;
     }
 
     texture = SDL_CreateTextureFromSurface( renderer, surface );
     if(!texture) {
         ERR("Couldn't create texture");
-        return -1;
+        return NULL;
     }
-    Texture t = initTexture(0,0,id);
-    if(!t) return -1;
+    Texture t = initTexture(0,0,0);
+    if(!t) return NULL;
     setTexturePtr(t, texture);
     setTextureHeight(t, surface->h);
     setTextureWidth(t, surface->w);
     
     SDL_FreeSurface( surface );
 
-    return getTextureId(t);
+    return t;
 }
 
-// TODO:: load shall return the id of the texture.
-int load(TextureManager manager,SDL_Renderer* renderer,const char* file_name){
-    int new_t_id = loadTextureFromFile(renderer,file_name, manager->textures_top++);
-    if(new_t_id == -1) {
+// TODO :: load shall return the id of the texture.
+void load(TextureManager manager,SDL_Renderer* renderer, char* file_name){
+    Texture new_t = loadTextureFromFile(renderer, file_name);
+    if(!new_t) {
       ERR("Couldn't load texture");
-      manager->textures_top--;
+      return;
     }
-    
+
     //TODO:: convert from list to array
     //listInsert(manager->textures,new_t);
-    return new_t_id;
+    tableInsert(manager->texturesTable, file_name, new_t);
+    fprintf(stderr, "Success");
 }
 
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color){}
@@ -84,7 +66,7 @@ void draw(TextureManager manager,int id,int x,int y,
             int width, int height, SDL_Renderer* renderer,
             SDL_RendererFlip flip){
 
-    Texture to_render = loopAndFindTexture(manager, id);
+    Texture to_render = NULL;
     if(!to_render) return;
     
     SDL_Rect src;
@@ -103,7 +85,7 @@ void drawFrame(TextureManager manager,int id,int x,int y,int frame_width,
             int frame_height,int render_width,int render_height,int current_row,int current_frame,
             SDL_Renderer* renderer, SDL_RendererFlip flip){
 
-    Texture to_render = loopAndFindTexture(manager,id);
+    Texture to_render = NULL;
     if(!to_render) return;
     
     SDL_Rect src;
@@ -127,7 +109,7 @@ void drawFrame(TextureManager manager,int id,int x,int y,int frame_width,
 void drawText(TextureManager manager,int label_id,int x,int y,
             int width, int height, SDL_Color color,SDL_Renderer* renderer){
         
-        Node current = getHead(manager->labels);
+        Node current = NULL;
         while (current != NULL)
         {
             Texture tmp = getNodeData(current);
@@ -153,7 +135,7 @@ void drawText(TextureManager manager,int label_id,int x,int y,
 }
 
 void drawSprite(TextureManager manager, int id,int x,int y, int width,int height, int sprite_x,int sprite_y,SDL_Renderer* renderer){
-    Texture to_render = loopAndFindTexture(manager,id);
+    Texture to_render = NULL;
     if(!to_render) return;
     
     SDL_Rect src;
@@ -194,7 +176,5 @@ void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float
 
 void destroyTextureManager(TextureManager manager){
     if(!manager) return;
-    listDestroy(manager->labels);
-    listDestroy(manager->textures);
     free(manager);
 }

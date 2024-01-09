@@ -1,7 +1,8 @@
 #include "stdlib.h"
 
-#include "assets.h"
+#include "../../headers/assets.h"
 #include "stdio.h"
+#include "string.h"
 
 char* int2string(int x) {
     int tmp = x;
@@ -21,4 +22,5 @@ char* int2string(int x) {
         i--;
     }
     return result;
-};
+}
+

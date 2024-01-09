@@ -1,21 +1,23 @@
-#ifndef HASHTABLE_H
-#define HASHTABLE_H
+#ifndef HASHTABLE_C
+#define HASHTABLE_C
 
-#include "common.h"
-#include "stdlib.h"
-typedef struct hash_t* HashTable;
-typedef void*          KEY;
-typedef void*          VAL;
+#include "stddef.h"
 
-// Creates an empty table (allocates memory for new table)
+typedef char* KEY;
+
+// Bundle the data
+typedef struct hashtable_t* HashTable;
+
+// Initialization and Destroying
 HashTable createTable();
-// free's the memory allocated for table
 void      destroyTable(HashTable table);
 
+// Methods
+size_t  tableGetSize(HashTable table);
+void    tableInsert(HashTable table, KEY key, void* value);
+void*   tableSearch(HashTable table, KEY key);
+void    tableDelete(HashTable table, KEY key);
 
-// Table functionality.
-bool tableAdd(HashTable table, KEY key, VAL value);
-VAL  tableFind(HashTable table, KEY key);
-VAL  tableDelete(HashTable table, KEY key);
-
+// prints the whole table as { key : value } 
+void tablePrint(HashTable table);
 #endif

@@ -71,8 +71,7 @@ static void loadTilesMap(TileManger manager,const char* map_path){
 
 void setupTiles(TileManger manager,const char* file_path){
     //manager->tiles[0][0] = createTile(0,0,EARTH_TILE);
-    loadTilesMap(manager,"world.txt");
-    fprintf(stderr, "hgello?");
+    loadTilesMap(manager, file_path);
 }
 
 void renderTiles(TileManger manager,TextureManager texture_manager,SDL_Renderer* renderer,SDL_Rect camera){

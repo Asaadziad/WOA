@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-#include "list.h"
+#include "../../headers/list.h"
 
 struct node_t
 {
