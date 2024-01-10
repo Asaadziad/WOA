@@ -86,7 +86,7 @@ void renderTiles(TileManger manager,TextureManager texture_manager,SDL_Renderer*
 
             int current_frame = getTileType(tile);
             //fprintf(stderr,"%d - %d\n",current_row,current_frame);
-            drawFrame(texture_manager,0,screenX,screenY,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,current_frame,renderer,SDL_FLIP_NONE);
+            drawFrame(texture_manager,"walls.png",screenX,screenY,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,TILE_WIDTH,1,current_frame,renderer,SDL_FLIP_NONE);
 
 
         }

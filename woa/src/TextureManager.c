@@ -1,5 +1,7 @@
 #include "../headers/TextureManager.h"
 
+#include "limits.h"
+
 #include "../headers/list.h"
 #include "../headers/texture.h"
 #include "../headers/common.h"
@@ -25,6 +27,7 @@ Texture loadTextureFromFile(SDL_Renderer* renderer, const char* path){
     SDL_Texture* texture;
 
     SDL_Surface* surface = IMG_Load(path);
+    
     if(!surface) {
         ERR("Couldn't load file");
         return NULL;
@@ -48,7 +51,11 @@ Texture loadTextureFromFile(SDL_Renderer* renderer, const char* path){
 
 // TODO :: load shall return the id of the texture.
 void load(TextureManager manager,SDL_Renderer* renderer, char* file_name){
-    Texture new_t = loadTextureFromFile(renderer, file_name);
+    char path[PATH_MAX] = "";
+    char* resourcesPath = "./res/";
+    strcat(path, resourcesPath);
+    strcat(path, file_name); 
+    Texture new_t = loadTextureFromFile(renderer, path);
     if(!new_t) {
       ERR("Couldn't load texture");
       return;
@@ -57,7 +64,7 @@ void load(TextureManager manager,SDL_Renderer* renderer, char* file_name){
     //TODO:: convert from list to array
     //listInsert(manager->textures,new_t);
     tableInsert(manager->texturesTable, file_name, new_t);
-    fprintf(stderr, "Success");
+
 }
 
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color){}
@@ -81,11 +88,11 @@ void draw(TextureManager manager,int id,int x,int y,
     SDL_RenderCopyEx(renderer,getTexturePtr(to_render),&src,&dst,0,0,flip);
 }
 
-void drawFrame(TextureManager manager,int id,int x,int y,int frame_width,
+void drawFrame(TextureManager manager,char* name,int x,int y,int frame_width,
             int frame_height,int render_width,int render_height,int current_row,int current_frame,
             SDL_Renderer* renderer, SDL_RendererFlip flip){
 
-    Texture to_render = NULL;
+    Texture to_render = (Texture)tableSearch(manager->texturesTable, name);
     if(!to_render) return;
     
     SDL_Rect src;

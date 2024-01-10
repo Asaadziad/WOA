@@ -106,17 +106,17 @@ GameState getCurrentState(Game game){
  
 void loadManagerResources(struct game_managers* managers,Renderer renderer){
 char* textures_res[6] = {
-  "./res/character.png",
-  "./res/walls.png",
-  "./res/uisheet.png",
-  "./res/woodcutting.png",
-  "./res/npc.png",
-  "./res/weapons.png"
+  "character.png",
+  "walls.png",
+  "uisheet.png",
+  "woodcutting.png",
+  "npc.png",
+  "weapons.png"
 };
 
   const int textures_count = 6;
   for(int i = 0; i < textures_count;i++){
-    load(managers->texture_manager,renderer,textures_res[i]);
+    load(managers->texture_manager, renderer, textures_res[i]);
 
   }
 }

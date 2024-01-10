@@ -38,10 +38,10 @@ Player initPlayer(int x,int y,int width,int height){
 
 void playerDraw(TextureManager manager,Player p,SDL_Renderer* renderer,SDL_Rect camera){
     if(p->isAttacking){
-    drawFrame(manager,2,p->position.x - camera.x,p->position.y - camera.y,TILE_WIDTH + 32,TILE_HEIGHT,TILE_WIDTH + 32,TILE_HEIGHT,p->frame_row,p->current_frame,renderer,SDL_FLIP_NONE);
+    drawFrame(manager,"character.png",p->position.x - camera.x,p->position.y - camera.y,TILE_WIDTH + 32,TILE_HEIGHT,TILE_WIDTH + 32,TILE_HEIGHT,p->frame_row,p->current_frame,renderer,SDL_FLIP_NONE);
 
     } else {
-    drawFrame(manager,2,p->position.x - camera.x,p->position.y - camera.y,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,p->frame_row,p->current_frame,renderer,SDL_FLIP_NONE);
+    drawFrame(manager,"character.png",p->position.x - camera.x,p->position.y - camera.y,TILE_WIDTH,TILE_HEIGHT,TILE_WIDTH,TILE_HEIGHT,p->frame_row,p->current_frame,renderer,SDL_FLIP_NONE);
 
     }   
 }
