@@ -8,7 +8,7 @@ Label createLabel(Game game,const char* text, int x, int y){
     SDL_Color black = {0,0,0,0};
 
     
-    SDL_Surface* surface = TTF_RenderText_Solid(getGlobalFont(game),text,black);
+    SDL_Surface* surface = TTF_RenderText_Solid(getGlobalFont(game), text, black);
     if(!surface) return NULL;
 
     s->labelTexture = SDL_CreateTextureFromSurface((getRenderer(game)) , surface );
