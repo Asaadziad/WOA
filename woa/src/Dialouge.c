@@ -7,6 +7,7 @@ struct dialouge_t {
   char* dialouge; // array of strings to save the sentences    
 };
 
+
 DIALOUGE createDialouge(int id,char* dialouge){
     DIALOUGE d = (DIALOUGE)malloc(sizeof(*d));
     if(!d) return NULL;
