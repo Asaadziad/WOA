@@ -5,6 +5,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "texture.h"
 #include "stdbool.h"
+
 typedef struct texturem_t* TextureManager;
 
 TextureManager textureManagerInit();

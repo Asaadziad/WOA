@@ -8,6 +8,9 @@
 #include "../headers/logger.h"
 #include "../headers/hashtable.h"
 
+#include "../headers/DialougeManager.h"
+#include "../headers/Dialouge.h"
+
 struct texturem_t {
     HashTable texturesTable;
 };
@@ -180,6 +183,30 @@ void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float
     }
 }
 
+void drawDialouge(TextureManager manager,
+                  SDL_Renderer* renderer, 
+                  int x, int y,
+                  DialougeManager dManager,
+                  DialougeRequest request) {
+  Texture to_render = getDialougeTexture(dManager, request);
+  if(!to_render) {
+    fprintf(stderr, "Couldn't initiate texture");
+    return;
+  }
+  SDL_Rect src;
+  SDL_Rect dst;
+  src.x = 0;
+  src.y = 0;
+  src.h = dst.h = getTextureHeight(to_render);
+  src.w = dst.w = getTextureWidth(to_render); 
+  dst.x = x;
+  dst.y = y;
+
+SDL_RenderCopy(renderer, 
+                  getTexturePtr(to_render), 
+                  &src, 
+                  &dst);
+}
 
 void destroyTextureManager(TextureManager manager){
     if(!manager) return;
