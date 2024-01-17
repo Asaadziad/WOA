@@ -24,7 +24,7 @@ typedef union dialouge_res {
 } DialougeResponse;
 
 
-DIALOUGE createDialouge(int id, char* dialouge);
+DIALOUGE createDialouge(char** sentences, int count);
 void destroyDialouge(DIALOUGE dialouge);
 
 #endif

@@ -24,7 +24,7 @@ Texture getDialougeTexture(DialougeManager manager,DialougeRequest request){
     Texture t = NULL; 
     // TODO:: Check if res has an error
 
-    // TODO:: prepare a texture using the dialouge respons
+    // TODO:: prepare a texture using the dialouge response
 
     return t;
 }
