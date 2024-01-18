@@ -7,6 +7,13 @@ struct dialouge_t {
   char** sentences;    
 };
 
+int getSentencesCount(DIALOUGE d) {
+  return d->top;
+}
+
+char** getSentences(DIALOUGE d) {
+  return d->sentences;
+}
 
 DIALOUGE createDialouge(char** sentences, int count){
     DIALOUGE d = (DIALOUGE)malloc(sizeof(*d));

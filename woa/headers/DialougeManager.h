@@ -12,6 +12,6 @@ DialougeManager initDialougeManager();
 void destroyDialogeManager(DialougeManager manager);
 
 // Dialouge actions.
-Texture getDialougeTexture(DialougeManager manager,DialougeRequest request);
+Texture getDialougeTexture(DialougeManager manager,DialougeRequest request, int w, int h);
 
 #endif

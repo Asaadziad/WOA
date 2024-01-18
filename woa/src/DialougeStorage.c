@@ -20,11 +20,13 @@ void destroyDialougeStorage(DialougeStorage d) {
 
 DialougeResponse getDialouge(DialougeStorage storage,DialougeRequest request){
   DialougeResponse res;
-  if(request < 0 || request >= LAST_HOLDER) {
+  if(request.dialougeName < 0 || request.dialougeName >= LAST_HOLDER) {
     res.error  = NULL_ARGS;
+    res.dialouge = NULL;
     return res;
   }
-  res.dialouge = storage[request];
+  res.error = DIALOUGE_SUCCESS;
+  res.dialouge = storage[request.dialougeName];
   return res;
 }
 

@@ -8,10 +8,11 @@
 struct texture_t {
     int height;
     int width;
+    int id;
+
     Vector2f render_pos;
-    SDL_Texture* texture;
-    int id;    
-    int label_id;
+    SDL_Texture* texture;    
+    SDL_Texture* next; // in case i want to save a chain of textures to be rendered simultaneously   
 };
 
 void setTexturePtr(Texture t, SDL_Texture* t_ptr) {
@@ -22,9 +23,6 @@ void setTextureId(Texture t, int id){
   t->id = id;
 }
 
-void setTextureLabelId(Texture t, int label_id){
-  t->label_id = label_id;
-}
 
 
 void setTextureHeight(Texture t, int height){
@@ -39,9 +37,6 @@ int getTextureId(Texture t){
   return t->id;
 }
 
-int getTextureLabelId(Texture t){
-  return t->label_id;
-}
 
 int getTextureHeight(Texture t){
   return t->height;
@@ -65,7 +60,7 @@ Texture initTexture(int render_x,int render_y,int texture_id){
     Vector2f starter_pos = {render_x,render_y};
     new_texture->render_pos = starter_pos;
     new_texture->id = texture_id;
-    new_texture->label_id = -1;
+
     return new_texture;
 }
 
