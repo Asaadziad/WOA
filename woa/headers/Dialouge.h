@@ -17,7 +17,7 @@ typedef union dialouge_res {
   DialougeError error;
 } DialougeResponse;
 
-typedef union dialoge_req {
+typedef struct dialoge_req {
   enum {
   SWORD_DIALOUGE,
   MENU_DIALOUGE,

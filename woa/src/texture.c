@@ -12,7 +12,7 @@ struct texture_t {
 
     Vector2f render_pos;
     SDL_Texture* texture;    
-    SDL_Texture* next; // in case i want to save a chain of textures to be rendered simultaneously   
+    
 };
 
 void setTexturePtr(Texture t, SDL_Texture* t_ptr) {

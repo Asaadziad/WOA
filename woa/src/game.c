@@ -123,7 +123,7 @@ char* textures_res[6] = {
 
 void loadTextures(Game game){
   loadManagerResources(game->managers, getRenderer(game));
-  setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
+  //setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
   setupTiles(game->managers->tile_manager,"./res/world.txt");
 }
 
@@ -360,7 +360,7 @@ void quitGame(Game game){
     destroyTextureManager(game->managers->texture_manager);
     destroyNPCManager(game->managers->npc_manager);
     destroyObjectManager(game->managers->object_manager);
-    destroyDialogeManager(game->managers->dialouge_manager);
+    //destroyDialogeManager(game->managers->dialouge_manager);
     destroyTileManager(game->managers->tile_manager);
     
     free(game->map);

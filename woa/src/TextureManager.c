@@ -119,28 +119,7 @@ void drawFrame(TextureManager manager,char* name,int x,int y,int frame_width,
 void drawText(TextureManager manager,int label_id,int x,int y,
             int width, int height, SDL_Color color,SDL_Renderer* renderer){
         
-        Node current = NULL;
-        while (current != NULL)
-        {
-            Texture tmp = getNodeData(current);
-            if(getTextureLabelId(tmp) == label_id){
-                SDL_Rect src;
-                SDL_Rect dst;
-                src.x = 0;
-                src.y = 0;
-                src.h = getTextureHeight(tmp);
-                src.w = getTextureWidth(tmp); 
-                dst.w = width;
-                dst.h = height;
-                dst.x = x;
-                dst.y = y;
-                SDL_RenderCopy(renderer, 
-                    getTexturePtr(tmp), 
-                    &src, 
-                    &dst);
-            }
-            current = getNextNode(current);
-        }
+        
                 
 }
 
@@ -186,26 +165,15 @@ void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float
 void drawDialouge(TextureManager manager,
                   SDL_Renderer* renderer, 
                   int x, int y,
+                  TTF_Font* gFont,
                   DialougeManager dManager,
                   DialougeRequest request) {
-  Texture to_render = getDialougeTexture(dManager, request);
+  Texture* to_render = getDialougeTexture(dManager, request, renderer, gFont);
   if(!to_render) {
     fprintf(stderr, "Couldn't initiate texture");
     return;
   }
-  SDL_Rect src;
-  SDL_Rect dst;
-  src.x = 0;
-  src.y = 0;
-  src.h = dst.h = getTextureHeight(to_render);
-  src.w = dst.w = getTextureWidth(to_render); 
-  dst.x = x;
-  dst.y = y;
-
-SDL_RenderCopy(renderer, 
-                  getTexturePtr(to_render), 
-                  &src, 
-                  &dst);
+  // Here you loop on the array . :)
 }
 
 void destroyTextureManager(TextureManager manager){
