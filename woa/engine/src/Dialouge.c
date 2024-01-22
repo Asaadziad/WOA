@@ -15,6 +15,9 @@ char** getSentences(DIALOUGE d) {
   return d->sentences;
 }
 
+static void allocateAndCopy(char* dest,const char* src) {
+  }
+
 DIALOUGE createDialouge(char** sentences, int count){
     DIALOUGE d = (DIALOUGE)malloc(sizeof(*d));
     if(!d) return NULL;
@@ -24,8 +27,17 @@ DIALOUGE createDialouge(char** sentences, int count){
       free(d);
       return NULL;
     }
-    for(int i = 0 ; i < count; i++) {
-      strcpy(d->sentences[i], sentences[i]);
+
+       
+    for(int i = 0 ; i < count; i++) { 
+      
+    d->sentences[i] = malloc(sizeof(char) * strlen(sentences[i]) + 1);
+    if(!d->sentences[i]) {
+      fprintf(stderr, "Couldn't allocate memory for string");
+      continue;
+    }
+    strcpy(d->sentences[i], sentences[i]);
+
     }
     return d;
 }

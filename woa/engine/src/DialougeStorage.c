@@ -8,6 +8,9 @@ DialougeStorage initDialougeStorage() {
   if(!storage) {
     return NULL;
   }
+
+  char *sentences[] = {"hello world"};
+  storage[SWORD_DIALOUGE] = createDialouge(sentences, 1);
   return storage;
 }
 

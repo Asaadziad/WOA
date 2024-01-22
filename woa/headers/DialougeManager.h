@@ -14,6 +14,6 @@ void destroyDialogeManager(DialougeManager manager);
 
 // Dialouge actions.
 Texture* getDialougeTexture(DialougeManager manager,DialougeRequest request,
-                            SDL_Renderer* renderer, TTF_Font* gFont);
+                            SDL_Renderer* renderer, TTF_Font* gFont, int* nWritten);
 
 #endif

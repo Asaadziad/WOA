@@ -12,7 +12,7 @@ typedef enum {
   DIALOUGE_SUCCESS,
 } DialougeError;
 
-typedef union dialouge_res {
+typedef struct dialouge_res {
   DIALOUGE dialouge;
   DialougeError error;
 } DialougeResponse;

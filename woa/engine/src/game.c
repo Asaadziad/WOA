@@ -122,6 +122,7 @@ char* textures_res[6] = {
 }
 
 void loadTextures(Game game){
+  
   loadManagerResources(game->managers, getRenderer(game));
   //setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
   setupTiles(game->managers->tile_manager,"./res/world.txt");
@@ -286,8 +287,12 @@ void initRendering(Game game){
     
     switch(game->state){
         case MENU_STATE:
-        drawText(game->managers->texture_manager,0,0,0,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
-        drawText(game->managers->texture_manager,1,0,0,250,50,(SDL_Color){0,0,0,0},getRenderer(game));
+          drawDialouge(game->managers->texture_manager,
+                  getRenderer(game), 
+                  0, 0,
+                  getGlobalFont(game),
+                  game->managers->dialouge_manager,
+                  (DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}}); 
         break;
         case RUNNING_STATE:
         drawMap(game);

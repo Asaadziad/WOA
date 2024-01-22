@@ -5,7 +5,7 @@
 #include "SDL2/SDL_ttf.h"
 #include "texture.h"
 #include "stdbool.h"
-
+#include "DialougeManager.h"
 typedef struct texturem_t* TextureManager;
 
 TextureManager textureManagerInit();
@@ -31,4 +31,11 @@ void drawText(TextureManager manager,int label_id,int x,int y,
             int width, int height, SDL_Color color,SDL_Renderer* renderer);
 void drawSprite(TextureManager manager, int id,int x,int y, int width,int height, int sprite_x,int sprite_y,SDL_Renderer* renderer);
 void drawRect(int x,int y,int height,int width,SDL_Color color,bool isFill,float fill_width,SDL_Renderer* renderer);
+void drawDialouge(TextureManager manager,
+                  SDL_Renderer* renderer, 
+                  int x, int y,
+                  TTF_Font* gFont,
+                  DialougeManager dManager,
+                  DialougeRequest request); 
+
 #endif

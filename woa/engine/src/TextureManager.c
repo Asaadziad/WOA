@@ -168,12 +168,28 @@ void drawDialouge(TextureManager manager,
                   TTF_Font* gFont,
                   DialougeManager dManager,
                   DialougeRequest request) {
-  Texture* to_render = getDialougeTexture(dManager, request, renderer, gFont);
+  int sentencesWritten = 0;
+  Texture* to_render = getDialougeTexture(dManager, request, renderer, gFont, &sentencesWritten);
   if(!to_render) {
     fprintf(stderr, "Couldn't initiate texture");
     return;
   }
-  // Here you loop on the array . :)
+
+    SDL_Rect src;
+    SDL_Rect dst;
+    src.x = x;
+    src.y = y;
+      // Here you loop on the array . :)
+  for(int i =0; i < sentencesWritten; i++) {
+    if(!to_render[i]) continue;
+    src.h = dst.h = getTextureHeight(to_render[i]);
+    src.w = dst.w = getTextureWidth(to_render[i]);
+    dst.x = x;
+    dst.y = y;
+    SDL_Texture* texture = getTexturePtr(to_render[i]);
+    if(!texture) continue;
+    SDL_RenderCopy(renderer,texture, &src, &dst);
+  }  
 }
 
 void destroyTextureManager(TextureManager manager){
