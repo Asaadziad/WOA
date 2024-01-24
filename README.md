@@ -14,6 +14,10 @@ Here i will be sharing some of the design decisions and diagrams i have made for
 
 ![Screenshot from 2023-11-27 05-33-42](https://github.com/Asaadziad/WOA/assets/108868994/1f015a5e-b233-4152-9dfc-223ed9cced09)
 
+- Now you can render dialouges on action
+
+
+[Screencast from 24-01-24 11:36:45.webm](https://github.com/Asaadziad/WOA/assets/108868994/f8024354-496b-471b-af04-ff226d782688)
 
 
 # Get Started
