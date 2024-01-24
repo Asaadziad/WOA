@@ -9,14 +9,14 @@ struct object_t {
     SDL_Rect src;
 };
 
-OBJECT createObject(int height, int width, int x, int y,ObjectType type){
+OBJECT createObject(int w, int h, int x, int y, ObjectType type){
     OBJECT obj = (OBJECT)malloc(sizeof(*obj));
     if(!obj) return NULL;
     SDL_Rect src;
     src.x = x;
     src.y = y;
-    src.h = height;
-    src.w = width;
+    src.h = h;
+    src.w = w; 
     obj->src = src;
     obj->type = type;
     obj->isRenderable = true;

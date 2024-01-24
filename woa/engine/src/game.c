@@ -103,10 +103,16 @@ GameState getCurrentState(Game game){
   return game->state;
 }
 
+#define RENDERDIALOUGE(x, y, request) drawDialouge(game->managers->texture_manager,\
+                  getRenderer(game), \
+                  (x), (y),\
+                  getGlobalFont(game),\
+                  game->managers->dialouge_manager,\
+                  (request)) 
  
 void loadManagerResources(struct game_managers* managers,Renderer renderer){
 char* textures_res[6] = {
-  "character.png",
+  [0] = "character.png",
   "walls.png",
   "uisheet.png",
   "woodcutting.png",
@@ -231,14 +237,14 @@ static void renderEntities(Game game){
 
 
 
-static void drawHP(TextureManager manager,Renderer renderer,int playerHp){
+static void drawHP(Game game,TextureManager manager,Renderer renderer,int playerHp){
     SDL_Rect rect;
     rect.x = 0;
     rect.y = SCREEN_HEIGHT - 50;
     rect.w = 200;
     rect.h = 50;
     drawRect(rect.x,rect.y,rect.h,rect.w,(SDL_Color){255,0,0,0},true,(float)((float)playerHp/100)*rect.w,renderer);
-    drawText(manager,2,rect.x + rect.w/2 - 25/2,rect.y + rect.h/2 - 25/2,25,25,(SDL_Color){255,255,255,255},renderer);
+    RENDERDIALOUGE(rect.x + rect.w/2 - 20, rect.y + rect.h/2 - 20,((DialougeRequest){HP_TEXT, 0, 0, (SDL_Color){255,255,255,255}})); 
 }
 
 
@@ -255,7 +261,7 @@ static void renderUI(Game game){
     } else {
         //drawFrame(game->managers->texture_manager,UI_INVENTORY_TEXTURE,dst.x,dst.y - dst.h,32,32,dst.w,dst.h,1,0,getRenderer(game),SDL_FLIP_NONE);
     }
-    drawHP(game->managers->texture_manager,getRenderer(game),game->players[0]->hp);
+    drawHP(game, game->managers->texture_manager,getRenderer(game),game->players[0]->hp);
 }
 
 static void renderInventory(Game game){
@@ -282,17 +288,13 @@ void static renderGameOverScreen(Game game){
 }
 
 
+
 void initRendering(Game game){
     clearScreen(game);
     
     switch(game->state){
         case MENU_STATE:
-          drawDialouge(game->managers->texture_manager,
-                  getRenderer(game), 
-                  0, 0,
-                  getGlobalFont(game),
-                  game->managers->dialouge_manager,
-                  (DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}}); 
+          RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}}));
         break;
         case RUNNING_STATE:
         drawMap(game);
@@ -301,7 +303,8 @@ void initRendering(Game game){
         renderObjects(game->managers->object_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
         renderUI(game);
         if(game->players[0]->isInDialouge){
-           // renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,getRenderer(game),game->players[0]->current_dialouge);
+         RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}})); 
+          // renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,getRenderer(game),game->players[0]->current_dialouge);
         }
         if(game->players[0]->isInInventory){
             //draw the inventory

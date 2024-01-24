@@ -1,16 +1,29 @@
 #include "../../headers/DialougeStorage.h"
+
+
 #include "stdlib.h"
 
 typedef DIALOUGE* DialougeStorage;
+
+extern char* dialouges[][LAST_HOLDER];
+extern int dialougesLen[LAST_HOLDER];
+
+static void  fillStorage(DialougeStorage storage){
+  
+ for (int i = 0; i < LAST_HOLDER;i++) {
+    storage[i] = createDialouge(dialouges[i], dialougesLen[i]);
+ 
+ } 
+  
+
+}
 
 DialougeStorage initDialougeStorage() {
   DialougeStorage storage = (DialougeStorage)malloc(sizeof(DIALOUGE) * LAST_HOLDER);
   if(!storage) {
     return NULL;
   }
-
-  char *sentences[] = {"hello world"};
-  storage[SWORD_DIALOUGE] = createDialouge(sentences, 1);
+  fillStorage(storage);
   return storage;
 }
 

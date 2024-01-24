@@ -158,7 +158,7 @@ void checkPlayerCollisionWithObjects(ObjectManager manager,Player p){
 
 
 OBJECT findObject(ObjectManager manager,ObjectType type){
-    OBJECT tmp = createObject(0,0,0,0,SWORD_OBJECT);
+    OBJECT tmp = CREATE_DEFAULT_OBJ(SWORD_OBJECT);
     OBJECT to_find = listFind(manager->objects,tmp);
     return to_find;
 }

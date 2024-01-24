@@ -6,6 +6,7 @@
 #include "../../headers/DialougeStorage.h"
 #include "../../headers/Dialouge.h"
 
+
 struct dialougem_t {   
     DialougeStorage dialouges;  // Dialouges storage
 };
