@@ -17,7 +17,7 @@ Player initPlayer(int x,int y,int width,int height){
     new_p->screenY = SCREEN_HEIGHT/2 - (TILE_HEIGHT/2);
     new_p->width = width;
     new_p->height = height;
-    Vector2f vel = {10,10};
+    Vector2f vel = {0,0};
     new_p->vel = vel;
     new_p->level = 0;
     new_p->current_xp = 0;
@@ -113,6 +113,8 @@ void playerUpdate(Player p,SDL_Rect camera){
     if(p->invincible_frames > 0){
         p->invincible_frames--;
     }
+   p->position.x += p->vel.x;
+   p->position.y += p->vel.y;
 }
 
 

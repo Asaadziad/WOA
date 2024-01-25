@@ -14,14 +14,20 @@ typedef enum {
 typedef struct object_t* OBJECT;
 
 
-OBJECT createObject(int height, int width, int x, int y,ObjectType type);
+OBJECT createObject(int w, int h, int x, int y, ObjectType type);
+#ifndef DEFAULCREATEOBJECT
+#define CREATE_DEFAULT_OBJ(type) createObject(0,0,0,0,type)
+#endif
 void destroyObject(OBJECT obj);
 void objectDraw(TextureManager manager,OBJECT obj,SDL_Renderer* renderer,SDL_Rect camera);
 void printObject(OBJECT obj);
 bool checkObjectsTypes(OBJECT obj1,OBJECT obj2);
+void objectUpdate(OBJECT obj);
+
+
+
 void setObjectFrame(OBJECT obj,int frame);
 int getObjectFrame(OBJECT obj);
-void objectUpdate(OBJECT obj);
 void setObjectRenderable(OBJECT obj, bool isRenderable);
 ObjectType objectGetType(OBJECT obj);
 SDL_Rect objectGetRect(OBJECT obj);

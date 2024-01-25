@@ -6,36 +6,32 @@
 #include "../../headers/CollisionDetection.h"
 
 void handlePlayerMovement(Player p, MovementType m_type){
-
+    #define P_VEL 5
     p->current_frame++;
     switch(m_type){
         case MOVE_UP:
-
-        p->position.y -=  p->vel.y;
-        if(p->position.y < 0) {
-            p->position.y = 0;
-            return;
-        }
+        p->vel.y = -P_VEL;
+        if(p->position.y < 0) p->vel.y = 0;
         break;
         
         case MOVE_DOWN:
-        if(p->position.y >= (TILE_HEIGHT * MAX_WORLD_ROWS)) return;
+        if(p->position.y >= (TILE_HEIGHT * MAX_WORLD_ROWS)) p->vel.y = 0;
 
 
-        p->position.y +=  p->vel.y;
+        p->vel.y = P_VEL;
         break;
   
         case MOVE_RIGHT:
 
-        if(p->position.x + TILE_WIDTH >= (TILE_WIDTH * MAX_WORLD_COLS)) return;
+        if(p->position.x + TILE_WIDTH >= (TILE_WIDTH * MAX_WORLD_COLS)) p->vel.x = 0;
 
-        p->position.x +=  p->vel.x;
+        p->vel.x =  P_VEL;
         break;
 
         case MOVE_LEFT:
-        p->position.x -= p->vel.x;
+        p->vel.x = -P_VEL;
         if(p->position.x < 0) {
-            p->position.x = 0;
+            p->vel.x = 0;
             return;
         }
         

@@ -19,8 +19,12 @@ typedef struct dialouge_res {
 
 typedef struct dialoge_req {
   enum {
+  // MULTI-LINE DIALOUGES HERE
   SWORD_DIALOUGE,
   MENU_DIALOUGE,
+  
+  //Singular Texts here
+  HP_TEXT,
   LAST_HOLDER, // place holder to determine size of array
   } dialougeName;
   

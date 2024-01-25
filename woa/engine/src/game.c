@@ -145,24 +145,22 @@ void loadGameFont(Game game,const char* font_file_path,int size){
 
 static void handleKey(Game game,SDL_Keycode code){
     Player asaad = game->players[0];
-    switch(code){
-        case SDLK_LEFT:
-        if(asaad->isInDialouge) break;
-        handlePlayerMovement(asaad,MOVE_LEFT);
-        break;
-        case SDLK_RIGHT:
-        if(asaad->isInDialouge) break;
+    if(!asaad->isInDialouge) {
 
-        handlePlayerMovement(asaad,MOVE_RIGHT);
-        break;
-        case SDLK_UP:
-        if(asaad->isInDialouge) break;
-        handlePlayerMovement(asaad,MOVE_UP);
-        break;
-        case SDLK_DOWN:
-        if(asaad->isInDialouge) break;
-        handlePlayerMovement(asaad,MOVE_DOWN);
-        break;
+    if(code == SDLK_LEFT) {
+      handlePlayerMovement(asaad, MOVE_LEFT);
+    }
+    if(code == SDLK_RIGHT) {
+      handlePlayerMovement(asaad, MOVE_RIGHT);
+    }
+    if(code == SDLK_UP) {
+      handlePlayerMovement(asaad, MOVE_UP);
+    }
+    if(code == SDLK_DOWN) {
+      handlePlayerMovement(asaad, MOVE_DOWN);
+    }
+    }
+    switch(code){
         case SDLK_v:
             asaad->isInDialouge = !asaad->isInDialouge;
         break;
@@ -195,6 +193,16 @@ static bool mouseInRect(Game game, SDL_Rect rect){
     return true;
 }
 
+static void resetPlayerState(Player p, SDL_Keycode code) {
+  if(code == SDLK_LEFT || code == SDLK_RIGHT){
+    p->vel.x = 0;
+  }
+  if(code == SDLK_DOWN || code == SDLK_UP) {
+    p->vel.y = 0;
+  }
+  
+}
+
 void handleEvents(SDL_Event* e,Game game){
     while(SDL_PollEvent(e) != 0){
         switch(e->type){
@@ -203,6 +211,9 @@ void handleEvents(SDL_Event* e,Game game){
             break;
             case SDL_KEYDOWN:
                 handleKey(game, e->key.keysym.sym);
+            break;
+            case SDL_KEYUP:
+                resetPlayerState(game->players[0], e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
                 SDL_GetMouseState(&(game->window->mouse_x),&(game->window->mouse_y));
