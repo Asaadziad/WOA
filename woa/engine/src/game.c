@@ -44,10 +44,11 @@ struct game_window {
 struct game_t {
     Player*    players;
     GameState  state;
-    u8       handeled_event;
+    u8         handeled_event;
     int*       map;
     Managers   managers;
     Window     window;
+    int*       updateStack; //an array of all update functions that needs to be called on gameUpdate
 };
 
 
@@ -369,6 +370,11 @@ void gameUpdate(Game game){
     }
 }
 
+void gameRender(Game game) {
+  /*
+   * Calling rendering functions here
+   * */
+}
 
 void quitGame(Game game){
     TTF_CloseFont(game->window->global_font);
