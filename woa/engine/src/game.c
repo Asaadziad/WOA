@@ -7,6 +7,7 @@
 #include "../../headers/common.h"
 
 // needed(maybe?) includes
+#include "../../headers/ProjecTile.h"
 #include "../../headers/memory.h"
 #include "../../headers/movementHandler.h"
 #include "../../headers/tile.h"
@@ -168,6 +169,10 @@ static void handleKey(Game game,SDL_Keycode code){
         break;
         case SDLK_i:
             asaad->isInInventory = !asaad->isInInventory;
+        break;
+        case SDLK_w:
+        projectileRender(game->managers->texture_manager,createProjectile(initVec3(0,0,0),FIREBALL),getRenderer(game), game->window->camera);
+
         break;
         case SDLK_q:
             //Check if player has sword

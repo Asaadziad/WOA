@@ -1,5 +1,7 @@
 #include "../../headers/ProjecTile.h"
 #include "stdlib.h"
+#include "SDL2/SDL.h"
+#include "../../headers/TextureManager.h"
 
 struct projectile_t {
   Vec3 v;
@@ -27,6 +29,23 @@ ProjectileType getProjectileType(PROJECTILE p) {
 void setProjectileVec(PROJECTILE p , Vec3 new_v){
   copyVec(p->v, new_v);
 }
+
+void projectileUpdate(PROJECTILE p, Vec3 new_pos_speed) {
+  copyVec(p->v, new_pos_speed);
+}
+
+void projectileRender(TextureManager manager,PROJECTILE p, SDL_Renderer* renderer, SDL_Rect camera) {
+  switch(p->type) {
+    case FIREBALL:
+        drawFrame(manager,"fire.png",getX(p->v),getY(p->v),48,
+            48,48,48,1,0,
+            renderer, SDL_FLIP_NONE); 
+      break;
+    default: break; 
+  }
+}
+
+
 
 void destroyProjectile(PROJECTILE p) {
   free(p);
