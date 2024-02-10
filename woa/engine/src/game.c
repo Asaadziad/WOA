@@ -23,15 +23,17 @@
 #include "../../headers/taskManager.h"
 #include "../../headers/ObjectManager.h"
 #include "../../headers/DialougeManager.h"
+#include "../../headers/ProjectileManager.h"
 
 /* MEMORY CHUNKS HERE  */
 struct game_managers {
-    TaskManager     task_manager;
-    TextureManager  texture_manager;
-    ObjectManager   object_manager;
-    NpcManager      npc_manager;
-    DialougeManager dialouge_manager;
-    TileManger      tile_manager;
+    TaskManager       task_manager;
+    TextureManager    texture_manager;
+    ObjectManager     object_manager;
+    NpcManager        npc_manager;
+    DialougeManager   dialouge_manager;
+    TileManger        tile_manager;
+    ProjectileManager projectile_manager;
 };
 
 struct game_window {
@@ -61,6 +63,7 @@ void initManagers(struct game_managers* managers){
     managers->npc_manager = initNPCManager();
     managers->dialouge_manager = initDialougeManager();
     managers->tile_manager = initTileManager();
+    managers->projectile_manager = initProjectileManager();
 }
 
 internal
@@ -171,8 +174,7 @@ static void handleKey(Game game,SDL_Keycode code){
             asaad->isInInventory = !asaad->isInInventory;
         break;
         case SDLK_w:
-        projectileRender(game->managers->texture_manager,createProjectile(initVec3(0,0,0),FIREBALL),getRenderer(game), game->window->camera);
-
+        insertProjectile(game->managers->projectile_manager,asaad->position.x, asaad->position.y, 4, FIREBALL);
         break;
         case SDLK_q:
             //Check if player has sword
@@ -319,6 +321,7 @@ void initRendering(Game game){
         
         renderEntities(game);
         renderObjects(game->managers->object_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
+        projectilesRender(game->managers->projectile_manager, game->managers->texture_manager, getRenderer(game), game->window->camera);
         renderUI(game);
         if(game->players[0]->isInDialouge){
          RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}})); 
@@ -373,6 +376,7 @@ void gameUpdate(Game game){
     if(game->players[0]->hp <= 0){
         game->state = GAME_OVER_STATE;
     }
+    projectilesUpdate(game->managers->projectile_manager);
 }
 
 void gameRender(Game game) {

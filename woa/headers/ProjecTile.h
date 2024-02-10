@@ -21,5 +21,7 @@ PROJECTILE createProjectile(Vec3 pos_speed_vec, ProjectileType type);
 void destroyProjectile(PROJECTILE p);
 void projectileRender(TextureManager manager,PROJECTILE p, SDL_Renderer* renderer, SDL_Rect camera); 
 void projectileUpdate(PROJECTILE p, Vec3 new_pos_speed); 
+int getProjectileLifeFrames(PROJECTILE p); 
+Vec3 getProjectileVector(PROJECTILE p);
 
 #endif
