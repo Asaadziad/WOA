@@ -19,6 +19,10 @@ Here i will be sharing some of the design decisions and diagrams i have made for
 
 [Screencast from 24-01-24 11:36:45.webm](https://github.com/Asaadziad/WOA/assets/108868994/f8024354-496b-471b-af04-ff226d782688)
 
+- Player can shoot missles (after 2 seconds it vanishes)
+
+[Screencast from 10-02-24 16:53:00.webm](https://github.com/Asaadziad/WOA/assets/108868994/1a0e485c-1b55-467d-94c6-6f9571ec917e)
+
 
 # Get Started
 
