@@ -39,7 +39,8 @@ void renderNPCs(NpcManager manager,TextureManager texture_manager,SDL_Renderer* 
 }
 
 void updateNPCs(NpcManager manager){
-    Node current = getHead(manager->npc_list);
+  if(!manager) return;
+  Node current = getHead(manager->npc_list);
     if(!current) return;
     for(int i = 0; i < getListSize(manager->npc_list);i++){
         NPC tmp = getNodeData(current);

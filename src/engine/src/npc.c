@@ -118,7 +118,7 @@ static void updateNPCAttackRanger(NPC npc){
 }
 
 void updateNPC(NPC npc){
-
+  if(!npc) return;
     if(!npc->isAttacking){
     npc->current_frame = (int)(SDL_GetTicks()/100) % 6;
     // every 2 seconds change position

@@ -153,11 +153,13 @@ Element listFind(List list, Element element){
 }
 
 size_t getListSize(List list){
-    return list->size;
+  if(!list) return 0;
+  return list->size;
 }
 
 Node getHead(List list){
-    return list->head;
+  if(!list) return NULL;
+  return list->head;
 }
 
 ListResult removeHead(List list){
@@ -196,9 +198,11 @@ ListResult setHead(List list,Node node){
 
 
 Element getNodeData(Node node){
-    return node->data;
+  if(!node) return NULL;
+  return node->data;
 }
 
 Node getNextNode(Node node){
-    return node->next;
+  if(!node) return NULL;
+  return node->next;
 }

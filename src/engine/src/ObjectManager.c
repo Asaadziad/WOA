@@ -25,10 +25,11 @@ static bool compareObjectPtr(void* elem1,void* elem2){
 }
 
 ObjectManager initObjectManager(){
-    ObjectManager manager = (ObjectManager)malloc(sizeof(*manager));
-    if(!manager) return NULL;
-    manager->objects = listCreate(destroyObjPtr,compareObjectPtr,printObjectPtr);
-    return manager;
+  //ObjectManager manager = (ObjectManager)malloc(sizeof(*manager));
+  // if(!manager) return NULL;
+    //manager->objects = listCreate(destroyObjPtr,compareObjectPtr,printObjectPtr);
+    //return manager;
+  return NULL;
 }
 
 typedef struct token_t* Token;

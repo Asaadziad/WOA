@@ -55,7 +55,7 @@ Texture loadTextureFromFile(SDL_Renderer* renderer, const char* path){
 
 // TODO :: load shall return the id of the texture.
 void load(TextureManager manager,SDL_Renderer* renderer, char* file_name){
-    char path[PATH_MAX] = "";
+  char path[PATH_MAX] = "";
     char* resourcesPath = "./res/";
     strcat(path, resourcesPath);
     strcat(path, file_name); 
@@ -68,7 +68,6 @@ void load(TextureManager manager,SDL_Renderer* renderer, char* file_name){
     //TODO:: convert from list to array
     //listInsert(manager->textures,new_t);
     tableInsert(manager->texturesTable, file_name, new_t);
-
 }
 
 void loadText(TextureManager manager,SDL_Renderer* renderer,TTF_Font* font, const char* text,SDL_Color* color){}
@@ -92,7 +91,7 @@ void draw(TextureManager manager,int id,int x,int y,
     SDL_RenderCopyEx(renderer,getTexturePtr(to_render),&src,&dst,0,0,flip);
 }
 
-void drawFrame(TextureManager manager,char* name,int x,int y,int frame_width,
+void drawFrame(TextureManager manager, char* name,int x,int y,int frame_width,
             int frame_height,int render_width,int render_height,int current_row,int current_frame,
             SDL_Renderer* renderer, SDL_RendererFlip flip){
 

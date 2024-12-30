@@ -52,15 +52,15 @@ struct game_t {
     int*       map;
     Managers   managers;
     Window     window;
+  SDL_Renderer* renderer;
+  TTF_Font* global_font;
     int*       updateStack; //an array of all update functions that needs to be called on gameUpdate
 };
-
-
 
 internal
 void initManagers(struct game_managers* managers){
     managers->texture_manager = textureManagerInit();
-    managers->object_manager = initObjectManager();
+    // managers->object_manager = initObjectManager();
     managers->npc_manager = initNPCManager();
     managers->dialouge_manager = initDialougeManager();
     managers->tile_manager = initTileManager();
@@ -80,27 +80,28 @@ void initWindow(struct game_window* window){
 Game initGame(){
     Game new_g = (Game)malloc(sizeof(*new_g));
     if(!new_g) return NULL;
-    new_g->state = MENU_STATE;
-    new_g->managers = malloc(sizeof(*new_g->managers));
-    new_g->window = malloc(sizeof(*new_g->window));
+    new_g->state = RUNNING_STATE;// MENU_STATE;
+    new_g->managers = malloc(sizeof(*(new_g->managers)));
+    new_g->window   = malloc(sizeof(*(new_g->window)));
     if(!new_g->window || !new_g->managers){
       fprintf(stderr, "Could not allocate managers and window");
       return NULL;
     }
     initManagers(new_g->managers);
-    initWindow(new_g->window);    
+    initWindow(new_g->window);
     return new_g;
 }
 
 void setRenderer(Game game,Renderer renderer){
-  game->window->renderer = renderer;
+  game->renderer = renderer;
 }
 
 Renderer getRenderer(Game game){
-   return ((game) && (game->window)) ? game->window->renderer : NULL;
+   return game->renderer;
 }
+
 TTF_Font* getGlobalFont(Game game){
-  return ((game) && (game->window)) ? game->window->global_font : NULL;
+  return game->global_font;
 }
 
 
@@ -135,10 +136,9 @@ void loadManagerResources(struct game_managers* managers,Renderer renderer){
 }
 
 void loadTextures(Game game){
-  
   loadManagerResources(game->managers, getRenderer(game));
   //setupDialouges(game->managers->dialouge_manager,"./data/dialouges.csv");
-  setupTiles(game->managers->tile_manager,"./res/world.txt");
+  setupTiles(game->managers->tile_manager, "./res/world.txt");
 }
 
 void loadGameFont(Game game,const char* font_file_path,int size){
@@ -226,8 +226,9 @@ void handleEvents(SDL_Event* e,Game game){
                 resetPlayerState(game->players[0], e->key.keysym.sym);
             break;
             case SDL_MOUSEBUTTONDOWN:
-                SDL_GetMouseState(&(game->window->mouse_x),&(game->window->mouse_y));
-                handlePlayerClick(game,game->window->mouse_x,game->window->mouse_y);
+	      printf("%x", &(game->window->mouse_x));
+	      SDL_GetMouseState(&(game->window->mouse_x),&(game->window->mouse_y));
+	      handlePlayerClick(game,game->window->mouse_x,game->window->mouse_y);
                 SDL_Rect dst;
                 dst.x = SCREEN_WIDTH/2;
                 dst.y = SCREEN_HEIGHT;
@@ -247,12 +248,12 @@ void initEntities(Game game){
     game->players = ALLOCATE(Player, PLAYERS_COUNT);
     Player asaad = initPlayer(0,0,TILE_WIDTH,TILE_HEIGHT);
     game->players[0] = asaad; 
-    setupObjects(game->managers->object_manager,"./res/objects.txt");
+    //setupObjects(game->managers->object_manager,"./res/objects.txt");
     setupNPCs(game->managers->npc_manager);
 }
 
 static void renderEntities(Game game){
-    playerDraw(game->managers->texture_manager,game->players[0],getRenderer(game),game->window->camera);
+    playerDraw(game->managers->texture_manager, game->players[0], getRenderer(game), game->window->camera);
     renderNPCs(game->managers->npc_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
 }
 
@@ -308,32 +309,31 @@ void static renderGameOverScreen(Game game){
     drawText(game->managers->texture_manager,7,SCREEN_WIDTH/2,SCREEN_HEIGHT/2 + 50,200,50,black,getRenderer(game));
 }
 
-
-
 void initRendering(Game game){
     clearScreen(game);
     
     switch(game->state){
         case MENU_STATE:
-          RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}}));
+          // RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}}));
         break;
         case RUNNING_STATE:
-        drawMap(game);
-        
-        renderEntities(game);
-        renderObjects(game->managers->object_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
-        projectilesRender(game->managers->projectile_manager, game->managers->texture_manager, getRenderer(game), game->window->camera);
-        renderUI(game);
+	  drawMap(game);
+	  printf("Running_state");
+	  renderEntities(game);
+	  printf("Rendererd Entities");
+        // renderObjects(game->managers->object_manager,game->managers->texture_manager,getRenderer(game),game->window->camera);
+        // projectilesRender(game->managers->projectile_manager, game->managers->texture_manager, getRenderer(game), game->window->camera);
+        // renderUI(game);
         if(game->players[0]->isInDialouge){
-         RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}})); 
+	  // RENDERDIALOUGE(400,300,((DialougeRequest){SWORD_DIALOUGE, 10,10, (SDL_Color){0,0,0,0}})); 
           // renderDialouge(game->managers->dialouge_manager,game->managers->texture_manager,getRenderer(game),game->players[0]->current_dialouge);
         }
         if(game->players[0]->isInInventory){
             //draw the inventory
-            renderInventory(game);
+            // renderInventory(game);
         }
         if(game->state == GAME_OVER_STATE){
-            renderGameOverScreen(game);
+	  // renderGameOverScreen(game);
         }
         break;
         default:break;
@@ -367,17 +367,17 @@ static void checkCamera(SDL_Rect* camera){
 }
 
 void gameUpdate(Game game){
-    game->window->camera.x = (game->players[0]->position.x - game->window->camera.w/2);
-    game->window->camera.y = (game->players[0]->position.y - game->window->camera.h/2);
+  game->window->camera.x = (game->players[0]->position.x - game->window->camera.w/2);
+  game->window->camera.y = (game->players[0]->position.y - game->window->camera.h/2);
     checkCamera(&game->window->camera);
-    playerUpdate(game->players[0],game->window->camera);
-    updateNPCs(game->managers->npc_manager);
-    checkPlayerCollisionWithObjects(game->managers->object_manager,game->players[0]);
-    checkPlayerCollisionWithNPCs(game->managers->npc_manager,game->players[0]);
+    playerUpdate(game->players[0], game->window->camera);
+    //updateNPCs(game->managers->npc_manager);
+    //checkPlayerCollisionWithObjects(game->managers->object_manager,game->players[0]);
+    //   checkPlayerCollisionWithNPCs(game->managers->npc_manager,game->players[0]);
     if(game->players[0]->hp <= 0){
-        game->state = GAME_OVER_STATE;
+      game->state = GAME_OVER_STATE;
     }
-    projectilesUpdate(game->managers->projectile_manager);
+    //    projectilesUpdate(game->managers->projectile_manager);
 }
 
 void gameRender(Game game) {
@@ -387,19 +387,19 @@ void gameRender(Game game) {
 }
 
 void quitGame(Game game){
-    TTF_CloseFont(game->window->global_font);
+  //TTF_CloseFont(game->window->global_font);
 
     for(int i = 0; i < PLAYERS_COUNT;i++){
-        destroyPlayer(game->players[i]);
+      //  destroyPlayer(game->players[i]);
     }
-    destroyTaskManager(game->managers->task_manager);
-    destroyTextureManager(game->managers->texture_manager);
-    destroyNPCManager(game->managers->npc_manager);
-    destroyObjectManager(game->managers->object_manager);
+    // destroyTaskManager(game->managers->task_manager);
+    //destroyTextureManager(game->managers->texture_manager);
+    //destroyNPCManager(game->managers->npc_manager);
+    //    destroyObjectManager(game->managers->object_manager);
     //destroyDialogeManager(game->managers->dialouge_manager);
-    destroyTileManager(game->managers->tile_manager);
+    //destroyTileManager(game->managers->tile_manager);
     
-    free(game->map);
-    free(game->players);
-    free(game);
+    //free(game->map);
+    //free(game->players);
+    //free(game);
 }
